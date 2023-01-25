@@ -104,9 +104,9 @@ struct MemoryMetrics {
 
 struct NetworkMetrics {
 	int receiveRate;				// Data received
-	int receivePacketRate;			// Packets received
+	float receivePacketRate;		// Packets received
 	int sendRate;					// Data sent
-	int sendPacketsRate;			// Packets sent
+	float sendPacketsRate;			// Packets sent
 };
 
 // Execute system command and return the output in the string
@@ -206,14 +206,29 @@ void getInputOutputMetrics(InputOutputMetrics &inputOuputMetrics){
 
 };
 
+void getNetworkMetrics(NetworkMetrics &networkMetrics){
+
+	const char* command = "ifstat 1 1 | tail -1 | awk '{ print $1, $2 }'";
+	std::string output = exec(command), temp;
+
+	std::stringstream stream(output);
+	stream >> temp;
+	networkMetrics.receivePacketRate = std::stof(temp);
+	stream >> temp;
+	networkMetrics.sendPacketsRate = std::stof(temp);
+
+};
+
 int main() {
 	SystemMetrics systemMetrics;
 	ProcessorMetrics processorMetrics;
 	InputOutputMetrics inputOutputMetrics;
+	NetworkMetrics networkMetrics;
 
 	getSystemMetrics(systemMetrics);
 	getProcessorMetrics(processorMetrics);
 	getInputOutputMetrics(inputOutputMetrics);
+	getNetworkMetrics(networkMetrics);
 
 	// DEBUG
 	std::cout << "\n Interrupt Rate = " << systemMetrics.interruptRate 
