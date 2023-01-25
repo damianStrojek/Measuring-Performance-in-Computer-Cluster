@@ -67,6 +67,17 @@ struct ProcessorMetrics {
 	int processorPower;				// Power consumed by the processor
 };
 
+struct InputOutputMetrics {
+	int readRate;					// Data read
+	int readTime;					// Data read time
+	int readOperationsRate;			// Amount of read operations per second
+	int writeRate;					// Data written
+	int writeTime;					// Data write time
+	int writeOperationsRate;		// Amount of write operations per second
+	int flushTime;					// Flush execution time
+	int flushOperationsRate;		// Amount of flush operations per second
+};
+
 struct MemoryMetrics {
 	// Amount of memory is counted in MB
 	int memoryUsed;					// RAM used
@@ -161,7 +172,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	stream >> temp;
 	processorMetrics.timeIRQ = std::stoi(temp);
 	stream >> temp;
-	processorMetrics.timesoftIRQ = std::stoi(temp);
+	processorMetrics.timeSoftIRQ = std::stoi(temp);
 	stream >> temp;
 	processorMetrics.timeSteal= std::stoi(temp);
 	stream >> temp;
@@ -175,12 +186,34 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	*/
 };
 
+void getInputOutputMetrics(InputOutputMetrics &inputOuputMetrics){
+	
+	// Not sure if this is working - I have no linux available rn
+	// Have to check whether those metrics make any sense
+	const char* command = "awk '{ print $2 }' /proc/$$/io";
+	std::string output = exec(command), temp;
+	
+	std::stringstream stream(output);
+	stream >> temp;
+	inputOuputMetrics.readRate = std::stoi(temp);
+	stream >> temp;
+	inputOuputMetrics.writeRate = std::stoi(temp);
+	stream >> temp;
+	inputOuputMetrics.readOperationsRate = std::stoi(temp);
+	stream >> temp;
+	inputOuputMetrics.writeOperationsRate = std::stoi(temp);
+	stream >> temp;
+
+};
+
 int main() {
 	SystemMetrics systemMetrics;
 	ProcessorMetrics processorMetrics;
+	InputOutputMetrics inputOutputMetrics;
 
 	getSystemMetrics(systemMetrics);
 	getProcessorMetrics(processorMetrics);
+	getInputOutputMetrics(inputOutputMetrics);
 
 	// DEBUG
 	std::cout << "\n Interrupt Rate = " << systemMetrics.interruptRate 
