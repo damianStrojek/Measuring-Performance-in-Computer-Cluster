@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include <algorithm>
 #include <sstream>
+#include <map>
 
 // Constant paths to files in Linux that contain information about different metrics
 #define LOADAVG "/proc/loadavg"			// Number of tasks in the queue, process units that are being executed
@@ -21,6 +22,7 @@
 										// For example: the number of bytes written to and read from memory
 #define MEMINFO "/proc/meminfo"			// Operating memory information
 #define SWAPINFO "/proc/swap"			// List of the available swap areas
+
 
 /*
 EXAMPLE OF GETTING THE FILE INTO A STRING
@@ -219,6 +221,92 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 
 };
 
+void writeToFileSystemMetrics(std::ofstream &file, SystemMetrics data) {
+	file << (data.processesRunning != -213769 ? std::to_string(data.processesRunning) : "not_supported") << ",";
+	file << (data.processesAll != -213769 ? std::to_string(data.processesAll) : "not_supported") << ",";
+	file << (data.processesBlocked != -213769 ? std::to_string(data.processesBlocked) : "not_supported") << ",";
+	file << (data.contextSwitchRate != -213769 ? std::to_string(data.contextSwitchRate) : "not_supported") << ",";
+	file << (data.interruptRate != -213769 ? std::to_string(data.interruptRate) : "not_supported");
+
+}
+void writeToFileProcessorMetrics(std::ofstream &file, ProcessorMetrics data) {
+	file << (data.timeUser != -213769 ? std::to_string(data.timeUser) : "not_supported") << ",";
+	file << (data.timeNice != -213769 ? std::to_string(data.timeNice) : "not_supported") << ",";
+	file << (data.timeSystem != -213769 ? std::to_string(data.timeSystem) : "not_supported") << ",";
+	file << (data.timeIdle != -213769 ? std::to_string(data.timeIdle) : "not_supported") << ",";
+	file << (data.timeIoWait != -213769 ? std::to_string(data.timeIoWait) : "not_supported") << ",";
+	file << (data.timeIRQ != -213769 ? std::to_string(data.timeIRQ) : "not_supported") << ",";
+	file << (data.timeSoftIRQ != -213769 ? std::to_string(data.timeSoftIRQ) : "not_supported") << ",";
+	file << (data.timeSteal != -213769 ? std::to_string(data.timeSteal) : "not_supported") << ",";
+	file << (data.timeGuest != -213769 ? std::to_string(data.timeGuest) : "not_supported") << ",";
+	file << (data.timeGuestNice != -213769 ? std::to_string(data.timeGuestNice) : "not_supported") << ",";
+	file << (data.instructionsRetiredRate != -213769 ? std::to_string(data.instructionsRetiredRate) : "not_supported") << ",";
+	file << (data.cyclesRate != -213769 ? std::to_string(data.cyclesRate) : "not_supported") << ",";
+	file << (data.cyclesReferenceRate != -213769 ? std::to_string(data.cyclesReferenceRate) : "not_supported") << ",";
+	file << (data.frequencyRelative != -213769 ? std::to_string(data.frequencyRelative) : "not_supported") << ",";
+	file << (data.frequencyActiveRelative != -213769 ? std::to_string(data.frequencyActiveRelative) : "not_supported") << ",";
+	file << (data.cacheL2HitRate != -213769 ? std::to_string(data.cacheL2HitRate) : "not_supported") << ",";
+	file << (data.cacheL2MissRate != -213769 ? std::to_string(data.cacheL2MissRate) : "not_supported") << ",";
+	file << (data.cacheL3HitRate != -213769 ? std::to_string(data.cacheL3HitRate) : "not_supported") << ",";
+	file << (data.cacheL3HitSnoopRate != -213769 ? std::to_string(data.cacheL3HitSnoopRate) : "not_supported") << ",";
+	file << (data.cacheL3MissRate != -213769 ? std::to_string(data.cacheL3MissRate) : "not_supported") << ",";
+	file << (data.processorPower != -213769 ? std::to_string(data.processorPower) : "not_supported") << ",";
+
+}
+void writeToFileInputOutputMetrics(std::ofstream &file, InputOutputMetrics data) {
+	file << (data.readRate != -213769 ? std::to_string(data.readRate) : "not_supported") << ",";
+	file << (data.readTime != -213769 ? std::to_string(data.readTime) : "not_supported") << ",";
+	file << (data.readOperationsRate != -213769 ? std::to_string(data.readOperationsRate) : "not_supported") << ",";
+	file << (data.writeRate != -213769 ? std::to_string(data.writeRate) : "not_supported") << ",";
+	file << (data.writeTime != -213769 ? std::to_string(data.writeTime) : "not_supported") << ",";
+	file << (data.writeOperationsRate != -213769 ? std::to_string(data.writeOperationsRate) : "not_supported") << ",";
+	file << (data.flushTime != -213769 ? std::to_string(data.flushTime) : "not_supported") << ",";
+	file << (data.flushOperationsRate != -213769 ? std::to_string(data.flushOperationsRate) : "not_supported") << ",";
+
+}
+
+void writeToFileMemoryMetrics(std::ofstream &file, MemoryMetrics data) {
+	file << (data.memoryUsed != -213769 ? std::to_string(data.memoryUsed) : "not_supported") << ",";
+	file << (data.memoryCached != -213769 ? std::to_string(data.memoryCached) : "not_supported") << ",";
+	file << (data.swapUsed != -213769 ? std::to_string(data.swapUsed) : "not_supported") << ",";
+	file << (data.swapCached != -213769 ? std::to_string(data.swapCached) : "not_supported") << ",";
+	file << (data.memoryActive != -213769 ? std::to_string(data.memoryActive) : "not_supported") << ",";
+	file << (data.memoryInactive != -213769 ? std::to_string(data.memoryInactive) : "not_supported") << ",";
+	file << (data.pageInRate != -213769 ? std::to_string(data.pageInRate) : "not_supported") << ",";
+	file << (data.pageOutRate != -213769 ? std::to_string(data.pageOutRate) : "not_supported") << ",";
+	file << (data.pageFaultRate != -213769 ? std::to_string(data.pageFaultRate) : "not_supported") << ",";
+	file << (data.pageFaultsMajorRate != -213769 ? std::to_string(data.pageFaultsMajorRate) : "not_supported") << ",";
+	file << (data.pageFreeRate != -213769 ? std::to_string(data.pageFreeRate) : "not_supported") << ",";
+	file << (data.pageActivateRate != -213769 ? std::to_string(data.pageActivateRate) : "not_supported") << ",";
+	file << (data.pageDeactivateRate != -213769 ? std::to_string(data.pageDeactivateRate) : "not_supported") << ",";
+	file << (data.memoryReadRate != -213769 ? std::to_string(data.memoryReadRate) : "not_supported") << ",";
+	file << (data.memoryWriteRate != -213769 ? std::to_string(data.memoryWriteRate) : "not_supported") << ",";
+	file << (data.memoryIoRate != -213769 ? std::to_string(data.memoryIoRate) : "not_supported") << ",";
+	file << (data.memoryPower != -213769 ? std::to_string(data.memoryPower) : "not_supported") << ",";
+
+}
+void writeToFileNetworkMetrics(std::ofstream &file, NetworkMetrics data) {
+	file << ((data.receiveRate == -213769) ? "not_supported," : (std::to_string(data.receiveRate) + ","));
+	file << ((data.receivePacketRate == -213769) ? "not_supported," : (std::to_string(data.receivePacketRate) + ","));
+	file << ((data.sendRate == -213769) ? "not_supported," : (std::to_string(data.sendRate) + ","));
+	file << ((data.sendPacketsRate == -213769) ? "not_supported," : (std::to_string(data.sendPacketsRate) + ","));
+}
+
+void writeToCSV(int timestamp, SystemMetrics systemMetrics, ProcessorMetrics processorMetrics, InputOutputMetrics inputOutputMetrics, NetworkMetrics networkMetrics){
+    std::ofstream file("test.csv", std::ios::trunc);
+    if (file.is_open()) {
+		file << timestamp << ",";
+        writeToFileSystemMetrics(file, systemMetrics);
+		writeToFileProcessorMetrics(file, processorMetrics);
+		writeToFileInputOutputMetrics(file, inputOutputMetrics);
+		writeToFileNetworkMetrics(file, networkMetrics);
+		file << std::endl;
+        file.close();
+    } else {
+        std::cerr << "Unable to open file " << "test.csv" << " for writing" << std::endl;
+    }
+}
+
 int main() {
 	SystemMetrics systemMetrics;
 	ProcessorMetrics processorMetrics;
@@ -229,6 +317,8 @@ int main() {
 	getProcessorMetrics(processorMetrics);
 	getInputOutputMetrics(inputOutputMetrics);
 	getNetworkMetrics(networkMetrics);
+
+	writeToCSV(1, systemMetrics, processorMetrics, inputOutputMetrics, networkMetrics);
 
 	// DEBUG
 	std::cout << "\n Interrupt Rate = " << systemMetrics.interruptRate 
