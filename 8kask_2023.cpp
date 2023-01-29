@@ -8,9 +8,16 @@
 #include <cstdio>
 #include <array>
 #include <memory>
+#include <cstring>
 #include <stdexcept>
 #include <algorithm>
 #include <sstream>
+#include <termios.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <ctime>
+#include <iomanip>
+#include <chrono>
 
 // Constant paths to files in Linux that contain information about different metrics
 #define LOADAVG "/proc/loadavg"			// Number of tasks in the queue, process units that are being executed
@@ -53,7 +60,6 @@ struct ProcessorMetrics {
 	int timeSoftIRQ;				// SoftIRQ handling time
 	int timeSteal;					// Time spent in other OSs in visualization mode
 	int timeGuest;					// Virtual CPU uptime for other OSs under kernel control
-	int timeGuestNice;				// Virtual CPU (low priority) uptime for other OSs under kernel control
 	int instructionsRetiredRate;	// Number of actualy executed instructions
 	int cyclesRate;					// Number of clock cycles during core operation (Turbo Boost possible)
 	int cyclesReferenceRate;		// Number of reference clock cycles
@@ -96,17 +102,17 @@ struct MemoryMetrics {
 	int pageActivateRate;			// Page activation
 	int pageDeactivateRate;			// Page deactivation
 	// Read, write, and io rate are measured in MB/s
-	float memoryReadRate;				// Reading from memory
+	float memoryReadRate;			// Reading from memory
 	float memoryWriteRate;			// Writing to memory
 	float memoryIoRate;				// Requests to read/write data from all I/O devices
 	int memoryPower;				// Power consumed by memory
 };
 
 struct NetworkMetrics {
-	float receiveRate;				// Data received
-	float receivePacketRate;		// Packets received
-	float sendRate;					// Data sent
-	float sendPacketsRate;			// Packets sent
+	int receivedData;				// All of the packets sent
+	float receivePacketRate;		// packets that are being received in KB/s
+	int sentData;					// All of the packets sent
+	float sendPacketsRate;			// packets that are being sent in KB/s
 };
 
 // Execute system command and return the output in the string
@@ -148,12 +154,11 @@ void getSystemMetrics(SystemMetrics &systemMetrics) {
 	output = exec(command);
 	systemMetrics.processesBlocked = std::stoi(output);
 
-	/* // DEBUG
-	std::cout << "Interrupt Rate = " << systemMetrics.interruptRate 
-		<< " Context switch rate = " << systemMetrics.contextSwitchRate
-		<< " All processes = " << systemMetrics.processesAll
-		<< " Running processes = " << systemMetrics.processesRunning
-		<< " Blocked processes = " << systemMetrics.processesBlocked << "\n";
+	/* DEBUG
+	std::cout << "\nInterrupt Rate = " << systemMetrics.interruptRate << "\nContext switch rate = " << 
+	systemMetrics.contextSwitchRate << "\nAll processes = " << systemMetrics.processesAll << 
+	"\nRunning processes = " << systemMetrics.processesRunning << "\nBlocked processes = " << 
+	systemMetrics.processesBlocked << "\n";
 	*/
 };
 
@@ -185,7 +190,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	stream >> temp;
 	processorMetrics.timeSoftIRQ = std::stoi(temp);
 	stream >> temp;
-	processorMetrics.timeSteal= std::stoi(temp);
+	processorMetrics.timeSteal = std::stoi(temp);
 	stream >> temp;
 	processorMetrics.timeGuest = std::stoi(temp);
 
@@ -196,6 +201,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	}
 	*/
 
+	/*
 	command = "perf stat -e L2_cache_references,L2_cache_misses,L3_cache_references,L3_cache_misses,L3_cache_snoop_hits,L3_cache_snoop_misses";
 	output = exec(command);
 	std::stringstream stream(output);
@@ -218,24 +224,29 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	stream >> temp;
 	snoopMisses = std::stoi(temp);
 	processorMetrics.cacheL3HitSnoopRate = snoopHits / (snoopHits + snoopMisses);
-
-	/*
-	TO DO
-	int timeGuestNice;				// Virtual CPU (low priority) uptime for other OSs under kernel control
-	int instructionsRetiredRate;	// Number of actualy executed instructions
-	int cyclesRate;					// Number of clock cycles during core operation (Turbo Boost possible)
-	int cyclesReferenceRate;		// Number of reference clock cycles
-	int frequencyRelative;			// Average core clock frequency, also taking into account Turbo Boost
-	int frequencyActiveRelative;	// Average core clock frequency if not in C0 state, also including TB
-	int processorPower;				// Power consumed by the processor
 	*/
 
-	/* // DEBUG
-	std::cout << "Time user = " << processorMetrics.timeUser << " Time nice = " << processorMetrics.timeNice <<
-	" Time system = " << processorMetrics.timeSystem << " Time idle = " << processorMetrics.timeUser << 
-	" Time IO Wait = " << processorMetrics.timeIoWait << " Time IRQ = " << processorMetrics.timeIRQ <<
-	" Time soft IRQ = " << processorMetrics.timeSoftIRQ << " Time Steal = " << processorMetrics.timeSteal <<
-	" Time Guest = " << processorMetrics.timeGuest << "\n";
+	// Temporary values - don't know how to use perf to collect this information
+	processorMetrics.cacheL2MissRate = -692137;
+	processorMetrics.cacheL2HitRate = -692137;
+	processorMetrics.cacheL3MissRate = -692137;
+	processorMetrics.cacheL3HitRate = -692137;
+	processorMetrics.cacheL3HitSnoopRate = -692137;
+
+	processorMetrics.instructionsRetiredRate = -692137;
+	processorMetrics.cyclesRate = -692137;
+	processorMetrics.cyclesReferenceRate = -692137;
+	processorMetrics.frequencyRelative = -692137;
+	processorMetrics.frequencyActiveRelative = -692137;
+	processorMetrics.processorPower = -692137;
+
+	
+	/*DEBUG
+	std::cout << "\nTime user = " << processorMetrics.timeUser  << "\nTime nice = " << processorMetrics.timeNice <<
+	"\nTime system = " << processorMetrics.timeSystem << "\nTime idle = " << processorMetrics.timeIdle << 
+	"\nTime I/O wait = " << processorMetrics.timeIoWait << "\nTime IRQ = " << processorMetrics.timeIRQ << 
+	"\nTime Soft IRQ = " << processorMetrics.timeSoftIRQ << "\nTime Steal = " << processorMetrics.timeSteal << 
+	"\nTime Guest = " << processorMetrics.timeGuest << "\n";
 	*/
 };
 
@@ -255,65 +266,82 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 	inputOutputMetrics.writeOperationsRate = std::stoi(temp);
 	stream >> temp;
 
+	/*
 	command = "perf stat -e io:r,io:w,io:f -I 1000";
 	output = exec(command);
-	std::stringstream stream(output);
+	std::stringstream streamTwo(output);
 
-	stream >> temp;
+	streamTwo >> temp;
 	inputOutputMetrics.readTime = std::stoi(temp);
-	stream >> temp;
+	streamTwo >> temp;
 	inputOutputMetrics.writeTime = std::stoi(temp);
-	stream >> temp;
+	streamTwo >> temp;
 	inputOutputMetrics.flushOperationsRate = std::stoi(temp);
 	// Tutaj ma trafić czas wykonywania tego polecenia
-	stream >> temp;
+	streamTwo >> temp;
 	inputOutputMetrics.flushTime = inputOutputMetrics.flushOperationsRate / std::stoi(temp);
+	*/
 
-	/* // DEBUG
-	std::cout << "Read Rate = " << inputOutputMetrics.readRate << " Write Rate = " << inputOutputMetrics.writeRate <<
-	" Read Operations Rate = " << inputOutputMetrics.readOperationsRate << " Write Operations Rate = " <<
-	inputOutputMetrics.writeOperationsRate << "\n";
+	// Temporary values
+	inputOutputMetrics.readTime = -692137;
+	inputOutputMetrics.writeTime = -692137;
+	inputOutputMetrics.flushOperationsRate = -692137;
+	inputOutputMetrics.flushTime = -692137;
+
+	// DEBUG
+	/*
+	std::cout << "\nI/O Read Rate = " << inputOutputMetrics.readRate << "\nI/O Write Rate = " << 
+	inputOutputMetrics.writeRate << "\nI/O Read Operations Rate = " << inputOutputMetrics.readOperationsRate << 
+	"\nI/O Write Operations Rate = " << inputOutputMetrics.writeOperationsRate << "\n";
 	*/
 };
 
 void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 
-	const char* command = "cat /proc/meminfo";
-	std::string ouput = exec(command), temp;
+	const char* command = "grep -v -e 'anon' -e 'file' /proc/meminfo | grep -E '^(Cached|SwapCached|SwapTotal|SwapFree|Active|Inactive)' | awk '{print $2}'";
+	std::string output = exec(command), temp, swapFree;
+	std::stringstream stream(output);
 
 	stream >> temp;
-	memoryMetrics.memoryUsed =		// MemTotal - MemFree
+	memoryMetrics.memoryCached = std::stof(temp);
+	memoryMetrics.memoryCached = memoryMetrics.memoryCached / 1024;
 	stream >> temp;
-	memoryMetrics.memoryCached =	// Cached
+	memoryMetrics.swapCached = std::stof(temp);
+	memoryMetrics.swapCached = memoryMetrics.swapCached / 1024;
 	stream >> temp;
-	memoryMetrics.swapUsed =		// SwapTotal - SwapFree
+	memoryMetrics.memoryActive = std::stof(temp);
+	memoryMetrics.memoryActive = memoryMetrics.memoryActive / 1024;
 	stream >> temp;
-	memoryMetrics.swapCached =		// Swap Cached
+	memoryMetrics.memoryInactive = std::stof(temp);
+	memoryMetrics.memoryInactive = memoryMetrics.memoryInactive / 1024;
 	stream >> temp;
-	memoryMetrics.memoryActive =	// Active
-	stream >> temp;
-	memoryMetrics.memoryInactive =	// Inactive
+	stream >> swapFree;
+	memoryMetrics.swapUsed = std::stof(temp) - std::stof(swapFree);
+	memoryMetrics.swapUsed = memoryMetrics.swapUsed / 1024;
 
 	// Page Input Rate, Page Output Rate, Page Fault Rate, Page Free Rate, Page Activate Rate, Page Deactivate Rate
-	command = "vmstat 1 2 | awk 'NR==3{print '$7', '$8', '$9', '$10', '$11', '$12'}'";
-	
+	// command = "vmstat 1 2 | awk 'NR==3{print '$7', '$8', '$9', '$10', '$11', '$12'}'";
+	// Temporary values
+	memoryMetrics.pageInRate = -692137;
+	memoryMetrics.pageOutRate = -692137;
+	memoryMetrics.pageFaultRate = -692137;
+	memoryMetrics.pageFreeRate = -692137;
+	memoryMetrics.pageActivateRate = -692137;
+	memoryMetrics.pageDeactivateRate = -692137;
 	
 	// Read Rate, Write Rate, I/O Read requests, I/O Write requests
-	command = "iostat -x 1 2 | awk 'NR==4{print '$4', '$5', '$6', '$7'}'";
+	// command = "iostat -x 1 2 | awk 'NR==4{print '$4', '$5', '$6', '$7'}'";
+	// Temporary values
+	memoryMetrics.memoryReadRate = -692137;
+	memoryMetrics.memoryWriteRate = -692137;
+	memoryMetrics.memoryIoRate = -692137;
+	memoryMetrics.memoryPower = -692137;
 
-
+	// DEBUG
 	/*
-	TO DO
-	int memoryPower;				// Power consumed by memory
-	*/
-
-	/* // DEBUG
-	std::cout << "Memory Used = " << memoryMetrics.memoryUsed << "\nMemory Cached = " << memoryMetrics.memoryCached <<
-	"\nSwap Used = " << memoryMetrics.swapUsed << "\nSwap Cached = " << memoryMetrics.swapCached << "\nMemory Active = " <<
-	memoryMetrics.memoryActive << "\nMemory Inactive" << memoryMetrics.memoryInactive << 
-	
-	
-	"\nMemory Read Rate = " << << "\nMemory Write Rate = " << << "\nI/O Read Requests = " << << "\nI/O Write Requests" << << 
+	std::cout << "\nMemory Used = " << memoryMetrics.memoryUsed << " MB\nMemory Cached = " << memoryMetrics.memoryCached <<
+	" MB\nSwap Used = " << memoryMetrics.swapUsed << " MB\nSwap Cached = " << memoryMetrics.swapCached << " MB\nMemory Active = " <<
+	memoryMetrics.memoryActive << " MB\nMemory Inactive = " << memoryMetrics.memoryInactive << " MB\n";
 	*/
 };
 
@@ -328,33 +356,137 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	stream >> temp;
 	networkMetrics.sendPacketsRate = std::stof(temp);
 
-	command = "ifconfig eth0 | awk '/RX bytes/{print '$2/1024/1024'}/TX bytes/{print '$10/1024/1024'}'";
+	command = "cat /proc/net/dev | awk '/^ *eth0:/ {rx=$3; tx=$11; print rx,tx; exit}'";
 	output = exec(command);
-	std::stringstream stream(output);
+	std::stringstream streamTwo(output);
 
-	stream >> temp;
-	networkMetrics.receiveRate = std::stof(temp);
-	stream >> temp;
-	networkMetrics.sendRate = std::stof(temp);
+	streamTwo >> temp;
+	networkMetrics.receivedData = std::stoi(temp);
+	streamTwo >> temp;
+	networkMetrics.sentData = std::stoi(temp);
 
-	/* // DEBUG
-	std::cout << "Receive Packet Rate = " << networkMetrics.receivePacketRate << " Send Packet Rate = " << networkMetrics.sendPacketsRate << "\n";
+	/// DEBUG
+	/*
+	std::cout << "\nReceive Packet Rate = " << networkMetrics.receivePacketRate << " KB/s\nSend Packet Rate = " << networkMetrics.sendPacketsRate << 
+	" KB/s\nPackets Received = " <<  networkMetrics.receivedData << "\nPackets Sent = " << networkMetrics.sentData << "\n";
 	*/
 };
 
+int keyboardHit(void) {
+	struct termios oldt, newt;
+	int ch;
+	int oldf;
+
+	tcgetattr(STDIN_FILENO, &oldt);
+	newt = oldt;
+	newt.c_lflag &= ~(ICANON | ECHO);
+	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+	oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+	fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
+
+	ch = getchar();
+
+	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+	fcntl(STDIN_FILENO, F_SETFL, oldf);
+
+	if(ch != EOF) {
+		ungetc(ch, stdin);
+		return 1;
+	}
+	return 0;
+};
+void printMetric(std::string metricName, int metricValue, std::string metricUnit){
+	std::string value = std::to_string(metricValue);
+	if(metricValue == -692137) {
+		value="notSupported";
+		metricUnit="";
+	}
+	std::cout << metricName << std::right << std::setfill('.') << std::setw(30-metricName.length()) << value << metricUnit << std::endl;
+}
+
+void printMetricPair(std::string metricName, int metricValue, std::string metricUnit, std::string metricName2, int metricValue2, std::string metricUnit2){
+	std::string value = std::to_string(metricValue);
+	if(metricValue == -692137) {
+		value="notSupported";
+		metricUnit="";
+	}
+	std::string value2 = std::to_string(metricValue2);
+	if(metricValue2 == -692137) {
+		value2="notSupported";
+		metricUnit2="";
+	}
+	std::cout << metricName << std::right << std::setfill('.') << std::setw(30-metricName.length()) << value << metricUnit;
+	for(int i=0; i<20-metricUnit.length(); i++){
+		std::cout << ' ';
+	}
+	std::cout << std::left << metricName2 << std::right << std::setfill('.') << std::setw(30-metricName2.length()) << value2 << metricUnit2 << std::endl;
+}
+
+void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetrics, InputOutputMetrics* inputOutputMetrics, MemoryMetrics* memoryMetrics, NetworkMetrics* networkMetrics){
+	auto now = std::chrono::system_clock::now();
+  	std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+    std::cout << std::put_time(std::localtime(&now_c), "%Y-%m-%d %X") << '\n';
+	std::cout << "System:";
+	for(int i=0;i<43;i++){
+		std::cout << ' ';
+	}
+	std::cout << "Network:" << '\n';
+	printMetricPair("Processes running", systemMetrics->processesRunning,"", "Received packets",networkMetrics->receivedData,"");
+	printMetricPair("All Processes", systemMetrics->processesAll,"","Received packets rate", networkMetrics->receivePacketRate,"KB/s");
+	printMetricPair("Context Switch Rate", systemMetrics->contextSwitchRate,"/s","Sent packets",networkMetrics->sentData,"");
+	printMetricPair("Interrupt rate", systemMetrics->interruptRate,"/s","Sent packets rate",networkMetrics->sendPacketsRate,"KB/s");
+	std::cout << '\n';
+	std::cout << "Memory:";
+	for(int i=0;i<43;i++){
+		std::cout << ' ';
+	}
+	std::cout << "Processor:" << '\n';
+	printMetricPair("Memory used", memoryMetrics->memoryUsed,"MB","Time user",processorMetrics->timeUser,"USER_HZ");
+	printMetricPair("Memory cached", memoryMetrics->memoryCached,"MB","Time system",processorMetrics->timeSystem,"USER_HZ");
+	printMetricPair("Swap used", memoryMetrics->swapUsed,"MB","Time idle",processorMetrics->timeIdle,"USER_HZ");
+	printMetricPair("Swap cached", memoryMetrics->swapCached,"MB","Time I/O wait",processorMetrics->timeIoWait,"USER_HZ");
+	printMetricPair("Memory Active", memoryMetrics->memoryActive,"MB","Time IRQ",processorMetrics->timeIRQ,"USER_HZ");
+	printMetricPair("Memory Inactive", memoryMetrics->memoryInactive,"MB","Time Steal",processorMetrics->timeSteal,"USER_HZ");
+	std::cout << '\n'<< "I/O" << '\n';
+	printMetric("Read Rate",inputOutputMetrics->readRate,"MB/s");
+	printMetric("Write Rate",inputOutputMetrics->writeRate,"MB/s");
+	printMetric("Read operations rate",inputOutputMetrics->readOperationsRate,"/s");
+	printMetric("Write operations rate",inputOutputMetrics->writeOperationsRate,"/s");
+	std::cout << '\n';
+}
+
+
 int main() {
 
+	// Structures for all metrics
 	SystemMetrics systemMetrics;
 	ProcessorMetrics processorMetrics;
 	InputOutputMetrics inputOutputMetrics;
 	MemoryMetrics memoryMetrics;
 	NetworkMetrics networkMetrics;
 
-	getSystemMetrics(systemMetrics);
-	getProcessorMetrics(processorMetrics);
-	getInputOutputMetrics(inputOutputMetrics);
-	getMemoryMetrics(memoryMetr)
-	getNetworkMetrics(networkMetrics);
-	
+	while(true){
+    	if(keyboardHit()){
+			std::cout << "\n\nKey pressed, STOPPING LOOP.\n\n";
+			break;
+		}
+		
+		//auto start = std::chrono::high_resolution_clock::now();
+		getSystemMetrics(systemMetrics);
+		getProcessorMetrics(processorMetrics);
+		getInputOutputMetrics(inputOutputMetrics);
+		getMemoryMetrics(memoryMetrics);
+		getNetworkMetrics(networkMetrics);
+		//auto end = std::chrono::high_resolution_clock::now();
+		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
+		//std::cout<<"Time taken to get all measures:" << duration.count()<< "microseconds" << '\n';
+
+		// Display metrics
+		printMetrics(&systemMetrics, &processorMetrics, &inputOutputMetrics, &memoryMetrics, &networkMetrics);
+		// Save metrics to file
+
+		sleep(1);
+  	}
+
 	return 0;
 };
