@@ -145,6 +145,14 @@ void getSystemMetrics(SystemMetrics &systemMetrics) {
 	command = "ps -eo state | grep -c '^D'";
 	output = exec(command);
 	systemMetrics.processesBlocked = std::stoi(output);
+
+	/* // DEBUG
+	std::cout << "Interrupt Rate = " << systemMetrics.interruptRate 
+		<< " Context switch rate = " << systemMetrics.contextSwitchRate
+		<< " All processes = " << systemMetrics.processesAll
+		<< " Running processes = " << systemMetrics.processesRunning
+		<< " Blocked processes = " << systemMetrics.processesBlocked << "\n";
+	*/
 };
 
 void getProcessorMetrics(ProcessorMetrics &processorMetrics){
@@ -184,12 +192,18 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 		std::cout << temp;
 	}
 	*/
+
+	/* // DEBUG
+	std::cout << "Time user = " << processorMetrics.timeUser << " Time nice = " << processorMetrics.timeNice <<
+	" Time system = " << processorMetrics.timeSystem << " Time idle = " << processorMetrics.timeUser << 
+	" Time IO Wait = " << processorMetrics.timeIoWait << " Time IRQ = " << processorMetrics.timeIRQ <<
+	" Time soft IRQ = " << processorMetrics.timeSoftIRQ << " Time Steal = " << processorMetrics.timeSteal <<
+	" Time Guest = " << processorMetrics.timeGuest << "\n";
+	*/
 };
 
 void getInputOutputMetrics(InputOutputMetrics &inputOuputMetrics){
 	
-	// Not sure if this is working - I have no linux available rn
-	// Have to check whether those metrics make any sense
 	const char* command = "awk '{ print $2 }' /proc/$$/io";
 	std::string output = exec(command), temp;
 	
@@ -204,6 +218,11 @@ void getInputOutputMetrics(InputOutputMetrics &inputOuputMetrics){
 	inputOuputMetrics.writeOperationsRate = std::stoi(temp);
 	stream >> temp;
 
+	/* // DEBUG
+	std::cout << "Read Rate = " << inputOuputMetrics.readRate << " Write Rate = " << inputOuputMetrics.writeRate <<
+	" Read Operations Rate = " << inputOuputMetrics.readOperationsRate << " Write Operations Rate = " <<
+	inputOuputMetrics.writeOperationsRate << "\n";
+	*/
 };
 
 void getNetworkMetrics(NetworkMetrics &networkMetrics){
@@ -217,6 +236,9 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	stream >> temp;
 	networkMetrics.sendPacketsRate = std::stof(temp);
 
+	/* // DEBUG
+	std::cout << "Receive Packet Rate = " << networkMetrics.receivePacketRate << " Send Packet Rate = " << networkMetrics.sendPacketsRate << "\n";
+	*/
 };
 
 int main() {
@@ -229,12 +251,6 @@ int main() {
 	getProcessorMetrics(processorMetrics);
 	getInputOutputMetrics(inputOutputMetrics);
 	getNetworkMetrics(networkMetrics);
-
-	// DEBUG
-	std::cout << "\n Interrupt Rate = " << systemMetrics.interruptRate 
-		<< " Context switch rate = " << systemMetrics.contextSwitchRate << " "
-		<< " All processes = " << systemMetrics.processesAll << " "
-		<< " Running processes = " << systemMetrics.processesRunning << " "
-		<< " Blocked processes = " << systemMetrics.processesBlocked;
+	
 	return 0;
 }
