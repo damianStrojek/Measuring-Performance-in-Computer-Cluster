@@ -1,3 +1,0 @@
-ifstat
-perf
-vmstat

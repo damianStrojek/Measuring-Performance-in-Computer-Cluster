@@ -64,10 +64,11 @@ struct ProcessorMetrics {
 };
 
 struct InputOutputMetrics {
-	int readRate;					// Data read
+	int processID;					// Process ID of a given task 
+	int dataRead;					// Data read
 	int readTime;					// Data read time
 	int readOperationsRate;			// Amount of read operations per second
-	int writeRate;					// Data written
+	int dataWritten;				// Data written
 	int writeTime;					// Data write time
 	int writeOperationsRate;		// Amount of write operations per second
 	int flushTime;					// Flush execution time
@@ -76,13 +77,6 @@ struct InputOutputMetrics {
 
 struct MemoryMetrics {
 	// Amount of memory is counted in MB
-	float memoryUsed;					// RAM used
-	float memoryCached;				// Cache for files read from disk
-	float swapUsed;					// Swap memory used
-	float swapCached;					// Data previously written from memory to disk,
-									// fetched back and still in the swap file
-	float memoryActive;				// Data used in the last period
-	float memoryInactive;				// Data used before memoryActive
 	float memoryUsed;				// RAM used
 	float memoryCached;				// Cache for files read from disk
 	float swapUsed;					// Swap memory used
@@ -249,15 +243,15 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 };
 
 void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
-	
-	const char* command = "awk '{ print $2 }' /proc/$$/io";
+
+	const char* command = "awk '{ print $2 }' /proc/1/io";
 	std::string output = exec(command), temp;
 	std::stringstream stream(output);
 	
 	stream >> temp;
-	inputOutputMetrics.readRate = std::stoi(temp);
+	inputOutputMetrics.dataRead = std::stoi(temp) / 1024;
 	stream >> temp;
-	inputOutputMetrics.writeRate = std::stoi(temp);
+	inputOutputMetrics.dataWritten = std::stoi(temp) / 1024;
 	stream >> temp;
 	inputOutputMetrics.readOperationsRate = std::stoi(temp);
 	stream >> temp;
@@ -288,8 +282,8 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 
 	// DEBUG
 	/*
-	std::cout << "\nI/O Read Rate = " << inputOutputMetrics.readRate << "\nI/O Write Rate = " << 
-	inputOutputMetrics.writeRate << "\nI/O Read Operations Rate = " << inputOutputMetrics.readOperationsRate << 
+	std::cout << "\nI/O Read Rate = " << inputOutputMetrics.dataRead << "\nI/O Write Rate = " << 
+	inputOutputMetrics.dataWritten << "\nI/O Read Operations Rate = " << inputOutputMetrics.readOperationsRate << 
 	"\nI/O Write Operations Rate = " << inputOutputMetrics.writeOperationsRate << "\n";
 	*/
 };
@@ -388,7 +382,6 @@ void writeToFileProcessorMetrics(std::ofstream &file, ProcessorMetrics data) {
 	file << (data.timeSoftIRQ != NOTSUPPORTED ? std::to_string(data.timeSoftIRQ) : "not_supported") << ",";
 	file << (data.timeSteal != NOTSUPPORTED ? std::to_string(data.timeSteal) : "not_supported") << ",";
 	file << (data.timeGuest != NOTSUPPORTED ? std::to_string(data.timeGuest) : "not_supported") << ",";
-	file << (data.timeGuestNice != NOTSUPPORTED ? std::to_string(data.timeGuestNice) : "not_supported") << ",";
 	file << (data.instructionsRetiredRate != NOTSUPPORTED ? std::to_string(data.instructionsRetiredRate) : "not_supported") << ",";
 	file << (data.cyclesRate != NOTSUPPORTED ? std::to_string(data.cyclesRate) : "not_supported") << ",";
 	file << (data.cyclesReferenceRate != NOTSUPPORTED ? std::to_string(data.cyclesReferenceRate) : "not_supported") << ",";
@@ -403,10 +396,10 @@ void writeToFileProcessorMetrics(std::ofstream &file, ProcessorMetrics data) {
 };
 
 void writeToFileInputOutputMetrics(std::ofstream &file, InputOutputMetrics data) {
-	file << (data.readRate != NOTSUPPORTED ? std::to_string(data.readRate) : "not_supported") << ",";
+	file << (data.dataRead != NOTSUPPORTED ? std::to_string(data.dataRead) : "not_supported") << ",";
 	file << (data.readTime != NOTSUPPORTED ? std::to_string(data.readTime) : "not_supported") << ",";
 	file << (data.readOperationsRate != NOTSUPPORTED ? std::to_string(data.readOperationsRate) : "not_supported") << ",";
-	file << (data.writeRate != NOTSUPPORTED ? std::to_string(data.writeRate) : "not_supported") << ",";
+	file << (data.dataWritten != NOTSUPPORTED ? std::to_string(data.dataWritten) : "not_supported") << ",";
 	file << (data.writeTime != NOTSUPPORTED ? std::to_string(data.writeTime) : "not_supported") << ",";
 	file << (data.writeOperationsRate != NOTSUPPORTED ? std::to_string(data.writeOperationsRate) : "not_supported") << ",";
 	file << (data.flushTime != NOTSUPPORTED ? std::to_string(data.flushTime) : "not_supported") << ",";
@@ -434,76 +427,76 @@ void writeToFileMemoryMetrics(std::ofstream &file, MemoryMetrics data) {
 };
 
 void writeToFileNetworkMetrics(std::ofstream &file, NetworkMetrics data) {
-	file << ((data.receiveRate == NOTSUPPORTED) ? "not_supported," : (std::to_string(data.receiveRate) + ","));
+	file << ((data.receivedData == NOTSUPPORTED) ? "not_supported," : (std::to_string(data.receivedData) + ","));
 	file << ((data.receivePacketRate == NOTSUPPORTED) ? "not_supported," : (std::to_string(data.receivePacketRate) + ","));
-	file << ((data.sendRate == NOTSUPPORTED) ? "not_supported," : (std::to_string(data.sendRate) + ","));
+	file << ((data.sentData == NOTSUPPORTED) ? "not_supported," : (std::to_string(data.sentData) + ","));
 	file << ((data.sendPacketsRate == NOTSUPPORTED) ? "not_supported," : (std::to_string(data.sendPacketsRate) + ","));
 };
 
-void writeToCSV(std::string timestamp, SystemMetrics systemMetrics, ProcessorMetrics processorMetrics, 
+void writeToCSV(std::ofstream &file, std::string timestamp, SystemMetrics systemMetrics, ProcessorMetrics processorMetrics, 
 				InputOutputMetrics inputOutputMetrics, MemoryMetrics memoryMetrics, NetworkMetrics networkMetrics){
-    
-	std::string fileName = timestamp += "_metrics.csv";
-	std::ofstream file(fileName, std::ios::trunc);
 
-    if (file.is_open()) {
-		file << timestamp << ",";
-        writeToFileSystemMetrics(file, systemMetrics);
-		writeToFileProcessorMetrics(file, processorMetrics);
-		writeToFileMemoryMertics(file, memoryMetrics);
-		writeToFileInputOutputMetrics(file, inputOutputMetrics);
-		writeToFileNetworkMetrics(file, networkMetrics);
-		file << std::endl;
-        file.close();
-    } else
-        std::cerr << "\n [ERROR] Unable to open file " << fileName << " for writing.\n";
+	file << timestamp << ",";
+	writeToFileSystemMetrics(file, systemMetrics);
+	writeToFileProcessorMetrics(file, processorMetrics);
+	writeToFileMemoryMetrics(file, memoryMetrics);
+	writeToFileInputOutputMetrics(file, inputOutputMetrics);
+	writeToFileNetworkMetrics(file, networkMetrics);
+	file << std::endl;
 };
 
 void printMetric(std::string metricName, int metricValue, std::string metricUnit){
-	std::string value = std::to_string(metricValue);
-	if(metricValue == -692137) {
-		value="notSupported";
-		metricUnit="";
-	}
-	std::cout << metricName << std::right << std::setfill('.') << std::setw(30-metricName.length()) << value << metricUnit << std::endl;
-}
 
-void printMetricPair(std::string metricName, int metricValue, std::string metricUnit, std::string metricName2, int metricValue2, std::string metricUnit2){
 	std::string value = std::to_string(metricValue);
-	if(metricValue == -692137) {
-		value="notSupported";
-		metricUnit="";
+	if(metricValue == NOTSUPPORTED) {
+		value = "notSupported";
+		metricUnit = "";
 	}
-	std::string value2 = std::to_string(metricValue2);
-	if(metricValue2 == -692137) {
-		value2="notSupported";
-		metricUnit2="";
+	std::cout << metricName << std::right << std::setfill('.') << std::setw(30-metricName.length()) << value << metricUnit << "\n";
+};
+
+void printMetricPair(std::string metricName, int metricValue, std::string metricUnit, 
+						std::string metricNameTwo, int metricValueTwo, std::string metricUnitTwo){
+
+	std::string value = std::to_string(metricValue);
+	if(metricValue == NOTSUPPORTED) {
+		value = "notSupported";
+		metricUnit = "";
 	}
+
+	std::string value2 = std::to_string(metricValueTwo);
+	if(metricValueTwo == NOTSUPPORTED) {
+		value2 = "notSupported";
+		metricUnitTwo = "";
+	}
+
 	std::cout << metricName << std::right << std::setfill('.') << std::setw(30-metricName.length()) << value << metricUnit;
-	for(int i=0; i<20-metricUnit.length(); i++){
-		std::cout << ' ';
-	}
-	std::cout << std::left << metricName2 << std::right << std::setfill('.') << std::setw(30-metricName2.length()) << value2 << metricUnit2 << std::endl;
-}
+	for(int i=0; i<20-metricUnit.length(); i++) std::cout << ' ';
 
-void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetrics, InputOutputMetrics* inputOutputMetrics, MemoryMetrics* memoryMetrics, NetworkMetrics* networkMetrics){
+	std::cout << std::left << metricNameTwo << std::right << std::setfill('.') << 
+		std::setw(30-metricNameTwo.length()) << value2 << metricUnitTwo << std::endl;
+};
+
+void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetrics, 
+					InputOutputMetrics* inputOutputMetrics, MemoryMetrics* memoryMetrics, NetworkMetrics* networkMetrics){
+
 	auto now = std::chrono::system_clock::now();
   	std::time_t now_c = std::chrono::system_clock::to_time_t(now);
     std::cout << std::put_time(std::localtime(&now_c), "%Y-%m-%d %X") << '\n';
+
 	std::cout << "System:";
-	for(int i=0;i<43;i++){
-		std::cout << ' ';
-	}
+	for(int i=0;i<43;i++) std::cout << ' ';
+
 	std::cout << "Network:" << '\n';
 	printMetricPair("Processes running", systemMetrics->processesRunning,"", "Received packets",networkMetrics->receivedData,"");
 	printMetricPair("All Processes", systemMetrics->processesAll,"","Received packets rate", networkMetrics->receivePacketRate,"KB/s");
 	printMetricPair("Context Switch Rate", systemMetrics->contextSwitchRate,"/s","Sent packets",networkMetrics->sentData,"");
 	printMetricPair("Interrupt rate", systemMetrics->interruptRate,"/s","Sent packets rate",networkMetrics->sendPacketsRate,"KB/s");
 	std::cout << '\n';
+
 	std::cout << "Memory:";
-	for(int i=0;i<43;i++){
-		std::cout << ' ';
-	}
+	for(int i=0;i<43;i++) std::cout << ' ';
+
 	std::cout << "Processor:" << '\n';
 	printMetricPair("Memory used", memoryMetrics->memoryUsed,"MB","Time user",processorMetrics->timeUser,"USER_HZ");
 	printMetricPair("Memory cached", memoryMetrics->memoryCached,"MB","Time system",processorMetrics->timeSystem,"USER_HZ");
@@ -511,13 +504,14 @@ void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetri
 	printMetricPair("Swap cached", memoryMetrics->swapCached,"MB","Time I/O wait",processorMetrics->timeIoWait,"USER_HZ");
 	printMetricPair("Memory Active", memoryMetrics->memoryActive,"MB","Time IRQ",processorMetrics->timeIRQ,"USER_HZ");
 	printMetricPair("Memory Inactive", memoryMetrics->memoryInactive,"MB","Time Steal",processorMetrics->timeSteal,"USER_HZ");
-	std::cout << '\n'<< "I/O" << '\n';
-	printMetric("Read Rate",inputOutputMetrics->readRate,"MB/s");
-	printMetric("Write Rate",inputOutputMetrics->writeRate,"MB/s");
-	printMetric("Read operations rate",inputOutputMetrics->readOperationsRate,"/s");
-	printMetric("Write operations rate",inputOutputMetrics->writeOperationsRate,"/s");
+
+	std::cout << '\n'<< "I/O for PID 1:" << '\n';
+	printMetric("Data Read ",inputOutputMetrics->dataRead,"MB");
+	printMetric("Data Written ",inputOutputMetrics->dataWritten,"MB");
+	printMetric("Read operations ",inputOutputMetrics->readOperationsRate,"");
+	printMetric("Write operations ",inputOutputMetrics->writeOperationsRate,"");
 	std::cout << '\n';
-}
+};
 
 int keyboardHit(void) {
 	struct termios oldt, newt;
@@ -552,25 +546,23 @@ int main() {
 	MemoryMetrics memoryMetrics;
 	NetworkMetrics networkMetrics;
 
-	while(true){
-    	if(keyboardHit()){
-			std::cout << "\n\nKey pressed, STOPPING LOOP.\n\n";
-			break;
-		}
-		
-		//auto start = std::chrono::high_resolution_clock::now();
-
 	const char* command = "date +'%d%m%y-%H%M%S'";
-	std::string timestamp;
+	std::string timestamp = exec(command);
+	timestamp.pop_back();
+	std::string fileName = timestamp += "_metrics.csv";
+	std::ofstream file(fileName, std::ios::out);
+	if(!file.is_open()) std::cerr << "\n [ERROR] Unable to open file " << fileName << " for writing.\n";
 
 	while(true) {
     	if(keyboardHit()) {
 			std::cout << "\n\n [STOP] Key pressed.\n\n";
 			break;
 		}	
-    
+		
 		timestamp = exec(command);
-		std::cout << "\n\n [TIMESTAMP] " << timestamp << "\n";
+		timestamp.pop_back();
+
+		//auto start = std::chrono::high_resolution_clock::now();
 
 		getSystemMetrics(systemMetrics);
 		getProcessorMetrics(processorMetrics);
@@ -580,16 +572,17 @@ int main() {
 
 		//auto end = std::chrono::high_resolution_clock::now();
 		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
-		//std::cout<<"Time taken to get all measures:" << duration.count()<< "microseconds" << '\n';
+		//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
 
 		// Display metrics
 		printMetrics(&systemMetrics, &processorMetrics, &inputOutputMetrics, &memoryMetrics, &networkMetrics);
 
 		// Save metrics to file
-	  writeToCSV(timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
+	  	writeToCSV(file, timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
 
 		sleep(1);
   	}
-    
+
+    file.close();
 	return 0;
 };
