@@ -28,20 +28,6 @@
 #define MEMINFO "/proc/meminfo"			// Operating memory information
 #define SWAPINFO "/proc/swap"			// List of the available swap areas
 
-
-/*
-EXAMPLE OF GETTING THE FILE INTO A STRING
-
-std::ifstream procLoadavg;
-	procLoadavg.open(LOADAVG, std::ios::in);
-	if (procLoadavg.is_open()) {
-		std::string loadAvg((std::istreambuf_iterator<char>(procLoadavg)),
-			std::istreambuf_iterator<char>());
-		std::cout << loadAvg << "\n";
-	}
-	else std::cout << "\n[ERROR] provLoadAvg not opened\n";
-*/
-
 struct SystemMetrics {
 	int processesRunning;			// Number of processes in the R state
 	int processesAll;				// Number of all processes
@@ -86,13 +72,13 @@ struct InputOutputMetrics {
 
 struct MemoryMetrics {
 	// Amount of memory is counted in MB
-	float memoryUsed;					// RAM used
+	float memoryUsed;				// RAM used
 	float memoryCached;				// Cache for files read from disk
 	float swapUsed;					// Swap memory used
-	float swapCached;					// Data previously written from memory to disk,
+	float swapCached;				// Data previously written from memory to disk,
 									// fetched back and still in the swap file
 	float memoryActive;				// Data used in the last period
-	float memoryInactive;				// Data used before memoryActive
+	float memoryInactive;			// Data used before memoryActive
 	// Number of pages is given in pages/second
 	int pageInRate;					// Pages read
 	int pageOutRate;				// Pages saved
@@ -155,10 +141,12 @@ void getSystemMetrics(SystemMetrics &systemMetrics) {
 	systemMetrics.processesBlocked = std::stoi(output);
 
 	// DEBUG
+	/*
 	std::cout << "\nInterrupt Rate = " << systemMetrics.interruptRate << "\nContext switch rate = " << 
 	systemMetrics.contextSwitchRate << "\nAll processes = " << systemMetrics.processesAll << 
 	"\nRunning processes = " << systemMetrics.processesRunning << "\nBlocked processes = " << 
 	systemMetrics.processesBlocked << "\n";
+	*/
 };
 
 void getProcessorMetrics(ProcessorMetrics &processorMetrics){
@@ -173,7 +161,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	output = exec(command);
 	std::stringstream stream(output);
 
-	stream >> temp;				// Get rid of 'cpu' at the beggining
+	stream >> temp;		// Get rid of 'cpu' at the beggining
 	stream >> temp;
 	processorMetrics.timeUser = std::stoi(temp);
 	stream >> temp;
@@ -240,11 +228,13 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	processorMetrics.processorPower = NOTSUPPORTED;
 
 	// DEBUG
+	/*
 	std::cout << "\nTime user = " << processorMetrics.timeUser  << "\nTime nice = " << processorMetrics.timeNice <<
 	"\nTime system = " << processorMetrics.timeSystem << "\nTime idle = " << processorMetrics.timeIdle << 
 	"\nTime I/O wait = " << processorMetrics.timeIoWait << "\nTime IRQ = " << processorMetrics.timeIRQ << 
 	"\nTime Soft IRQ = " << processorMetrics.timeSoftIRQ << "\nTime Steal = " << processorMetrics.timeSteal << 
 	"\nTime Guest = " << processorMetrics.timeGuest << "\n";
+	*/
 };
 
 void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
@@ -286,9 +276,11 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 	inputOutputMetrics.flushTime = NOTSUPPORTED;
 
 	// DEBUG
+	/*
 	std::cout << "\nI/O Read Rate = " << inputOutputMetrics.readRate << "\nI/O Write Rate = " << 
 	inputOutputMetrics.writeRate << "\nI/O Read Operations Rate = " << inputOutputMetrics.readOperationsRate << 
 	"\nI/O Write Operations Rate = " << inputOutputMetrics.writeOperationsRate << "\n";
+	*/
 };
 
 void getMemoryMetrics(MemoryMetrics &memoryMetrics){
@@ -333,9 +325,11 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 	memoryMetrics.memoryPower = NOTSUPPORTED;
 
 	// DEBUG
+	/*
 	std::cout << "\nMemory Used = " << memoryMetrics.memoryUsed << " MB\nMemory Cached = " << memoryMetrics.memoryCached <<
 	" MB\nSwap Used = " << memoryMetrics.swapUsed << " MB\nSwap Cached = " << memoryMetrics.swapCached << " MB\nMemory Active = " <<
 	memoryMetrics.memoryActive << " MB\nMemory Inactive = " << memoryMetrics.memoryInactive << " MB\n";
+	*/
 };
 
 void getNetworkMetrics(NetworkMetrics &networkMetrics){
@@ -359,8 +353,99 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	networkMetrics.sentData = std::stoi(temp);
 
 	/// DEBUG
+	/*
 	std::cout << "\nReceive Packet Rate = " << networkMetrics.receivePacketRate << " KB/s\nSend Packet Rate = " << networkMetrics.sendPacketsRate << 
 	" KB/s\nPackets Received = " <<  networkMetrics.receivedData << "\nPackets Sent = " << networkMetrics.sentData << "\n";
+	*/
+};
+
+void writeToFileSystemMetrics(std::ofstream &file, SystemMetrics data) {
+	file << (data.processesRunning != NOTSUPPORTED ? std::to_string(data.processesRunning) : "not_supported") << ",";
+	file << (data.processesAll != NOTSUPPORTED ? std::to_string(data.processesAll) : "not_supported") << ",";
+	file << (data.processesBlocked != NOTSUPPORTED ? std::to_string(data.processesBlocked) : "not_supported") << ",";
+	file << (data.contextSwitchRate != NOTSUPPORTED ? std::to_string(data.contextSwitchRate) : "not_supported") << ",";
+	file << (data.interruptRate != NOTSUPPORTED ? std::to_string(data.interruptRate) : "not_supported");
+};
+
+void writeToFileProcessorMetrics(std::ofstream &file, ProcessorMetrics data) {
+	file << (data.timeUser != NOTSUPPORTED ? std::to_string(data.timeUser) : "not_supported") << ",";
+	file << (data.timeNice != NOTSUPPORTED ? std::to_string(data.timeNice) : "not_supported") << ",";
+	file << (data.timeSystem != NOTSUPPORTED ? std::to_string(data.timeSystem) : "not_supported") << ",";
+	file << (data.timeIdle != NOTSUPPORTED ? std::to_string(data.timeIdle) : "not_supported") << ",";
+	file << (data.timeIoWait != NOTSUPPORTED ? std::to_string(data.timeIoWait) : "not_supported") << ",";
+	file << (data.timeIRQ != NOTSUPPORTED ? std::to_string(data.timeIRQ) : "not_supported") << ",";
+	file << (data.timeSoftIRQ != NOTSUPPORTED ? std::to_string(data.timeSoftIRQ) : "not_supported") << ",";
+	file << (data.timeSteal != NOTSUPPORTED ? std::to_string(data.timeSteal) : "not_supported") << ",";
+	file << (data.timeGuest != NOTSUPPORTED ? std::to_string(data.timeGuest) : "not_supported") << ",";
+	file << (data.timeGuestNice != NOTSUPPORTED ? std::to_string(data.timeGuestNice) : "not_supported") << ",";
+	file << (data.instructionsRetiredRate != NOTSUPPORTED ? std::to_string(data.instructionsRetiredRate) : "not_supported") << ",";
+	file << (data.cyclesRate != NOTSUPPORTED ? std::to_string(data.cyclesRate) : "not_supported") << ",";
+	file << (data.cyclesReferenceRate != NOTSUPPORTED ? std::to_string(data.cyclesReferenceRate) : "not_supported") << ",";
+	file << (data.frequencyRelative != NOTSUPPORTED ? std::to_string(data.frequencyRelative) : "not_supported") << ",";
+	file << (data.frequencyActiveRelative != NOTSUPPORTED ? std::to_string(data.frequencyActiveRelative) : "not_supported") << ",";
+	file << (data.cacheL2HitRate != NOTSUPPORTED ? std::to_string(data.cacheL2HitRate) : "not_supported") << ",";
+	file << (data.cacheL2MissRate != NOTSUPPORTED ? std::to_string(data.cacheL2MissRate) : "not_supported") << ",";
+	file << (data.cacheL3HitRate != NOTSUPPORTED ? std::to_string(data.cacheL3HitRate) : "not_supported") << ",";
+	file << (data.cacheL3HitSnoopRate != NOTSUPPORTED ? std::to_string(data.cacheL3HitSnoopRate) : "not_supported") << ",";
+	file << (data.cacheL3MissRate != NOTSUPPORTED ? std::to_string(data.cacheL3MissRate) : "not_supported") << ",";
+	file << (data.processorPower != NOTSUPPORTED ? std::to_string(data.processorPower) : "not_supported") << ",";
+};
+
+void writeToFileInputOutputMetrics(std::ofstream &file, InputOutputMetrics data) {
+	file << (data.readRate != NOTSUPPORTED ? std::to_string(data.readRate) : "not_supported") << ",";
+	file << (data.readTime != NOTSUPPORTED ? std::to_string(data.readTime) : "not_supported") << ",";
+	file << (data.readOperationsRate != NOTSUPPORTED ? std::to_string(data.readOperationsRate) : "not_supported") << ",";
+	file << (data.writeRate != NOTSUPPORTED ? std::to_string(data.writeRate) : "not_supported") << ",";
+	file << (data.writeTime != NOTSUPPORTED ? std::to_string(data.writeTime) : "not_supported") << ",";
+	file << (data.writeOperationsRate != NOTSUPPORTED ? std::to_string(data.writeOperationsRate) : "not_supported") << ",";
+	file << (data.flushTime != NOTSUPPORTED ? std::to_string(data.flushTime) : "not_supported") << ",";
+	file << (data.flushOperationsRate != NOTSUPPORTED ? std::to_string(data.flushOperationsRate) : "not_supported") << ",";
+};
+
+void writeToFileMemoryMetrics(std::ofstream &file, MemoryMetrics data) {
+	file << (data.memoryUsed != NOTSUPPORTED ? std::to_string(data.memoryUsed) : "not_supported") << ",";
+	file << (data.memoryCached != NOTSUPPORTED ? std::to_string(data.memoryCached) : "not_supported") << ",";
+	file << (data.swapUsed != NOTSUPPORTED ? std::to_string(data.swapUsed) : "not_supported") << ",";
+	file << (data.swapCached != NOTSUPPORTED ? std::to_string(data.swapCached) : "not_supported") << ",";
+	file << (data.memoryActive != NOTSUPPORTED ? std::to_string(data.memoryActive) : "not_supported") << ",";
+	file << (data.memoryInactive != NOTSUPPORTED ? std::to_string(data.memoryInactive) : "not_supported") << ",";
+	file << (data.pageInRate != NOTSUPPORTED ? std::to_string(data.pageInRate) : "not_supported") << ",";
+	file << (data.pageOutRate != NOTSUPPORTED ? std::to_string(data.pageOutRate) : "not_supported") << ",";
+	file << (data.pageFaultRate != NOTSUPPORTED ? std::to_string(data.pageFaultRate) : "not_supported") << ",";
+	file << (data.pageFaultsMajorRate != NOTSUPPORTED ? std::to_string(data.pageFaultsMajorRate) : "not_supported") << ",";
+	file << (data.pageFreeRate != NOTSUPPORTED ? std::to_string(data.pageFreeRate) : "not_supported") << ",";
+	file << (data.pageActivateRate != NOTSUPPORTED ? std::to_string(data.pageActivateRate) : "not_supported") << ",";
+	file << (data.pageDeactivateRate != NOTSUPPORTED ? std::to_string(data.pageDeactivateRate) : "not_supported") << ",";
+	file << (data.memoryReadRate != NOTSUPPORTED ? std::to_string(data.memoryReadRate) : "not_supported") << ",";
+	file << (data.memoryWriteRate != NOTSUPPORTED ? std::to_string(data.memoryWriteRate) : "not_supported") << ",";
+	file << (data.memoryIoRate != NOTSUPPORTED ? std::to_string(data.memoryIoRate) : "not_supported") << ",";
+	file << (data.memoryPower != NOTSUPPORTED ? std::to_string(data.memoryPower) : "not_supported") << ",";
+};
+
+void writeToFileNetworkMetrics(std::ofstream &file, NetworkMetrics data) {
+	file << ((data.receiveRate == NOTSUPPORTED) ? "not_supported," : (std::to_string(data.receiveRate) + ","));
+	file << ((data.receivePacketRate == NOTSUPPORTED) ? "not_supported," : (std::to_string(data.receivePacketRate) + ","));
+	file << ((data.sendRate == NOTSUPPORTED) ? "not_supported," : (std::to_string(data.sendRate) + ","));
+	file << ((data.sendPacketsRate == NOTSUPPORTED) ? "not_supported," : (std::to_string(data.sendPacketsRate) + ","));
+};
+
+void writeToCSV(std::string timestamp, SystemMetrics systemMetrics, ProcessorMetrics processorMetrics, 
+				InputOutputMetrics inputOutputMetrics, MemoryMetrics memoryMetrics, NetworkMetrics networkMetrics){
+    
+	std::string fileName = timestamp += "_metrics.csv";
+	std::ofstream file(fileName, std::ios::trunc);
+
+    if (file.is_open()) {
+		file << timestamp << ",";
+        writeToFileSystemMetrics(file, systemMetrics);
+		writeToFileProcessorMetrics(file, processorMetrics);
+		writeToFileMemoryMertics(file, memoryMetrics);
+		writeToFileInputOutputMetrics(file, inputOutputMetrics);
+		writeToFileNetworkMetrics(file, networkMetrics);
+		file << std::endl;
+        file.close();
+    } else
+        std::cerr << "\n [ERROR] Unable to open file " << fileName << " for writing.\n";
 };
 
 int keyboardHit(void) {
@@ -387,92 +472,6 @@ int keyboardHit(void) {
 	return 0;
 };
 
-void writeToFileSystemMetrics(std::ofstream &file, SystemMetrics data) {
-	file << (data.processesRunning != -213769 ? std::to_string(data.processesRunning) : "not_supported") << ",";
-	file << (data.processesAll != -213769 ? std::to_string(data.processesAll) : "not_supported") << ",";
-	file << (data.processesBlocked != -213769 ? std::to_string(data.processesBlocked) : "not_supported") << ",";
-	file << (data.contextSwitchRate != -213769 ? std::to_string(data.contextSwitchRate) : "not_supported") << ",";
-	file << (data.interruptRate != -213769 ? std::to_string(data.interruptRate) : "not_supported");
-
-}
-void writeToFileProcessorMetrics(std::ofstream &file, ProcessorMetrics data) {
-	file << (data.timeUser != -213769 ? std::to_string(data.timeUser) : "not_supported") << ",";
-	file << (data.timeNice != -213769 ? std::to_string(data.timeNice) : "not_supported") << ",";
-	file << (data.timeSystem != -213769 ? std::to_string(data.timeSystem) : "not_supported") << ",";
-	file << (data.timeIdle != -213769 ? std::to_string(data.timeIdle) : "not_supported") << ",";
-	file << (data.timeIoWait != -213769 ? std::to_string(data.timeIoWait) : "not_supported") << ",";
-	file << (data.timeIRQ != -213769 ? std::to_string(data.timeIRQ) : "not_supported") << ",";
-	file << (data.timeSoftIRQ != -213769 ? std::to_string(data.timeSoftIRQ) : "not_supported") << ",";
-	file << (data.timeSteal != -213769 ? std::to_string(data.timeSteal) : "not_supported") << ",";
-	file << (data.timeGuest != -213769 ? std::to_string(data.timeGuest) : "not_supported") << ",";
-	file << (data.timeGuestNice != -213769 ? std::to_string(data.timeGuestNice) : "not_supported") << ",";
-	file << (data.instructionsRetiredRate != -213769 ? std::to_string(data.instructionsRetiredRate) : "not_supported") << ",";
-	file << (data.cyclesRate != -213769 ? std::to_string(data.cyclesRate) : "not_supported") << ",";
-	file << (data.cyclesReferenceRate != -213769 ? std::to_string(data.cyclesReferenceRate) : "not_supported") << ",";
-	file << (data.frequencyRelative != -213769 ? std::to_string(data.frequencyRelative) : "not_supported") << ",";
-	file << (data.frequencyActiveRelative != -213769 ? std::to_string(data.frequencyActiveRelative) : "not_supported") << ",";
-	file << (data.cacheL2HitRate != -213769 ? std::to_string(data.cacheL2HitRate) : "not_supported") << ",";
-	file << (data.cacheL2MissRate != -213769 ? std::to_string(data.cacheL2MissRate) : "not_supported") << ",";
-	file << (data.cacheL3HitRate != -213769 ? std::to_string(data.cacheL3HitRate) : "not_supported") << ",";
-	file << (data.cacheL3HitSnoopRate != -213769 ? std::to_string(data.cacheL3HitSnoopRate) : "not_supported") << ",";
-	file << (data.cacheL3MissRate != -213769 ? std::to_string(data.cacheL3MissRate) : "not_supported") << ",";
-	file << (data.processorPower != -213769 ? std::to_string(data.processorPower) : "not_supported") << ",";
-
-}
-void writeToFileInputOutputMetrics(std::ofstream &file, InputOutputMetrics data) {
-	file << (data.readRate != -213769 ? std::to_string(data.readRate) : "not_supported") << ",";
-	file << (data.readTime != -213769 ? std::to_string(data.readTime) : "not_supported") << ",";
-	file << (data.readOperationsRate != -213769 ? std::to_string(data.readOperationsRate) : "not_supported") << ",";
-	file << (data.writeRate != -213769 ? std::to_string(data.writeRate) : "not_supported") << ",";
-	file << (data.writeTime != -213769 ? std::to_string(data.writeTime) : "not_supported") << ",";
-	file << (data.writeOperationsRate != -213769 ? std::to_string(data.writeOperationsRate) : "not_supported") << ",";
-	file << (data.flushTime != -213769 ? std::to_string(data.flushTime) : "not_supported") << ",";
-	file << (data.flushOperationsRate != -213769 ? std::to_string(data.flushOperationsRate) : "not_supported") << ",";
-
-}
-
-void writeToFileMemoryMetrics(std::ofstream &file, MemoryMetrics data) {
-	file << (data.memoryUsed != -213769 ? std::to_string(data.memoryUsed) : "not_supported") << ",";
-	file << (data.memoryCached != -213769 ? std::to_string(data.memoryCached) : "not_supported") << ",";
-	file << (data.swapUsed != -213769 ? std::to_string(data.swapUsed) : "not_supported") << ",";
-	file << (data.swapCached != -213769 ? std::to_string(data.swapCached) : "not_supported") << ",";
-	file << (data.memoryActive != -213769 ? std::to_string(data.memoryActive) : "not_supported") << ",";
-	file << (data.memoryInactive != -213769 ? std::to_string(data.memoryInactive) : "not_supported") << ",";
-	file << (data.pageInRate != -213769 ? std::to_string(data.pageInRate) : "not_supported") << ",";
-	file << (data.pageOutRate != -213769 ? std::to_string(data.pageOutRate) : "not_supported") << ",";
-	file << (data.pageFaultRate != -213769 ? std::to_string(data.pageFaultRate) : "not_supported") << ",";
-	file << (data.pageFaultsMajorRate != -213769 ? std::to_string(data.pageFaultsMajorRate) : "not_supported") << ",";
-	file << (data.pageFreeRate != -213769 ? std::to_string(data.pageFreeRate) : "not_supported") << ",";
-	file << (data.pageActivateRate != -213769 ? std::to_string(data.pageActivateRate) : "not_supported") << ",";
-	file << (data.pageDeactivateRate != -213769 ? std::to_string(data.pageDeactivateRate) : "not_supported") << ",";
-	file << (data.memoryReadRate != -213769 ? std::to_string(data.memoryReadRate) : "not_supported") << ",";
-	file << (data.memoryWriteRate != -213769 ? std::to_string(data.memoryWriteRate) : "not_supported") << ",";
-	file << (data.memoryIoRate != -213769 ? std::to_string(data.memoryIoRate) : "not_supported") << ",";
-	file << (data.memoryPower != -213769 ? std::to_string(data.memoryPower) : "not_supported") << ",";
-
-}
-void writeToFileNetworkMetrics(std::ofstream &file, NetworkMetrics data) {
-	file << ((data.receiveRate == -213769) ? "not_supported," : (std::to_string(data.receiveRate) + ","));
-	file << ((data.receivePacketRate == -213769) ? "not_supported," : (std::to_string(data.receivePacketRate) + ","));
-	file << ((data.sendRate == -213769) ? "not_supported," : (std::to_string(data.sendRate) + ","));
-	file << ((data.sendPacketsRate == -213769) ? "not_supported," : (std::to_string(data.sendPacketsRate) + ","));
-}
-
-void writeToCSV(int timestamp, SystemMetrics systemMetrics, ProcessorMetrics processorMetrics, InputOutputMetrics inputOutputMetrics, NetworkMetrics networkMetrics){
-    std::ofstream file("test.csv", std::ios::trunc);
-    if (file.is_open()) {
-		file << timestamp << ",";
-        writeToFileSystemMetrics(file, systemMetrics);
-		writeToFileProcessorMetrics(file, processorMetrics);
-		writeToFileInputOutputMetrics(file, inputOutputMetrics);
-		writeToFileNetworkMetrics(file, networkMetrics);
-		file << std::endl;
-        file.close();
-    } else {
-        std::cerr << "Unable to open file " << "test.csv" << " for writing" << std::endl;
-    }
-}
-
 int main() {
 
 	// Structures for all metrics
@@ -481,16 +480,17 @@ int main() {
 	InputOutputMetrics inputOutputMetrics;
 	MemoryMetrics memoryMetrics;
 	NetworkMetrics networkMetrics;
+
 	const char* command = "date +'%d%m%y-%H%M%S'";
 	std::string timestamp;
 
-	while(true){
-    	if(keyboardHit()){
-			std::cout << "\n\nKey pressed, STOPPING LOOP.\n\n";
+	while(true) {
+    	if(keyboardHit()) {
+			std::cout << "\n\n [STOP] Key pressed.\n\n";
 			break;
 		}	
 		timestamp = exec(command);
-		std::cout << "\n\n !!! " << timestamp << "\n";
+		std::cout << "\n\n [TIMESTAMP] " << timestamp << "\n";
 
 		getSystemMetrics(systemMetrics);
 		getProcessorMetrics(processorMetrics);
@@ -499,9 +499,10 @@ int main() {
 		getNetworkMetrics(networkMetrics);
 
 		// Display metrics
+		//displayMetrics();
 
 		// Save metrics to file
-	  writeToCSV(1, systemMetrics, processorMetrics, inputOutputMetrics, networkMetrics);
+	  	writeToCSV(timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
 
 		sleep(3);
   	}
