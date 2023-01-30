@@ -8,12 +8,16 @@
 #include <cstdio>
 #include <array>
 #include <memory>
+#include <cstring>
 #include <stdexcept>
 #include <algorithm>
 #include <sstream>
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <ctime>
+#include <iomanip>
+#include <chrono>
 #include <map>
 
 #define NOTSUPPORTED -692137			// Functionality not yet supported
@@ -72,6 +76,13 @@ struct InputOutputMetrics {
 
 struct MemoryMetrics {
 	// Amount of memory is counted in MB
+	float memoryUsed;					// RAM used
+	float memoryCached;				// Cache for files read from disk
+	float swapUsed;					// Swap memory used
+	float swapCached;					// Data previously written from memory to disk,
+									// fetched back and still in the swap file
+	float memoryActive;				// Data used in the last period
+	float memoryInactive;				// Data used before memoryActive
 	float memoryUsed;				// RAM used
 	float memoryCached;				// Cache for files read from disk
 	float swapUsed;					// Swap memory used
@@ -448,6 +459,66 @@ void writeToCSV(std::string timestamp, SystemMetrics systemMetrics, ProcessorMet
         std::cerr << "\n [ERROR] Unable to open file " << fileName << " for writing.\n";
 };
 
+void printMetric(std::string metricName, int metricValue, std::string metricUnit){
+	std::string value = std::to_string(metricValue);
+	if(metricValue == -692137) {
+		value="notSupported";
+		metricUnit="";
+	}
+	std::cout << metricName << std::right << std::setfill('.') << std::setw(30-metricName.length()) << value << metricUnit << std::endl;
+}
+
+void printMetricPair(std::string metricName, int metricValue, std::string metricUnit, std::string metricName2, int metricValue2, std::string metricUnit2){
+	std::string value = std::to_string(metricValue);
+	if(metricValue == -692137) {
+		value="notSupported";
+		metricUnit="";
+	}
+	std::string value2 = std::to_string(metricValue2);
+	if(metricValue2 == -692137) {
+		value2="notSupported";
+		metricUnit2="";
+	}
+	std::cout << metricName << std::right << std::setfill('.') << std::setw(30-metricName.length()) << value << metricUnit;
+	for(int i=0; i<20-metricUnit.length(); i++){
+		std::cout << ' ';
+	}
+	std::cout << std::left << metricName2 << std::right << std::setfill('.') << std::setw(30-metricName2.length()) << value2 << metricUnit2 << std::endl;
+}
+
+void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetrics, InputOutputMetrics* inputOutputMetrics, MemoryMetrics* memoryMetrics, NetworkMetrics* networkMetrics){
+	auto now = std::chrono::system_clock::now();
+  	std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+    std::cout << std::put_time(std::localtime(&now_c), "%Y-%m-%d %X") << '\n';
+	std::cout << "System:";
+	for(int i=0;i<43;i++){
+		std::cout << ' ';
+	}
+	std::cout << "Network:" << '\n';
+	printMetricPair("Processes running", systemMetrics->processesRunning,"", "Received packets",networkMetrics->receivedData,"");
+	printMetricPair("All Processes", systemMetrics->processesAll,"","Received packets rate", networkMetrics->receivePacketRate,"KB/s");
+	printMetricPair("Context Switch Rate", systemMetrics->contextSwitchRate,"/s","Sent packets",networkMetrics->sentData,"");
+	printMetricPair("Interrupt rate", systemMetrics->interruptRate,"/s","Sent packets rate",networkMetrics->sendPacketsRate,"KB/s");
+	std::cout << '\n';
+	std::cout << "Memory:";
+	for(int i=0;i<43;i++){
+		std::cout << ' ';
+	}
+	std::cout << "Processor:" << '\n';
+	printMetricPair("Memory used", memoryMetrics->memoryUsed,"MB","Time user",processorMetrics->timeUser,"USER_HZ");
+	printMetricPair("Memory cached", memoryMetrics->memoryCached,"MB","Time system",processorMetrics->timeSystem,"USER_HZ");
+	printMetricPair("Swap used", memoryMetrics->swapUsed,"MB","Time idle",processorMetrics->timeIdle,"USER_HZ");
+	printMetricPair("Swap cached", memoryMetrics->swapCached,"MB","Time I/O wait",processorMetrics->timeIoWait,"USER_HZ");
+	printMetricPair("Memory Active", memoryMetrics->memoryActive,"MB","Time IRQ",processorMetrics->timeIRQ,"USER_HZ");
+	printMetricPair("Memory Inactive", memoryMetrics->memoryInactive,"MB","Time Steal",processorMetrics->timeSteal,"USER_HZ");
+	std::cout << '\n'<< "I/O" << '\n';
+	printMetric("Read Rate",inputOutputMetrics->readRate,"MB/s");
+	printMetric("Write Rate",inputOutputMetrics->writeRate,"MB/s");
+	printMetric("Read operations rate",inputOutputMetrics->readOperationsRate,"/s");
+	printMetric("Write operations rate",inputOutputMetrics->writeOperationsRate,"/s");
+	std::cout << '\n';
+}
+
 int keyboardHit(void) {
 	struct termios oldt, newt;
 	int ch;
@@ -481,6 +552,14 @@ int main() {
 	MemoryMetrics memoryMetrics;
 	NetworkMetrics networkMetrics;
 
+	while(true){
+    	if(keyboardHit()){
+			std::cout << "\n\nKey pressed, STOPPING LOOP.\n\n";
+			break;
+		}
+		
+		//auto start = std::chrono::high_resolution_clock::now();
+
 	const char* command = "date +'%d%m%y-%H%M%S'";
 	std::string timestamp;
 
@@ -489,6 +568,7 @@ int main() {
 			std::cout << "\n\n [STOP] Key pressed.\n\n";
 			break;
 		}	
+    
 		timestamp = exec(command);
 		std::cout << "\n\n [TIMESTAMP] " << timestamp << "\n";
 
@@ -498,13 +578,17 @@ int main() {
 		getMemoryMetrics(memoryMetrics);
 		getNetworkMetrics(networkMetrics);
 
+		//auto end = std::chrono::high_resolution_clock::now();
+		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
+		//std::cout<<"Time taken to get all measures:" << duration.count()<< "microseconds" << '\n';
+
 		// Display metrics
-		//displayMetrics();
+		printMetrics(&systemMetrics, &processorMetrics, &inputOutputMetrics, &memoryMetrics, &networkMetrics);
 
 		// Save metrics to file
-	  	writeToCSV(timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
+	  writeToCSV(timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
 
-		sleep(3);
+		sleep(1);
   	}
     
 	return 0;
