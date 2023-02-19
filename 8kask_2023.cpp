@@ -186,48 +186,8 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	stream >> temp;
 	processorMetrics.timeGuest = std::stoi(temp);
 
-	/* If we ever wanted to do it for each processor
-	for(int i = 0; i < numberOfProcessors; i++){
-		std::getline(stream, temp);
-		std::cout << temp;
-	}
-	*/
-
-	/*
-	command = "perf stat -e L2_cache_references,L2_cache_misses,L3_cache_references,L3_cache_misses,L3_cache_snoop_hits,L3_cache_snoop_misses";
-	output = exec(command);
-	std::stringstream stream(output);
-	int references, snoopHits, snoopMisses;
-
-	stream >> temp;
-	references = std::stoi(temp);
-	stream >> temp;
-	processorMetrics.cacheL2MissRate = std::stoi(temp);
-	processorMetrics.cacheL2HitRate = references / (references + processorMetrics.cacheL2MissRate);
-
-	stream >> temp;
-	references = std::stoi(temp);
-	stream >> temp;
-	processorMetrics.cacheL3MissRate = std::stoi(temp);
-	processorMetrics.cacheL3HitRate = references / (references + processorMetrics.cacheL3MissRate);
-
-	stream >> temp;
-	snoopHits = std::stoi(temp);
-	stream >> temp;
-	snoopMisses = std::stoi(temp);
-	processorMetrics.cacheL3HitSnoopRate = snoopHits / (snoopHits + snoopMisses);
-	*/
-
-	// Temporary values - don't know how to use perf to collect this information
-	/*
-	processorMetrics.cacheL2MissRate = NOTSUPPORTED;
-	processorMetrics.cacheL2HitRate = NOTSUPPORTED;
-	processorMetrics.cacheL3MissRate = NOTSUPPORTED;
-	processorMetrics.cacheL3HitRate = NOTSUPPORTED;
-	processorMetrics.cacheL3HitSnoopRate = NOTSUPPORTED;
-	*/
 	// [TODO] TEST
-	// ONELINER = sudo perf stat -e LLC-loads,LLC-load-misses,L2_RQSTS.ALL,L2_RQSTS.MISS,PERF_COUNT_HW_CPU_CYCLES,PERF_COUNT_HW_INSTRUCTIONS,PERF_COUNT_HW_REF_CPU_CYCLES,PERF_COUNT_HW_CPU_CYCLES:REF_XCLK,PERF_COUNT_HW_CPU_CYCLES:UNHALTED_CORE_CYCLES sleep 1 2>&1 | awk '/LLC-loads/ { ll=$1 } /LLC-load-misses/ { lm=$1 } /L2_RQSTS.ALL/ { l2=$1 } /L2_RQSTS.MISS/ { lm2=$1 } /CPU_CYCLES:/ { cpu=$1 } /INSTRUCTIONS/ { instr=$1 } /REF_CPU_CYCLES/ { ref=$1 } /REF_XCLK/ { xclk=$1 } /UNHALTED_CORE_CYCLES/ { unhalted=$1 } END { printf "L2 Cache Hit Rate: %f%%\n", (l2-lm2)*100/l2; printf "L2 Cache Miss Rate: %f%%\n", lm2*100/l2; printf "L3 Cache Hit Rate: %f%%\n", (ll-lm)*100/ll; printf "L3 Cache Miss Rate: %f%%\n", lm*100/ll; printf "Instructions Retired Rate: %f instructions/cycle\n", instr/cpu; printf "Processor Cycle Metrics: %f cycles/instruction\n", cpu/instr; printf "Processor Cycles Reference Rate: %f cycles/second\n", cpu/ref; printf "Relative Frequency: %f GHz\n", xclk/unhalted/1e9; printf "Active Relative Frequency: %f GHz\n", xclk/cpu/1e9 }'
+	// sudo perf stat -e LLC-loads,LLC-load-misses,L2_RQSTS.ALL,L2_RQSTS.MISS,PERF_COUNT_HW_CPU_CYCLES,PERF_COUNT_HW_INSTRUCTIONS,PERF_COUNT_HW_REF_CPU_CYCLES,PERF_COUNT_HW_CPU_CYCLES:REF_XCLK,PERF_COUNT_HW_CPU_CYCLES:UNHALTED_CORE_CYCLES sleep 1 2>&1 | awk '/LLC-loads/ { ll=$1 } /LLC-load-misses/ { lm=$1 } /L2_RQSTS.ALL/ { l2=$1 } /L2_RQSTS.MISS/ { lm2=$1 } /CPU_CYCLES:/ { cpu=$1 } /INSTRUCTIONS/ { instr=$1 } /REF_CPU_CYCLES/ { ref=$1 } /REF_XCLK/ { xclk=$1 } /UNHALTED_CORE_CYCLES/ { unhalted=$1 } END { printf "L2 Cache Hit Rate: %f%%\n", (l2-lm2)*100/l2; printf "L2 Cache Miss Rate: %f%%\n", lm2*100/l2; printf "L3 Cache Hit Rate: %f%%\n", (ll-lm)*100/ll; printf "L3 Cache Miss Rate: %f%%\n", lm*100/ll; printf "Instructions Retired Rate: %f instructions/cycle\n", instr/cpu; printf "Processor Cycle Metrics: %f cycles/instruction\n", cpu/instr; printf "Processor Cycles Reference Rate: %f cycles/second\n", cpu/ref; printf "Relative Frequency: %f GHz\n", xclk/unhalted/1e9; printf "Active Relative Frequency: %f GHz\n", xclk/cpu/1e9 }'
 
 	command = "sudo perf stat -e LLC-loads,LLC-load-misses,L2_RQSTS.ALL,L2_RQSTS.MISS,PERF_COUNT_HW_CACHE_L3_HITS sleep 1 2>&1 |" + 
 	" awk '/LLC-loads/ { ll=$1 } /LLC-load-misses/ { lm=$1 } /L2_RQSTS.ALL/ { l2=$1 } /L2_RQSTS.MISS/" + 
@@ -248,16 +208,8 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	streamTwo >> temp;
 	processorMetrics.cacheL3HitSnoopRate = std::stof(temp);
 
-	/*
-	processorMetrics.instructionsRetiredRate = NOTSUPPORTED;
-	processorMetrics.cyclesRate = NOTSUPPORTED;
-	processorMetrics.cyclesReferenceRate = NOTSUPPORTED;
-	processorMetrics.frequencyRelative = NOTSUPPORTED;
-	processorMetrics.frequencyActiveRelative = NOTSUPPORTED;
-	processorMetrics.processorPower = NOTSUPPORTED;
-	*/
 	// [TODO] TEST
-	// ONELINER = sudo perf stat -e cpu-cycles,instructions,ref-cycles,cpu-cycles:u,cpu-cycles:u:r0100,cpu-cycles:u:r0200,cpu-cycles:u:r0400,cpu-cycles:u:r0800,cpu-cycles:u:r1000,cpu-cycles:u:r2000,cpu-cycles:u:r4000,cpu-cycles:u:w,cpu-cycles:u:w:r0100,cpu-cycles:u:w:r0200,cpu-cycles:u:w:r0400,cpu-cycles:u:w:r0800,cpu-cycles:u:w:r1000,cpu-cycles:u:w:r2000,cpu-cycles:u:w:r4000 sleep 1 2>&1 | awk '/^cpu-cycles/ { cpu_cycles=$1 } /^instructions/ { instr=$1 } /^ref-cycles/ { ref_cycles=$1 } /^cpu-cycles:u/ { sub(/:/,"_",$1); sub(/u./,"",$1); a[$1]=$1 } /^cpu-cycles:u:/ { sub(/:/,"_",$1); sub(/u./,"",$1); a[$1]=$1 } END { printf "Instructions Retired Rate: %f instructions/cycle\n", instr/cpu_cycles; printf "Processor Cycle Metrics: %f cycles/instruction\n", cpu_cycles/instr; printf "Processor Cycles Reference Rate: %f cycles/second\n", cpu_cycles/ref_cycles; printf "Relative Frequency: %f GHz\n", a["cpu_cycles_u"]/a["cpu_cycles_u_r0100"]/1e9; printf "Active Relative Frequency: %f GHz\n", a["cpu_cycles_u"]/cpu_cycles/1e9 }'
+	// sudo perf stat -e cpu-cycles,instructions,ref-cycles,cpu-cycles:u,cpu-cycles:u:r0100,cpu-cycles:u:r0200,cpu-cycles:u:r0400,cpu-cycles:u:r0800,cpu-cycles:u:r1000,cpu-cycles:u:r2000,cpu-cycles:u:r4000,cpu-cycles:u:w,cpu-cycles:u:w:r0100,cpu-cycles:u:w:r0200,cpu-cycles:u:w:r0400,cpu-cycles:u:w:r0800,cpu-cycles:u:w:r1000,cpu-cycles:u:w:r2000,cpu-cycles:u:w:r4000 sleep 1 2>&1 | awk '/^cpu-cycles/ { cpu_cycles=$1 } /^instructions/ { instr=$1 } /^ref-cycles/ { ref_cycles=$1 } /^cpu-cycles:u/ { sub(/:/,"_",$1); sub(/u./,"",$1); a[$1]=$1 } /^cpu-cycles:u:/ { sub(/:/,"_",$1); sub(/u./,"",$1); a[$1]=$1 } END { printf "Instructions Retired Rate: %f instructions/cycle\n", instr/cpu_cycles; printf "Processor Cycle Metrics: %f cycles/instruction\n", cpu_cycles/instr; printf "Processor Cycles Reference Rate: %f cycles/second\n", cpu_cycles/ref_cycles; printf "Relative Frequency: %f GHz\n", a["cpu_cycles_u"]/a["cpu_cycles_u_r0100"]/1e9; printf "Active Relative Frequency: %f GHz\n", a["cpu_cycles_u"]/cpu_cycles/1e9 }'
 
 	command = "sudo perf stat -e cpu-cycles,instructions,ref-cycles,cpu-cycles:u,cpu-cycles:u:r0100,cpu-cycles:u:r0200," + 
 	"cpu-cycles:u:r0400,cpu-cycles:u:r0800,cpu-cycles:u:r1000,cpu-cycles:u:r2000,cpu-cycles:u:r4000,cpu-cycles:u:w," + 
@@ -306,27 +258,23 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 	inputOutputMetrics.writeOperationsRate = std::stoi(temp);
 	stream >> temp;
 
-	/*
-	command = "perf stat -e io:r,io:w,io:f -I 1000";
+	// [TODO] TEST
+	// iostat -d | awk 'BEGIN { ORS="," } /avg-cpu:/ {next} {print $1, $4, $5, $9, $10}' | awk -F, '{reads+=$2; writes+=$3; flushes+=$4; flush_time+=$5} END {printf("Mean read time: %.2f ms\nMean write time: %.2f ms\nFlush operations rate: %.2f/sec\nMean flush time: %.2f ms\n", reads/NR, writes/NR, flushes/NR, flush_time/flushes)}'
+
+	command = "iostat -d | awk 'BEGIN { ORS="," } /avg-cpu:/ {next} {print $1, $4, $5, $9, $10}' " + 
+	"| awk -F, '{reads+=$2; writes+=$3; flushes+=$4; flush_time+=$5} END " + 
+	"{printf('%.2f %.2f %.2f %.2f', reads/NR, writes/NR, flushes/NR, flush_time/flushes)}'";
 	output = exec(command);
 	std::stringstream streamTwo(output);
 
 	streamTwo >> temp;
-	inputOutputMetrics.readTime = std::stoi(temp);
+	inputOutputMetrics.readTime = std::stof(temp);		// ms
 	streamTwo >> temp;
-	inputOutputMetrics.writeTime = std::stoi(temp);
+	inputOutputMetrics.writeTime = std::stof(temp);		// ms
 	streamTwo >> temp;
-	inputOutputMetrics.flushOperationsRate = std::stoi(temp);
-	// Tutaj ma trafić czas wykonywania tego polecenia
+	inputOutputMetrics.flushOperationsRate = std::stof(temp);	// /sec
 	streamTwo >> temp;
-	inputOutputMetrics.flushTime = inputOutputMetrics.flushOperationsRate / std::stoi(temp);
-	*/
-
-	// Temporary values
-	inputOutputMetrics.readTime = NOTSUPPORTED;
-	inputOutputMetrics.writeTime = NOTSUPPORTED;
-	inputOutputMetrics.flushOperationsRate = NOTSUPPORTED;
-	inputOutputMetrics.flushTime = NOTSUPPORTED;
+	inputOutputMetrics.flushTime = std::stof(temp);		// ms
 
 	// DEBUG
 	/*
@@ -359,23 +307,34 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 	memoryMetrics.swapUsed = std::stof(temp) - std::stof(swapFree);
 	memoryMetrics.swapUsed = memoryMetrics.swapUsed / 1024;
 
-	// Page Input Rate, Page Output Rate, Page Fault Rate, Page Free Rate, Page Activate Rate, Page Deactivate Rate
-	// command = "vmstat 1 2 | awk 'NR==3{print '$7', '$8', '$9', '$10', '$11', '$12'}'";
-	// Temporary values
-	memoryMetrics.pageInRate = NOTSUPPORTED;
-	memoryMetrics.pageOutRate = NOTSUPPORTED;
-	memoryMetrics.pageFaultRate = NOTSUPPORTED;
-	memoryMetrics.pageFreeRate = NOTSUPPORTED;
-	memoryMetrics.pageActivateRate = NOTSUPPORTED;
-	memoryMetrics.pageDeactivateRate = NOTSUPPORTED;
-	
-	// Read Rate, Write Rate, I/O Read requests, I/O Write requests
-	// command = "iostat -x 1 2 | awk 'NR==4{print '$4', '$5', '$6', '$7'}'";
-	// Temporary values
+	/*
 	memoryMetrics.memoryReadRate = NOTSUPPORTED;
 	memoryMetrics.memoryWriteRate = NOTSUPPORTED;
 	memoryMetrics.memoryIoRate = NOTSUPPORTED;
 	memoryMetrics.memoryPower = NOTSUPPORTED;
+	*/
+
+	// [TODO] TEST
+	// vmstat -n 1 | awk 'NR==1 {next} NR==2 {for (i=1; i<=NF; i++) {if ($i == "si") si=i; else if ($i == "so") so=i; else if ($i == "in") in=i; else if ($i == "mf") mf=i; else if ($i == "fr") fr=i; else if ($i == "sr") sr=i; else if ($i == "cy") cy=i; else if ($i == "us") us=i}} NR>2 {print $si, $so, $in, $mf, $fr, $sr, $cy}' | awk '{printf("Pages read/s: %d\nPages written/s: %d\nPage fault/s: %d\nMajor page fault/s: %d\nFree pages/s: %d\nPages activated/s: %d\nPages deactivated/s: %d\n", $1, $2, $3, $4, $5, $6, $7)}'	
+	command = "vmstat -n 1 | awk 'NR==1 {next} NR==2 {for (i=1; i<=NF; i++) {if ($i == 'si') si=i; " + 
+	"else if ($i == 'so') so=i; else if ($i == 'in') in=i; else if ($i == 'mf') mf=i; else if ($i =" +
+	"= 'fr') fr=i; else if ($i == 'sr') sr=i; else if ($i == 'cy') cy=i; else if ($i == 'us') us=i}" + 
+	"} NR>2 {print $si, $so, $in, $mf, $fr, $sr, $cy}' | awk '{printf('%d %d %d %d %d %d %d', $1, $2, $3, $4, $5, $6, $7)}'";
+	output = exec(command);
+	std::stringstream streamTwo(output);
+
+	streamTwo >> temp;
+	memoryMetrics.pageInRate = std::stoi(temp);			// all these metrics are in pages/second
+	streamTwo >> temp;
+	memoryMetrics.pageOutRate = std::stoi(temp);
+	streamTwo >> temp;
+	memoryMetrics.pageFaultRate = std::stoi(temp);
+	streamTwo >> temp;
+	memoryMetrics.pageFreeRate = std::stoi(temp);
+	streamTwo >> temp;
+	memoryMetrics.pageActivateRate = std::stoi(temp);
+	streamTwo >> temp;
+	memoryMetrics.pageDeactivateRate = std::stoi(temp);
 
 	// DEBUG
 	/*
