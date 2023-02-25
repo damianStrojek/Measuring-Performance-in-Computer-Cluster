@@ -92,7 +92,10 @@ struct InputOutputMetrics {
 	int flushOperationsRate;		// Amount of flush operations per second
 
 	void printInputOuputMetrics(){
-		std::cout << "\t[INPUT/OUTPUT METRICS]\n\nProcess ID = " << this->processID << "\nI/O Read Rate = " << this->dataRead << "\nRead Time = " << this->readTime << "\nI/O Write Rate = " << inputOutputMetrics.dataWritten << "\nI/O Read Operations Rate = " << inputOutputMetrics.readOperationsRate << "\nI/O Write Operations Rate = " << inputOutputMetrics.writeOperationsRate << "\n";
+		std::cout << "\t[INPUT/OUTPUT METRICS]\n\nProcess ID = " << this->processID << "\nI/O Read Rate = " << this->dataRead << "\nRead Time = " << 
+		this->readTime << "\nI/O Read Operations Rate = " << this->readOperationsRate << "\nI/O Write Rate = " << this->dataWritten << 
+		"\nWrite Time = " << this->writeTime << "\nI/O Write Operations Rate = " << this->writeOperationsRate << "\nFlush Time = " << 
+		this->flushTime << "\nFlush Operations Rate = " << this->flushOperationsRate << "\n";
 	};
 };
 
@@ -120,7 +123,13 @@ struct MemoryMetrics {
 	int memoryPower;				// Power consumed by memory
 
 	void printMemoryMetrics(){
-
+		std::cout << "\t[MEMORY METRICS]\n\nMemory Used = " << this->memoryUsed << " MB\nMemory Cached = " << this->memoryCached << 
+		" MB\nSwap Used = " << this->swapUsed << " MB\nSwap Cached = " << this->swapCached << " MB\nMemory Active = " << this->memoryActive << 
+		" MB\nMemory Inactive = " << this->memoryInactive << " MB\nPage Read Rate = " << this->pageInRate << "\nPage Save Rate = " << 
+		this->pageOutRate << "\nPage Fault Rate = " << this->pageFaultRate << "\nPage Fault Major Rate = " << this->pageFaultsMajorRate << 
+		"\nPage Release Rate = " << this->pageFreeRate << "\nPage Activate Rate = " << this->pageActivateRate << "\nPage Deactivate Rate = " << 
+		this->pageDeactivateRate << "\nMemore Read Rate = " << this->memoryReadRate << " MB/s\nMemory Write Rate = " << this->memoryWriteRate << 
+		" MB/s\nMemory I/O Rate = " << this->memoryIoRate << " MB/s\nMemory Power Drain = " << this->memoryPower << "W\n";  
 	};
 };
 
@@ -131,7 +140,8 @@ struct NetworkMetrics {
 	float sendPacketsRate;			// packets that are being sent in KB/s
 
 	void printNetworkMetrics(){
-		
+		std::cout << "\nReceive Packet Rate = " << this->receivePacketRate << " KB/s\nSend Packet Rate = " << this->sendPacketsRate << 
+		" KB/s\nPackets Received = " << this->receivedData << "\nPackets Sent = " << this->sentData << "\n";
 	};
 };
 
@@ -363,12 +373,7 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 	streamFour >> temp;
 	memoryMetrics.memoryPower = std::stof(temp);
 	
-	// DEBUG
-	/*
-	std::cout << "\nMemory Used = " << memoryMetrics.memoryUsed << " MB\nMemory Cached = " << memoryMetrics.memoryCached <<
-	" MB\nSwap Used = " << memoryMetrics.swapUsed << " MB\nSwap Cached = " << memoryMetrics.swapCached << " MB\nMemory Active = " <<
-	memoryMetrics.memoryActive << " MB\nMemory Inactive = " << memoryMetrics.memoryInactive << " MB\n";
-	*/
+	memoryMetrics.printMemoryMetrics();
 };
 
 void getNetworkMetrics(NetworkMetrics &networkMetrics){
@@ -391,11 +396,7 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	streamTwo >> temp;
 	networkMetrics.sentData = std::stoi(temp);
 
-	/// DEBUG
-	/*
-	std::cout << "\nReceive Packet Rate = " << networkMetrics.receivePacketRate << " KB/s\nSend Packet Rate = " << networkMetrics.sendPacketsRate << 
-	" KB/s\nPackets Received = " <<  networkMetrics.receivedData << "\nPackets Sent = " << networkMetrics.sentData << "\n";
-	*/
+	networkMetrics.printNetworkMetrics();
 };
 
 void writeToFileSystemMetrics(std::ofstream &file, SystemMetrics data) {
