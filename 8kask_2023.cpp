@@ -38,6 +38,12 @@ struct SystemMetrics {
 	int processesBlocked;			// Number of processes waiting for I/O operation to complete
 	int contextSwitchRate;			// Number of context switches per second
 	int interruptRate;				// Number of all interrupts handled per second
+
+	void printSystemMetrics(){
+		std::cout << "\t[SYSTEM METRICS]\n\nInterrupt Rate = " << this->interruptRate << "interrupts/sec\nContext Switch Rate = " 
+		<< this->contextSwitchRate << "\nAll Processes = " << this->processesAll <<  "\nRunning Processes = " << 
+		this->processesRunning << "\nBlocked Processes = " << this->processesBlocked << "\n";
+	};
 };
 
 struct ProcessorMetrics {
@@ -61,6 +67,17 @@ struct ProcessorMetrics {
 	int cacheL3HitSnoopRate;		// Number of L3 cache hits, with references to sibling L2
 	int cacheL3MissRate;			// Number of L3 cache misses
 	int processorPower;				// Power consumed by the processor
+
+	void printProcessorMetrics(){
+		std::cout << "\t[PROCESSOR METRICS]\n\nTime User = " << this->timeUser  << "\nTime Nice = " << this->timeNice << "\nTime System = " << 
+		this->timeSystem << "\nTime Idle = " << this->timeIdle << "\nTime I/O Wait = " << this->timeIoWait << "\nTime IRQ = " << this->timeIRQ << 
+		"\nTime Soft IRQ = " << this->timeSoftIRQ << "\nTime Steal = " << this->timeSteal << "\nTime Guest = " << this->timeGuest << 
+		"\nInstructions Retired Rate = " << this->instructionsRetiredRate << "\nCycles rate = " << this->cyclesRate << "\nCycles reference rate = " << 
+		this->cyclesReferenceRate << "\nRelative Frequency = " << this->frequencyRelative << "\nActive Relative Frequency = " << 
+		this->frequencyActiveRelative << "\nCache L2 Hit Rate = " << this->cacheL2HitRate << "\nCache L2 Miss Rate = " << this->cacheL2MissRate << 
+		"\nCache L3 Hit Rate = " << this->cacheL3HitRate << "\nCache L3 Miss Rate = " << this->cacheL3MissRate << "\nCache L3 Hit Snoop Rate = " << 
+		this->cacheL3HitSnoopRate << "\nPower = " << this->processorPower << "\n"; 
+	};
 };
 
 struct InputOutputMetrics {
@@ -73,6 +90,10 @@ struct InputOutputMetrics {
 	int writeOperationsRate;		// Amount of write operations per second
 	int flushTime;					// Flush execution time
 	int flushOperationsRate;		// Amount of flush operations per second
+
+	void printInputOuputMetrics(){
+		std::cout << "\t[INPUT/OUTPUT METRICS]\n\nProcess ID = " << this->processID << "\nI/O Read Rate = " << this->dataRead << "\nRead Time = " << this->readTime << "\nI/O Write Rate = " << inputOutputMetrics.dataWritten << "\nI/O Read Operations Rate = " << inputOutputMetrics.readOperationsRate << "\nI/O Write Operations Rate = " << inputOutputMetrics.writeOperationsRate << "\n";
+	};
 };
 
 struct MemoryMetrics {
@@ -97,6 +118,10 @@ struct MemoryMetrics {
 	float memoryWriteRate;			// Writing to memory
 	float memoryIoRate;				// Requests to read/write data from all I/O devices
 	int memoryPower;				// Power consumed by memory
+
+	void printMemoryMetrics(){
+
+	};
 };
 
 struct NetworkMetrics {
@@ -104,6 +129,10 @@ struct NetworkMetrics {
 	float receivePacketRate;		// packets that are being received in KB/s
 	int sentData;					// All of the packets sent
 	float sendPacketsRate;			// packets that are being sent in KB/s
+
+	void printNetworkMetrics(){
+		
+	};
 };
 
 // Execute system command and return the output in the string
@@ -145,13 +174,7 @@ void getSystemMetrics(SystemMetrics &systemMetrics) {
 	output = exec(command);
 	systemMetrics.processesBlocked = std::stoi(output);
 
-	// DEBUG
-	/*
-	std::cout << "\nInterrupt Rate = " << systemMetrics.interruptRate << "\nContext switch rate = " << 
-	systemMetrics.contextSwitchRate << "\nAll processes = " << systemMetrics.processesAll << 
-	"\nRunning processes = " << systemMetrics.processesRunning << "\nBlocked processes = " << 
-	systemMetrics.processesBlocked << "\n";
-	*/
+	systemMetrics.printSystemMetrics();
 };
 
 void getProcessorMetrics(ProcessorMetrics &processorMetrics){
@@ -232,14 +255,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	streamThree >> temp;
 	processorMetrics.frequencyActiveRelative = std::stof(temp); // GHz
 
-	// DEBUG
-	/*
-	std::cout << "\nTime user = " << processorMetrics.timeUser  << "\nTime nice = " << processorMetrics.timeNice <<
-	"\nTime system = " << processorMetrics.timeSystem << "\nTime idle = " << processorMetrics.timeIdle << 
-	"\nTime I/O wait = " << processorMetrics.timeIoWait << "\nTime IRQ = " << processorMetrics.timeIRQ << 
-	"\nTime Soft IRQ = " << processorMetrics.timeSoftIRQ << "\nTime Steal = " << processorMetrics.timeSteal << 
-	"\nTime Guest = " << processorMetrics.timeGuest << "\n";
-	*/
+	processorMetrics.printProcessorMetrics();
 };
 
 void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
@@ -276,12 +292,7 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 	streamTwo >> temp;
 	inputOutputMetrics.flushTime = std::stof(temp);		// ms
 
-	// DEBUG
-	/*
-	std::cout << "\nI/O Read Rate = " << inputOutputMetrics.dataRead << "\nI/O Write Rate = " << 
-	inputOutputMetrics.dataWritten << "\nI/O Read Operations Rate = " << inputOutputMetrics.readOperationsRate << 
-	"\nI/O Write Operations Rate = " << inputOutputMetrics.writeOperationsRate << "\n";
-	*/
+	inputOutputMetrics.printInputOuputMetrics();
 };
 
 void getMemoryMetrics(MemoryMetrics &memoryMetrics){
@@ -307,15 +318,12 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 	memoryMetrics.swapUsed = std::stof(temp) - std::stof(swapFree);
 	memoryMetrics.swapUsed = memoryMetrics.swapUsed / 1024;
 
-	/*
-	memoryMetrics.memoryReadRate = NOTSUPPORTED;
-	memoryMetrics.memoryWriteRate = NOTSUPPORTED;
-	memoryMetrics.memoryIoRate = NOTSUPPORTED;
 	memoryMetrics.memoryPower = NOTSUPPORTED;
-	*/
 
 	// [TODO] TEST
 	// vmstat -n 1 | awk 'NR==1 {next} NR==2 {for (i=1; i<=NF; i++) {if ($i == "si") si=i; else if ($i == "so") so=i; else if ($i == "in") in=i; else if ($i == "mf") mf=i; else if ($i == "fr") fr=i; else if ($i == "sr") sr=i; else if ($i == "cy") cy=i; else if ($i == "us") us=i}} NR>2 {print $si, $so, $in, $mf, $fr, $sr, $cy}' | awk '{printf("Pages read/s: %d\nPages written/s: %d\nPage fault/s: %d\nMajor page fault/s: %d\nFree pages/s: %d\nPages activated/s: %d\nPages deactivated/s: %d\n", $1, $2, $3, $4, $5, $6, $7)}'	
+	// sar -r -B -n DEV 1 1 | tail -n 1 | awk '{printf("Memory read rate: %.2f MB/s\nMemory write rate: %.2f MB/s\nMemory I/O rate: %.2f MB/s\n", $4/1024, $5/1024, $6/1024)}'
+	// sudo powerstat -d 1 | awk '/Memory Power/ {printf("Memory Power: %.2f W\n", $4)}'
 	command = "vmstat -n 1 | awk 'NR==1 {next} NR==2 {for (i=1; i<=NF; i++) {if ($i == 'si') si=i; " + 
 	"else if ($i == 'so') so=i; else if ($i == 'in') in=i; else if ($i == 'mf') mf=i; else if ($i =" +
 	"= 'fr') fr=i; else if ($i == 'sr') sr=i; else if ($i == 'cy') cy=i; else if ($i == 'us') us=i}" + 
@@ -324,18 +332,37 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 	std::stringstream streamTwo(output);
 
 	streamTwo >> temp;
-	memoryMetrics.pageInRate = std::stoi(temp);			// all these metrics are in pages/second
+	memoryMetrics.pageInRate = std::stoi(temp);			// pages/second
 	streamTwo >> temp;
-	memoryMetrics.pageOutRate = std::stoi(temp);
+	memoryMetrics.pageOutRate = std::stoi(temp);		// pages/second
 	streamTwo >> temp;
-	memoryMetrics.pageFaultRate = std::stoi(temp);
+	memoryMetrics.pageFaultRate = std::stoi(temp);		// pages/second
 	streamTwo >> temp;
-	memoryMetrics.pageFreeRate = std::stoi(temp);
+	memoryMetrics.pageFreeRate = std::stoi(temp);		// pages/second
 	streamTwo >> temp;
-	memoryMetrics.pageActivateRate = std::stoi(temp);
+	memoryMetrics.pageActivateRate = std::stoi(temp);	// pages/second
 	streamTwo >> temp;
-	memoryMetrics.pageDeactivateRate = std::stoi(temp);
+	memoryMetrics.pageDeactivateRate = std::stoi(temp);	// pages/second
 
+	command = "sar -r -B -n DEV 1 1 | tail -n 1 | awk '{printf('%.2f %.2f %.2f', $4/1024, $5/1024, $6/1024)}'";
+	output = exec(command);
+	std::stringstream streamThree(output);
+
+	streamThree >> temp;
+	memoryMetrics.memoryReadRate = std::stof(temp);		// MB/s
+	streamThree >> temp;
+	memoryMetrics.memoryWriteRate = std::stof(temp);	// MB/s
+	streamThree >> temp;
+	memoryMetrics.memoryIoRate = std::stof(temp);		// MB/s
+
+	// Unfortunately, it's not possible to obtain accurate power consumption information for memory without measuring it over a period of time
+	command = "sudo powerstat -d 1 | awk '/Memory Power/ {printf('%.2f', $4)}'";
+	output = exec(command);
+	std::stringstream streamFour(output);
+
+	streamFour >> temp;
+	memoryMetrics.memoryPower = std::stof(temp);
+	
 	// DEBUG
 	/*
 	std::cout << "\nMemory Used = " << memoryMetrics.memoryUsed << " MB\nMemory Cached = " << memoryMetrics.memoryCached <<
