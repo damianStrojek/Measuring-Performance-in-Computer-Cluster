@@ -19,6 +19,7 @@
 #include <iomanip>
 #include <chrono>
 #include <map>
+#include <rapl.h>						// [TODO] Not downloaded yet
 
 #define NOTSUPPORTED -692137			// Functionality not yet supported
 
@@ -33,11 +34,19 @@
 #define SWAPINFO "/proc/swap"			// List of the available swap areas
 
 struct SystemMetrics {
-	int processesRunning;			// Number of processes in the R state
+	int processesRunning ;			// Number of processes in the R state
 	int processesAll;				// Number of all processes
 	int processesBlocked;			// Number of processes waiting for I/O operation to complete
 	int contextSwitchRate;			// Number of context switches per second
 	int interruptRate;				// Number of all interrupts handled per second
+
+	SystemMetrics(){
+		this->processesRunning = -1;
+		this->processesAll = -1;
+		this->processesBlocked = -1;
+		this->contextSwitchRate = -1;
+		this->interruptRate = -1;
+	};
 
 	void printSystemMetrics(){
 		std::cout << "\t[SYSTEM METRICS]\n\nInterrupt Rate = " << this->interruptRate << "interrupts/sec\nContext Switch Rate = " 
@@ -68,6 +77,29 @@ struct ProcessorMetrics {
 	int cacheL3MissRate;			// Number of L3 cache misses
 	int processorPower;				// Power consumed by the processor
 
+	ProcessorMetrics(){
+		this->timeUser = -1;
+		this->timeNice = -1;
+		this->timeSystem = -1;
+		this->timeIdle = -1;
+		this->timeIoWait = -1;
+		this->timeIRQ = -1;
+		this->timeSoftIRQ = -1;
+		this->timeSteal = -1;
+		this->timeGuest = -1;
+		this->instructionsRetiredRate = -1;
+		this->cyclesRate = -1;
+		this->cyclesReferenceRate = -1;
+		this->frequencyRelative = -1;
+		this->frequencyActiveRelative = -1;
+		this->cacheL2HitRate = -1;
+		this->cacheL2MissRate = -1;
+		this->cacheL3HitRate = -1;
+		this->cacheL3HitSnoopRate = -1;
+		this->cacheL3MissRate = -1;
+		this->processorPower = -1;
+	};
+
 	void printProcessorMetrics(){
 		std::cout << "\t[PROCESSOR METRICS]\n\nTime User = " << this->timeUser  << "\nTime Nice = " << this->timeNice << "\nTime System = " << 
 		this->timeSystem << "\nTime Idle = " << this->timeIdle << "\nTime I/O Wait = " << this->timeIoWait << "\nTime IRQ = " << this->timeIRQ << 
@@ -90,6 +122,18 @@ struct InputOutputMetrics {
 	int writeOperationsRate;		// Amount of write operations per second
 	int flushTime;					// Flush execution time
 	int flushOperationsRate;		// Amount of flush operations per second
+
+	InputOutputMetrics(){
+		this->processID = -1;
+		this->dataRead = -1;
+		this->readTime =-1;
+		this->readOperationsRate = -1;
+		this->dataWritten = -1;
+		this->writeTime = -1;
+		this->writeOperationsRate = -1;
+		this->flushTime = -1;
+		this->flushOperationsRate = -1;
+	};
 
 	void printInputOuputMetrics(){
 		std::cout << "\t[INPUT/OUTPUT METRICS]\n\nProcess ID = " << this->processID << "\nI/O Read Rate = " << this->dataRead << "\nRead Time = " << 
@@ -122,6 +166,26 @@ struct MemoryMetrics {
 	float memoryIoRate;				// Requests to read/write data from all I/O devices
 	int memoryPower;				// Power consumed by memory
 
+	MemoryMetrics(){
+		this->memoryUsed = -1;
+		this->memoryCached = -1;
+		this->swapUsed = -1;
+		this->swapCached = -1;
+		this->memoryActive = -1;
+		this->memoryInactive = -1;
+		this->pageInRate = -1;
+		this->pageOutRate = -1;
+		this->pageFaultRate = -1;
+		this->pageFaultsMajorRate = -1;
+		this->pageFreeRate = -1;
+		this->pageActivateRate = -1;
+		this->pageDeactivateRate = -1;
+		this->memoryReadRate = -1;
+		this->memoryWriteRate = -1;
+		this->memoryIoRate = -1;
+		this->memoryPower = -1;
+	};
+
 	void printMemoryMetrics(){
 		std::cout << "\t[MEMORY METRICS]\n\nMemory Used = " << this->memoryUsed << " MB\nMemory Cached = " << this->memoryCached << 
 		" MB\nSwap Used = " << this->swapUsed << " MB\nSwap Cached = " << this->swapCached << " MB\nMemory Active = " << this->memoryActive << 
@@ -139,6 +203,13 @@ struct NetworkMetrics {
 	int sentData;					// All of the packets sent
 	float sendPacketsRate;			// packets that are being sent in KB/s
 
+	NetworkMetrics(){
+		this->receivedData = -1;
+		this->receivePacketRate = -1;
+		this->sentData = -1;
+		this->sendPacketsRate = -1;
+	};
+
 	void printNetworkMetrics(){
 		std::cout << "\nReceive Packet Rate = " << this->receivePacketRate << " KB/s\nSend Packet Rate = " << this->sendPacketsRate << 
 		" KB/s\nPackets Received = " << this->receivedData << "\nPackets Sent = " << this->sentData << "\n";
@@ -154,6 +225,10 @@ std::string exec(const char* cmd) {
         throw std::runtime_error("popen() failed!");
     while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
         result += buffer.data();
+
+	if(!result.length())
+		std::cout << "\n[ERROR] String returned by exec() has length 0\n";
+
     return result;
 };
 
@@ -233,7 +308,6 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	processorMetrics.cacheL2HitRate = std::stof(temp);
 	streamTwo >> temp;
 	processorMetrics.cacheL2MissRate = std::stof(temp);
-
 	streamTwo >> temp;
 	processorMetrics.cacheL3HitRate = std::stof(temp);
 	streamTwo >> temp;
@@ -264,6 +338,19 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	processorMetrics.frequencyRelative = std::stof(temp); // GHz
 	streamThree >> temp;
 	processorMetrics.frequencyActiveRelative = std::stof(temp); // GHz
+
+	rapl_handle_t handle;
+	processorMetrics.processorPower = NULL;
+	if (rapl_open(&handle) != 0)
+		fprintf(stderr, "\n[ERROR] Opening RAPL interface\n");
+	else {
+		double energy;
+		if (rapl_energy_total(handle, &energy) != 0)
+			fprintf(stderr, "\n[ERROR] Downloading total energy consumption\n");
+		else
+			processorMetrics.processorPower = energy;
+	}
+  	rapl_close(handle);
 
 	processorMetrics.printProcessorMetrics();
 };
