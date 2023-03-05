@@ -13,8 +13,13 @@ The metrics and the places from which they are taken are to be directly specifie
 This application requires you to have:
 
 - ifstat
+- iostat
+- sar
+- powerstat
 - perf
 - vmstat
+- Intel RAPL
+- NVIDIA Management Library
 
 Compile using **C++20** and run using **sudo** permissions:
 

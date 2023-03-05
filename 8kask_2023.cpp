@@ -22,17 +22,7 @@
 #include <rapl.h>						// [TODO] Not supported yet
 #include <nvml.h>						// [TODO] Not supported yet
 
-#define NOTSUPPORTED -692137			// Functionality not yet supported
-
-// Constant paths to files in Linux that contain information about different metrics
-#define LOADAVG "/proc/loadavg"			// Number of tasks in the queue, process units that are being executed
-#define CPUINFO "/proc/cpuinfo"			// Detailed information about each CPU in the system (numbered from 0)
-#define PROCSTAT "/proc/stat"			// The amount of time CPU spent performing various types of work
-#define INTERRUPTS "/proc/interrupts"	// Counting each system interrupt
-#define PROCIO "/proc/$$/io"			// Information about the given task (in this case, task $$).
-										// For example: the number of bytes written to and read from memory
-#define MEMINFO "/proc/meminfo"			// Operating memory information
-#define SWAPINFO "/proc/swap"			// List of the available swap areas
+#define NOTSUPPORTED -666666			// Not yet supported functionality
 
 struct SystemMetrics {
 	int processesRunning ;			// Number of processes in the R state
@@ -125,7 +115,7 @@ struct InputOutputMetrics {
 	InputOutputMetrics(){
 		this->processID = -1;
 		this->dataRead = -1;
-		this->readTime =-1;
+		this->readTime = -1;
 		this->readOperationsRate = -1;
 		this->dataWritten = -1;
 		this->writeTime = -1;
