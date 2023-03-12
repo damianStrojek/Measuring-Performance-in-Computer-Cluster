@@ -1,25 +1,30 @@
-# Application for monitoring performance and energy consumption in a computing cluster
+# Application for Monitoring Performance and Energy Consumption in a Computing Cluster
 
 ## Aim
 
 The aim of the project is to create an application in C++ that will allow you to run a given application (parallel) on a computing cluster and save the values of selected metrics over time.
 
-## Design assumptions
+## Design Assumptions
 
-The metrics and the places from which they are taken are to be directly specified in the technical documentation of the project. Power is to be measured using Intel RAPL, NVIDIA NVML technology and an interface to the professional Yokogawa meter - with a predetermined frequency. Results are written to the output of any command line. The results are to be saved in text files, and the operation of the application is to be carried out for a specific distribution of the Linux operating system.
+The metrics and the places from which they are taken are to be directly specified in the technical documentation of the project. Power measurement is to take place using Intel RAPL, NVIDIA NVML technology and an interface to a professional Yokogawa meter - with a specific frequency. The results should be written to the output of any command line. The results should be saved to text files (.txt, .csv, etc.), and the application should run on a specific distribution of the GNU Linux operating system.
 
-## Requirements and compile
+## Requirements and Compile
 
-This application requires you to have:
+This application requires you to have following tools installed on each of the nodes:
 
 - ifstat
+- iostat
+- sar
+- powerstat
 - perf
 - vmstat
+- Intel RAPL
+- NVIDIA Management Library
 
 Compile using **C++20** and run using **sudo** permissions:
 
 ```bash
-g++ -std=c++20 -o metrics 8kask_2023.cpp
+g++ -std=c++20 -o measure-performance measure-performance.cpp
 ```
 
 ## Docker
