@@ -1,4 +1,4 @@
-# Documentation of metrics 
+# Metric Fetching Functions
 
 The purpose of writing this documentation is to show the logic behind used Linux commands. Many of these metrics can be obtained in several ways. The methods used in this application have been selected based on several criteria:
 
