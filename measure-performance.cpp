@@ -19,10 +19,10 @@
 #include <iomanip>
 #include <chrono>
 #include <map>
-#include <rapl.h>						// [TODO] Not supported yet
-#include <nvml.h>						// [TODO] Not supported yet
+//#include <rapl.h>						// [TODO] Not supported yet
+//#include <nvml.h>						// [TODO] Not supported yet
 
-#define NOTSUPPORTED -666666			// Functionality not yet supported
+#define NOTSUPPORTED -666				// Functionality not yet supported
 
 struct SystemMetrics {
 	int processesRunning ;			// Number of processes in the R state
@@ -40,7 +40,7 @@ struct SystemMetrics {
 	};
 
 	void printSystemMetrics(){
-		std::cout << "\t[SYSTEM METRICS]\n\nInterrupt Rate = " << this->interruptRate << " interrupts/sec\nContext Switch Rate = " 
+		std::cout << "\n\t[SYSTEM METRICS]\n\nInterrupt Rate = " << this->interruptRate << " interrupts/sec\nContext Switch Rate = " 
 		<< this->contextSwitchRate << " switches/sec\nAll Processes = " << this->processesAll <<  "\nRunning Processes = " << 
 		this->processesRunning << "\nBlocked Processes = " << this->processesBlocked << "\n";
 	};
@@ -90,7 +90,7 @@ struct ProcessorMetrics {
 	};
 
 	void printProcessorMetrics(){
-		std::cout << "\t[PROCESSOR METRICS]\n\nTime User = " << this->timeUser  << "\nTime Nice = " << this->timeNice << "\nTime System = " << 
+		std::cout << "\n\t[PROCESSOR METRICS]\n\nTime User = " << this->timeUser  << "\nTime Nice = " << this->timeNice << "\nTime System = " << 
 		this->timeSystem << "\nTime Idle = " << this->timeIdle << "\nTime I/O Wait = " << this->timeIoWait << "\nTime IRQ = " << this->timeIRQ << 
 		"\nTime Soft IRQ = " << this->timeSoftIRQ << "\nTime Steal = " << this->timeSteal << "\nTime Guest = " << this->timeGuest << 
 		"\nInstructions Retired Rate = " << this->instructionsRetiredRate << "\nCycles rate = " << this->cyclesRate << "\nCycles reference rate = " << 
@@ -125,7 +125,7 @@ struct InputOutputMetrics {
 	};
 
 	void printInputOuputMetrics(){
-		std::cout << "\t[INPUT/OUTPUT METRICS]\n\nProcess ID = " << this->processID << "\nData Read = " << this->dataRead << 
+		std::cout << "\n\t[INPUT/OUTPUT METRICS]\n\nProcess ID = " << this->processID << "\nData Read = " << this->dataRead << 
 		" MB\nRead Time = " << this->readTime << " ms\nRead Operations Rate = " << this->readOperationsRate << " operations [TO CHANGE]\nData Written = " 
 		<< this->dataWritten << " MB\nWrite Time = " << this->writeTime << " ms\nWrite Operations Rate = " << this->writeOperationsRate << 
 		" operations [TO CHANGE]\nFlush Time = " << this->flushTime << " ms\nFlush Operations Rate = " << this->flushOperationsRate << " ops/sec\n";
@@ -171,7 +171,7 @@ struct MemoryMetrics {
 	};
 
 	void printMemoryMetrics(){
-		std::cout << "\t[MEMORY METRICS]\n\nMemory Used = " << this->memoryUsed << " MB\nMemory Cached = " << this->memoryCached << 
+		std::cout << "\n\t[MEMORY METRICS]\n\nMemory Used = " << this->memoryUsed << " MB\nMemory Cached = " << this->memoryCached << 
 		" MB\nSwap Used = " << this->swapUsed << " MB\nSwap Cached = " << this->swapCached << " MB\nMemory Active = " << this->memoryActive << 
 		" MB\nMemory Inactive = " << this->memoryInactive << " MB\nPage Read Rate = " << this->pageInRate << "\nPage Save Rate = " << 
 		this->pageOutRate << "\nPage Fault Rate = " << this->pageFaultRate << "\nPage Fault Major Rate = " << this->pageFaultsMajorRate << 
@@ -195,7 +195,7 @@ struct NetworkMetrics {
 	};
 
 	void printNetworkMetrics(){
-		std::cout << "\t[NETWORK METRICS]\n\nReceive Packet Rate = " << this->receivePacketRate << " KB/s\nSend Packet Rate = " << 
+		std::cout << "\n\t[NETWORK METRICS]\n\nReceive Packet Rate = " << this->receivePacketRate << " KB/s\nSend Packet Rate = " << 
 		this->sendPacketsRate << " KB/s\nPackets Received = " << this->receivedData << "\nPackets Sent = " << this->sentData << "\n";
 	};
 };
@@ -209,16 +209,17 @@ struct PowerMetrics {
 	PowerMetrics(){
 		this->processorPower = -1;
 		this->memoryPower = -1;
-		this->gpuPower = -1;
-		this->gpuPowerHours = -1;
+		this->gpuPower = 1;
+		this->gpuPowerHours = 1;
 	};
 
 	void printPowerMetrics(){
-		std::cout << "\t[POWER METRICS]\n\nPower drained by:\nProcessor = " << this->processorPower << "W\nMemory = " << this->memoryPower << 
+		std::cout << "\n\t[POWER METRICS]\n\nPower drained by:\nProcessor = " << this->processorPower << "W\nMemory = " << this->memoryPower << 
 		"W\nGPU = " << this->gpuPower << "W\nGPU = " << this->gpuPowerHours << "Wh\n";
 	};
 };
 
+std::string exec(const char* cmd);
 void getSystemMetrics(SystemMetrics &systemMetrics);
 void getProcessorMetrics(ProcessorMetrics &processorMetrics);
 void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics);
@@ -267,12 +268,16 @@ int main(){
 
 		//auto start = std::chrono::high_resolution_clock::now();
 
+		std::cout << "\n\n  [TIMESTAMP] " << timestamp << "\n";
+
 		getSystemMetrics(systemMetrics);
 		getProcessorMetrics(processorMetrics);
 		getInputOutputMetrics(inputOutputMetrics);
 		getMemoryMetrics(memoryMetrics);
 		getNetworkMetrics(networkMetrics);
 		getPowerMetrics(powerMetrics);
+
+		sleep(2);
 
 		//auto end = std::chrono::high_resolution_clock::now();
 		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
@@ -532,7 +537,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics){
 
 	// sudo powerstat -d 1 | awk '/Memory Power/ {printf("Memory Power: %.2f W\n", $4)}'
 	const char* command = "sudo powerstat -d 1 | awk '/Memory Power/ { print $4 }'";
-	std::string output = exec(command);
+	std::string output = exec(command), temp;
 	std::stringstream streamOne(output);
 	streamOne >> temp;
 	powerMetrics.memoryPower = std::stof(temp);		// W
