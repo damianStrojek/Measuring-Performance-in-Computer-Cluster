@@ -23,9 +23,10 @@
 //#include <nvml.h>						// [TODO] Not supported yet
 
 #define NOTSUPPORTED -666				// Functionality not yet supported
+#define GPROCESSID 1					// PID of process that we are focused on (g stands for global)
 
 struct SystemMetrics {
-	int processesRunning ;			// Number of processes in the R state
+	int processesRunning;			// Number of processes in the R state
 	int processesAll;				// Number of all processes
 	int processesBlocked;			// Number of processes waiting for I/O operation to complete
 	int contextSwitchRate;			// Number of context switches per second
@@ -113,7 +114,7 @@ struct InputOutputMetrics {
 	int flushOperationsRate;		// Amount of flush operations per second
 
 	InputOutputMetrics(){
-		this->processID = 1;		// Default is the process with ID = 1
+		this->processID = GPROCESSID;
 		this->dataRead = -1;
 		this->readTime = -1;
 		this->readOperationsRate = -1;
@@ -214,7 +215,7 @@ struct PowerMetrics {
 	};
 
 	void printPowerMetrics(){
-		std::cout << "\n\t[POWER METRICS]\n\nPower drained by:\nProcessor = " << this->processorPower << "W\nMemory = " << this->memoryPower << 
+		std::cout << "\n\t[POWER METRICS]\n\nProcessor = " << this->processorPower << "W\nMemory = " << this->memoryPower << 
 		"W\nGPU = " << this->gpuPower << "W\nGPU = " << this->gpuPowerHours << "Wh\n";
 	};
 };
@@ -249,21 +250,22 @@ int main(){
 	NetworkMetrics networkMetrics;
 	PowerMetrics powerMetrics;
 
-	const char* command = "date +'%d%m%y-%H%M%S'";
-	std::string timestamp = exec(command);
+	const char* dateCommand = "date +'%d%m%y-%H%M%S'",
+		*processCommand = "ps -p 1 > /dev/null && echo '1' || echo '0'";
+	std::string timestamp = exec(dateCommand);
 	timestamp.pop_back();
-	std::string fileName = timestamp += "_metrics.csv";
+	/*std::string fileName = timestamp += "_metrics.csv";
 	std::ofstream file(fileName, std::ios::out);
-	if(!file.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";
+	if(!file.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";*/
 
-	// [TODO] while(process with PID = X is running, possible with `ps -p $PID > /dev/null`)
-	while(true){
+	// Checking if process with PROCESSID is still running
+	while(std::stoi(exec(processCommand))){
     	if(keyboardHit()){
 			std::cout << "\n\n\t [STOP] Key pressed.\n\n";
 			break;
 		}	
 		
-		timestamp = exec(command);
+		timestamp = exec(dateCommand);
 		timestamp.pop_back();
 
 		//auto start = std::chrono::high_resolution_clock::now();
@@ -290,7 +292,7 @@ int main(){
 	  	//writeToCSV(file, timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
   	}
 
-    file.close();
+    //file.close();
 	return 0;
 };
 
@@ -366,6 +368,8 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	stream >> temp;
 	processorMetrics.timeGuest = std::stoi(temp);		// USER_HZ
 
+	/*
+	// Not supported metrics:
 	processorMetrics.cacheL2HitRate = NOTSUPPORTED;
 	processorMetrics.cacheL2MissRate = NOTSUPPORTED;
 	processorMetrics.cacheL3HitRate = NOTSUPPORTED;
@@ -377,7 +381,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	processorMetrics.frequencyRelative = NOTSUPPORTED;
 	processorMetrics.frequencyActiveRelative = NOTSUPPORTED;
 
-	/* [TODO] as far as we know perf works only on hardware and we can't test it yet
+	// [TODO] as far as we know perf works only on hardware and we can't test it yet
 	// sudo perf stat -e LLC-loads,LLC-load-misses,L2_RQSTS.ALL,L2_RQSTS.MISS,PERF_COUNT_HW_CPU_CYCLES,PERF_COUNT_HW_INSTRUCTIONS,PERF_COUNT_HW_REF_CPU_CYCLES,PERF_COUNT_HW_CPU_CYCLES:REF_XCLK,PERF_COUNT_HW_CPU_CYCLES:UNHALTED_CORE_CYCLES sleep 1 2>&1 | awk '/LLC-loads/ { ll=$1 } /LLC-load-misses/ { lm=$1 } /L2_RQSTS.ALL/ { l2=$1 } /L2_RQSTS.MISS/ { lm2=$1 } /CPU_CYCLES:/ { cpu=$1 } /INSTRUCTIONS/ { instr=$1 } /REF_CPU_CYCLES/ { ref=$1 } /REF_XCLK/ { xclk=$1 } /UNHALTED_CORE_CYCLES/ { unhalted=$1 } END { printf "L2 Cache Hit Rate: %f%%\n", (l2-lm2)*100/l2; printf "L2 Cache Miss Rate: %f%%\n", lm2*100/l2; printf "L3 Cache Hit Rate: %f%%\n", (ll-lm)*100/ll; printf "L3 Cache Miss Rate: %f%%\n", lm*100/ll; printf "Instructions Retired Rate: %f instructions/cycle\n", instr/cpu; printf "Processor Cycle Metrics: %f cycles/instruction\n", cpu/instr; printf "Processor Cycles Reference Rate: %f cycles/second\n", cpu/ref; printf "Relative Frequency: %f GHz\n", xclk/unhalted/1e9; printf "Active Relative Frequency: %f GHz\n", xclk/cpu/1e9 }'
 	command = "sudo perf stat -e LLC-loads,LLC-load-misses,L2_RQSTS.ALL,L2_RQSTS.MISS,PERF_COUNT_HW_CACHE_L3_HITS sleep 1 2>&1 |" + 
 	" awk '/LLC-loads/ { ll=$1 } /LLC-load-misses/ { lm=$1 } /L2_RQSTS.ALL/ { l2=$1 } /L2_RQSTS.MISS/" + 
@@ -490,11 +494,13 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 	memoryMetrics.pageFaultRate = std::stoi(temp);		// pages/sec
 	streamTwo >> temp;
 	memoryMetrics.pageFreeRate = std::stoi(temp);		// pages/sec
-	
-	// [TODO] same situation as with processor metrics using perf
-	//command = "perf stat -e 'kmem:pgactivate,kmem:pgdeactivate' sleep 1"
+
+	/*
+	// Not supported metrics:
+	command = "perf stat -e 'kmem:pgactivate,kmem:pgdeactivate' sleep 1"
 	memoryMetrics.pageActivateRate = NOTSUPPORTED;
 	memoryMetrics.pageDeactivateRate = NOTSUPPORTED;
+	*/
 
 	command = "sar -b 1 1 | awk 'NR==4{print $6/1024 $7/1024 ($6+$7)/1024}'";
 	output = exec(command);
@@ -535,6 +541,13 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 
 void getPowerMetrics(PowerMetrics &powerMetrics){
 
+	/*
+	// Not supported metrics:
+	powerMetrics.memoryPower = NOTSUPPORTED;
+	powerMetrics.processorPower = NOTSUPPORTED;
+	powerMetrics.gpuPower = NOTSUPPORTED;
+	powerMetrics.gpuPowerHours = NOTSUPPORTED;
+
 	// sudo powerstat -d 1 | awk '/Memory Power/ {printf("Memory Power: %.2f W\n", $4)}'
 	const char* command = "sudo powerstat -d 1 | awk '/Memory Power/ { print $4 }'";
 	std::string output = exec(command), temp;
@@ -542,11 +555,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics){
 	streamOne >> temp;
 	powerMetrics.memoryPower = std::stof(temp);		// W
 
-	powerMetrics.processorPower = NOTSUPPORTED;
-	powerMetrics.gpuPower = NOTSUPPORTED;
-	powerMetrics.gpuPowerHours = NOTSUPPORTED;
-
-	/* [TODO] Test RAPL Library
+	// [TODO] Test RAPL Library
 	rapl_handle_t handle;
 	if (rapl_open(&handle) != 0)
 		std::cout << "\n\n\t [ERROR] Opening RAPL interface\n";
@@ -558,9 +567,8 @@ void getPowerMetrics(PowerMetrics &powerMetrics){
 			powerMetrics.processorPower = energy;
 	}
   	rapl_close(handle);
-	*/
 
-	/* [TODO] Test NVIDIA Library
+	// [TODO] Test NVIDIA Library
 	nvmlReturn_t result = nvmlInit();
 	if (NVML_SUCCESS != result)
 		std::cout << "\n\n\t [ERROR] Failed to initialize NVML: " << nvmlErrorString(result) << "\n";
