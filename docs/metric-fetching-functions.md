@@ -8,6 +8,30 @@ The purpose of writing this documentation is to show the logic behind used Linux
 
 ---
 
+## List of paths and tools
+
+Below is a list of paths from which we fetched data:
+
+- `/proc/loadavg`
+- `/proc/cpuinfo`
+- `/proc/stat`
+- `/proc/<PROCESS-ID>/io`
+- `/proc/meminfo`
+- `/proc/net/dev`
+
+And list of tools/commands:
+
+- date
+- vmstat
+- ps
+- iostat
+- sar
+- ifstat
+- *sudo* powerstat
+- cut, grep, cat, *sudo* awk, tail
+
+---
+
 ## System Metrics
 
 ### Interrupt and Context Switch Rates
