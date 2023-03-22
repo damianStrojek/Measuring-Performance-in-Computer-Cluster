@@ -83,14 +83,40 @@ All of the times are measured in `USER_HZ` which is typically 1/100 of a second.
 ### L2 and L3 Cache Hit and Miss Rates
 
 ```bash
-[TODO]
+perf stat -e cpu/event=0x24,umask=0x01,name=L2_RQSTS_DEMAND_DATA_RD_HIT/,cpu/event=0x24,umask=0x02,name=L2_RQSTS_ALL_DEMAND_DATA_RD/,cpu/event=0x24,umask=0x04,name=L2_RQSTS_DEMAND_DATA_RD_MISS/,cpu/event=0x2e,umask=0x01,name=LLC_REFERENCES_LLC_HIT/,cpu/event=0x2e,umask=0x02,name=LLC_REFERENCES_LLC_MISS/,cpu/event=0x2e,umask=0x08,name=LLC_REFERENCES_SNOOP_STALL/ --all-cpus sleep 1 2>&1 | awk '/L2_RQSTS_ALL_DEMAND_DATA_RD|L2_RQSTS_DEMAND_DATA_RD_HIT|L2_RQSTS_DEMAND_DATA_RD_MISS|LLC_REFERENCES_LLC_HIT|LLC_REFERENCES_LLC_MISS|LLC_REFERENCES_SNOOP_STALL/ {print $1}'
 ```
+
+This one-liner should give the following L2 and L3 cache metrics: 
+
+- `L2_RQSTS_DEMAND_DATA_RD_HIT`: counts L2 cache hits for demand data reads
+- `L2_RQSTS_ALL_DEMAND_DATA_RD`: counts all demand data reads to L2 cache
+- `L2_RQSTS_DEMAND_DATA_RD_MISS`: counts L2 cache misses for demand data reads
+- `LLC_REFERENCES_LLC_HIT`: counts LLC cache hits
+- `LLC_REFERENCES_LLC_MISS`: counts LLC cache misses
+- `LLC_REFERENCES_SNOOP_STALL`: counts snoop stalls on the bus due to LLC reference requests
+
+From these metrics, you can **calculate** the cache L2 hit rate, cache L2 miss rate, cache L3 hit rate, cache L3 miss rate, and cache L3 hit snoop rate **using the following formulas**:
+
+**Cache L2 hit rate** =  L2_RQSTS_DEMAND_DATA_RD_HIT / L2_RQSTS_ALL_DEMAND_DATA_RD
+
+**Cache L2 miss rate** = L2_RQSTS_DEMAND_DATA_RD_MISS / L2_RQSTS_ALL_DEMAND_DATA_RD
+
+**Cache L3 hit rate** = LLC_REFERENCES_LLC_HIT / (LLC_REFERENCES_LLC_HIT + LLC_REFERENCES_LLC_MISS)
+
+**Cache L3 miss rate** = LLC_REFERENCES_LLC_MISS / (LLC_REFERENCES_LLC_HIT + LLC_REFERENCES_LLC_MISS)
+
+**Cache L3 hit snoop rate** = LLC_REFERENCES_LLC_HIT / (LLC_REFERENCES_LLC_HIT + LLC_REFERENCES_SNOOP_STALL)
+
+
+*Note that these formulas assume that the events provided in the perf stat command accurately measure the cache behavior of your system. However, depending on the specific hardware and software configuration, the event names or formulas may need to be adjusted.*
 
 ### Cycles Rates and Relative Frequencies
 
 ```bash
-[TODO]
+sudo perf stat -e cpu/event=0x08,umask=0x01,name=INST_RETIRED/,cpu/event=0x76,umask=0x01,name=CPU_CLK_UNHALTED_THREAD/,cpu/event=0x3c,umask=0x00,name=CPU_CLK_UNHALTED_REF_TSC/,cpu/event=0x3b,umask=0x00,name=CORE_CLK_UNHALTED_REF/,cpu/event=0x3f,umask=0x01,name=CPU_CLK_UNHALTED_REF_XCLK/,cpu/event=0xac,umask=0x02,name=CYCLE_ACTIVITY_STALLS_L1D_PENDING/ --all-cpus sleep 1 2>&1 | awk '/INST_RETIRED|CPU_CLK_UNHALTED_THREAD|CPU_CLK_UNHALTED_REF_TSC|CORE_CLK_UNHALTED_REF|CPU_CLK_UNHALTED_REF_XCLK|CYCLE_ACTIVITY_STALLS_L1D_PENDING/ {print $1}'
 ```
+
+
 
 ---
 

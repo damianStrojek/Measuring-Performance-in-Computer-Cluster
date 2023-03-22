@@ -57,16 +57,16 @@ struct ProcessorMetrics {
 	int timeSoftIRQ;				// SoftIRQ handling time
 	int timeSteal;					// Time spent in other OSs in visualization mode
 	int timeGuest;					// Virtual CPU uptime for other OSs under kernel control
-	int instructionsRetiredRate;	// Number of actualy executed instructions
-	int cyclesRate;					// Number of clock cycles during core operation (Turbo Boost possible)
-	int cyclesReferenceRate;		// Number of reference clock cycles
-	int frequencyRelative;			// Average core clock frequency, also taking into account Turbo Boost
-	int frequencyActiveRelative;	// Average core clock frequency if not in C0 state, also including TB
-	int cacheL2HitRate;				// Number of L2 cache hits
-	int cacheL2MissRate;			// Number of L2 cache misses
-	int cacheL3HitRate;				// Number of L3 cache hits
-	int cacheL3HitSnoopRate;		// Number of L3 cache hits, with references to sibling L2
-	int cacheL3MissRate;			// Number of L3 cache misses
+	int instructionsRetiredRate;	// 
+	int cyclesRate;					// 
+	int cyclesReferenceRate;		// 
+	int frequencyRelative;			// 
+	int frequencyActiveRelative;	// 
+	float cacheL2HitRate;			// L2 cache hits for demand data reads / all demand data reads to L2 cache
+	float cacheL2MissRate;			// L2 cache misses for demand data reads / all demand data reads to L2 cache
+	float cacheL3HitRate;			// LLC cache hits / (LLC cache hits + LLC cache misses)
+	float cacheL3HitSnoopRate;		// LLC cache misses / (LLC cache hits + LLC cache misses)
+	float cacheL3MissRate;			// LLC cache hits / (LLC cache hits + snoop stalls on the bus due to LLC reference requests)
 
 	ProcessorMetrics(){
 		this->timeUser = -1;
@@ -368,47 +368,37 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	stream >> temp;
 	processorMetrics.timeGuest = std::stoi(temp);		// USER_HZ
 
-	/*
-	// Not supported metrics:
-	processorMetrics.cacheL2HitRate = NOTSUPPORTED;
-	processorMetrics.cacheL2MissRate = NOTSUPPORTED;
-	processorMetrics.cacheL3HitRate = NOTSUPPORTED;
-	processorMetrics.cacheL3MissRate = NOTSUPPORTED;
-	processorMetrics.cacheL3HitSnoopRate = NOTSUPPORTED;
-	processorMetrics.instructionsRetiredRate = NOTSUPPORTED;
-	processorMetrics.cyclesRate = NOTSUPPORTED;
-	processorMetrics.cyclesReferenceRate = NOTSUPPORTED;
-	processorMetrics.frequencyRelative = NOTSUPPORTED;
-	processorMetrics.frequencyActiveRelative = NOTSUPPORTED;
-
-	// [TODO] as far as we know perf works only on hardware and we can't test it yet
-	// sudo perf stat -e LLC-loads,LLC-load-misses,L2_RQSTS.ALL,L2_RQSTS.MISS,PERF_COUNT_HW_CPU_CYCLES,PERF_COUNT_HW_INSTRUCTIONS,PERF_COUNT_HW_REF_CPU_CYCLES,PERF_COUNT_HW_CPU_CYCLES:REF_XCLK,PERF_COUNT_HW_CPU_CYCLES:UNHALTED_CORE_CYCLES sleep 1 2>&1 | awk '/LLC-loads/ { ll=$1 } /LLC-load-misses/ { lm=$1 } /L2_RQSTS.ALL/ { l2=$1 } /L2_RQSTS.MISS/ { lm2=$1 } /CPU_CYCLES:/ { cpu=$1 } /INSTRUCTIONS/ { instr=$1 } /REF_CPU_CYCLES/ { ref=$1 } /REF_XCLK/ { xclk=$1 } /UNHALTED_CORE_CYCLES/ { unhalted=$1 } END { printf "L2 Cache Hit Rate: %f%%\n", (l2-lm2)*100/l2; printf "L2 Cache Miss Rate: %f%%\n", lm2*100/l2; printf "L3 Cache Hit Rate: %f%%\n", (ll-lm)*100/ll; printf "L3 Cache Miss Rate: %f%%\n", lm*100/ll; printf "Instructions Retired Rate: %f instructions/cycle\n", instr/cpu; printf "Processor Cycle Metrics: %f cycles/instruction\n", cpu/instr; printf "Processor Cycles Reference Rate: %f cycles/second\n", cpu/ref; printf "Relative Frequency: %f GHz\n", xclk/unhalted/1e9; printf "Active Relative Frequency: %f GHz\n", xclk/cpu/1e9 }'
-	command = "sudo perf stat -e LLC-loads,LLC-load-misses,L2_RQSTS.ALL,L2_RQSTS.MISS,PERF_COUNT_HW_CACHE_L3_HITS sleep 1 2>&1 |" + 
-	" awk '/LLC-loads/ { ll=$1 } /LLC-load-misses/ { lm=$1 } /L2_RQSTS.ALL/ { l2=$1 } /L2_RQSTS.MISS/" + 
-	"{ lm2=$1 } /L3_HITS/ { l3=$1 } END { printf '%f%% ', (l2-lm2)*100/l2; printf '%f%% '" + 
-	", lm2*100/l2; printf '%f%% ', (ll-lm)*100/ll; printf '%f%% ', lm*100/ll; printf '%f%%', l3*100/ll }'";
+	command = "perf stat -e cpu/event=0x24,umask=0x01,name=L2_RQSTS_DEMAND_DATA_RD_HIT/,cpu/" + 
+		"event=0x24,umask=0x02,name=L2_RQSTS_ALL_DEMAND_DATA_RD/,cpu/event=0x24,umask=0x04,n" + 
+		"ame=L2_RQSTS_DEMAND_DATA_RD_MISS/,cpu/event=0x2e,umask=0x01,name=LLC_REFERENCES_LLC" + 
+		"_HIT/,cpu/event=0x2e,umask=0x02,name=LLC_REFERENCES_LLC_MISS/,cpu/event=0x2e,umask=" + 
+		"0x08,name=LLC_REFERENCES_SNOOP_STALL/ --all-cpus sleep 1 2>&1 | awk '/L2_RQSTS_ALL_" + 
+		"DEMAND_DATA_RD|L2_RQSTS_DEMAND_DATA_RD_HIT|L2_RQSTS_DEMAND_DATA_RD_MISS|LLC_REFEREN" + 
+		"CES_LLC_HIT|LLC_REFERENCES_LLC_MISS|LLC_REFERENCES_SNOOP_STALL/ {print $1}'";
 	output = exec(command);
 	std::stringstream streamTwo(output);
+	float L2RqstsHit, L2RqstsMiss, L2RqstsData, LLCHit, LLCMiss, LLCSnoop;
 
 	streamTwo >> temp;
-	processorMetrics.cacheL2HitRate = std::stof(temp);
+	L2RqstsHit = std::stof(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheL2MissRate = std::stof(temp);
+	L2RqstsMiss = std::stof(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheL3HitRate = std::stof(temp);
+	L2RqstsData = std::stof(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheL3MissRate = std::stof(temp);
+	LLCHit = std::stof(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheL3HitSnoopRate = std::stof(temp);
+	LLCMiss = std::stof(temp);
+	streamTwo >> temp;
+	LLCSnoop = std::stof(temp);
 
-	// sudo perf stat -e cpu-cycles,instructions,ref-cycles,cpu-cycles:u,cpu-cycles:u:r0100,cpu-cycles:u:r0200,cpu-cycles:u:r0400,cpu-cycles:u:r0800,cpu-cycles:u:r1000,cpu-cycles:u:r2000,cpu-cycles:u:r4000,cpu-cycles:u:w,cpu-cycles:u:w:r0100,cpu-cycles:u:w:r0200,cpu-cycles:u:w:r0400,cpu-cycles:u:w:r0800,cpu-cycles:u:w:r1000,cpu-cycles:u:w:r2000,cpu-cycles:u:w:r4000 sleep 1 2>&1 | awk '/^cpu-cycles/ { cpu_cycles=$1 } /^instructions/ { instr=$1 } /^ref-cycles/ { ref_cycles=$1 } /^cpu-cycles:u/ { sub(/:/,"_",$1); sub(/u./,"",$1); a[$1]=$1 } /^cpu-cycles:u:/ { sub(/:/,"_",$1); sub(/u./,"",$1); a[$1]=$1 } END { printf "Instructions Retired Rate: %f instructions/cycle\n", instr/cpu_cycles; printf "Processor Cycle Metrics: %f cycles/instruction\n", cpu_cycles/instr; printf "Processor Cycles Reference Rate: %f cycles/second\n", cpu_cycles/ref_cycles; printf "Relative Frequency: %f GHz\n", a["cpu_cycles_u"]/a["cpu_cycles_u_r0100"]/1e9; printf "Active Relative Frequency: %f GHz\n", a["cpu_cycles_u"]/cpu_cycles/1e9 }'
-	command = "sudo perf stat -e cpu-cycles,instructions,ref-cycles,cpu-cycles:u,cpu-cycles:u:r0100,cpu-cycles:u:r0200," + 
-	"cpu-cycles:u:r0400,cpu-cycles:u:r0800,cpu-cycles:u:r1000,cpu-cycles:u:r2000,cpu-cycles:u:r4000,cpu-cycles:u:w," + 
-	"cpu-cycles:u:w:r0100,cpu-cycles:u:w:r0200,cpu-cycles:u:w:r0400,cpu-cycles:u:w:r0800,cpu-cycles:u:w:r1000," + 
-	"cpu-cycles:u:w:r2000,cpu-cycles:u:w:r4000 sleep 1 2>&1 | awk '/^cpu-cycles/ { cpu_cycles=$1 } /^instructions/ { instr=$1 }" + 
-	" /^ref-cycles/ { ref_cycles=$1 } /^cpu-cycles:u/ { sub(/:/,'_',$1); sub(/u./,'',$1); a[$1]=$1 } /^cpu-cycles:u:/ " + 
-	" { sub(/:/,'_',$1); sub(/u./,'',$1); a[$1]=$1 } END { printf '%f ', instr/cpu_cycles; printf '%f ', cpu_cycles/instr;" + 
-	" printf '%f ', cpu_cycles/ref_cycles; printf '%f ', a['cpu_cycles_u']/a['cpu_cycles_u_r0100']/1e9; printf '%f', a['cpu_cycles_u']/cpu_cycles/1e9 }'";
+	processorMetrics.cacheL2HitRate = L2RqstsHit / L2RqstsData;
+	processorMetrics.cacheL2MissRate = L2RqstsMiss / L2RqstsData;
+	processorMetrics.cacheL3HitRate = LLCHit / (LLCHit + LLCMiss);
+	processorMetrics.cacheL3MissRate = LLCMiss / (LLCHit + LLCMiss);
+	processorMetrics.cacheL3HitSnoopRate = LLCHit / (LLCHit + LLCSnoop);
+
+	command = "sudo perf stat -e cpu/event=0x08,umask=0x01,name=INST_RETIRED/,cpu/event=0x76,umask=0x01,name=CPU_CLK_UNHALTED_THREAD/,cpu/event=0x3c,umask=0x00,name=CPU_CLK_UNHALTED_REF_TSC/,cpu/event=0x3b,umask=0x00,name=CORE_CLK_UNHALTED_REF/,cpu/event=0x3f,umask=0x01,name=CPU_CLK_UNHALTED_REF_XCLK/,cpu/event=0xac,umask=0x02,name=CYCLE_ACTIVITY_STALLS_L1D_PENDING/ --all-cpus sleep 1 2>&1 | awk '/INST_RETIRED|CPU_CLK_UNHALTED_THREAD|CPU_CLK_UNHALTED_REF_TSC|CORE_CLK_UNHALTED_REF|CPU_CLK_UNHALTED_REF_XCLK|CYCLE_ACTIVITY_STALLS_L1D_PENDING/ {print $1}'";
 	output = exec(command);
 	std::stringstream streamThree(output);
 
@@ -422,7 +412,6 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	processorMetrics.frequencyRelative = std::stof(temp);		// GHz
 	streamThree >> temp;
 	processorMetrics.frequencyActiveRelative = std::stof(temp); // GHz
-	*/
 
 	processorMetrics.printProcessorMetrics();
 };
