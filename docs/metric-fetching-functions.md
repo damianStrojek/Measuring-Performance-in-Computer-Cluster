@@ -6,8 +6,6 @@ The purpose of writing this documentation is to show the logic behind used Linux
 - No need to wait for results to be calculated, e.g., we prefer to read metrics from the files,
 - Instead of reading different information from 5 different places, we prefer to find a place from which we will be able to download most of these metrics and then possibly supplement them.
 
----
-
 ## List of paths and tools
 
 Below is a list of paths from which we fetched data:
@@ -29,8 +27,6 @@ And list of tools/commands:
 - ifstat
 - powerstat
 - cut, grep, cat, awk, tail
-
----
 
 ## System Metrics
 
@@ -63,8 +59,6 @@ ps -eo state | grep -c '^D'
 Blocked processes are not available using previous methods so we had to use another command to get this number. This is a possibility of improvement in the future.
 
 ![Output](./images/blocked-processes.png)
-
----
 
 ## Processor Metrics
 
@@ -137,8 +131,6 @@ perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]
 
 ![Output](./images/processor-clocks.png)
 
----
-
 ## Input / Output Metrics
 
 ### Data read and written, Read and Write Operations Rates
@@ -170,8 +162,6 @@ $1 ~ /sda/ {                     # If the first field contains "sda"
 This command will first run `iostat -d -k` to get the disk statistics, then use `awk` to parse the output. The awk script looks for lines that start with a non-space character (which indicates the start of a new device's statistics) and saves the device name to the device variable. It then looks for lines that contain the string sda (*which can be replaced with any other device name as needed*) and calculates all of the metrics.
 
 ![Output](./images/io-read-write-times.png)
-
----
 
 ## Memory Metrics
 
@@ -209,8 +199,6 @@ Note that the output of this command may vary depending on your Linux distributi
 
 ![Output](./images/memory-read-write-rates.png)
 
----
-
 ## Network Metrics
 
 ### Receive and Send Packet Rates
@@ -236,8 +224,6 @@ The file `/proc/net/dev` keeps track of all received and sent packets and bytes.
 **There might be a need to change `eth0` to appropriate name of the network interface.**
 
 ![Output](./images/sent-and-received-data.png)
-
----
 
 ## Power Metrics
 
@@ -266,5 +252,3 @@ powerstat needs to be run with root privilege when using `-g`, `-p`, `-r`, `-s` 
 ```
 
 ![Output]()
-
----
