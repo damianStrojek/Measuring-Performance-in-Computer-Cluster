@@ -50,7 +50,7 @@ As far as we know, the output of the `vmstat` command has fixed places in which 
 cat /proc/loadavg | cut -d ' ' -f 4
 ```
 
-From the file /proc/loadavg we only get the number of all processes and processes that are currently running. This number is separated by a slash (`/`).
+From the file `/proc/loadavg` we only get the number of all processes and processes that are currently running. This number is separated by a slash (`/`).
 
 ![Output](./images/all-and-running-processes.png)
 
@@ -74,7 +74,7 @@ Blocked processes are not available using previous methods so we had to use anot
 cat /proc/cpuinfo | grep 'processor' -c
 ```
 
-Getting the number of processors that were reported to the /proc/cpuinfo. We can base our algorithm on that and read specific information about each processor.
+Getting the number of processors that were reported to the `/proc/cpuinfo`. We can base our algorithm on that and read specific information about each processor.
 
 ![Output](./images/number-of-processors.png)
 
@@ -84,7 +84,7 @@ Getting the number of processors that were reported to the /proc/cpuinfo. We can
 cat /proc/stat
 ```
 
-This file gives us a lot of information about all of the processors. We are only interested in the first line of the output which provides sum of information from all processors reported to the /proc/cpuinfo.
+This file gives us a lot of information about all of the processors. We are only interested in the first line of the output which provides sum of information from all processors reported to the `/proc/cpuinfo`.
 
 All of the times are measured in `USER_HZ` which is typically 1/100 of a second.
 
@@ -124,10 +124,18 @@ From these metrics, you can **calculate** the cache L2 hit rate, cache L2 miss r
 ### Cycles Rates and Relative Frequencies
 
 ```bash
-sudo perf stat -e cpu/event=0x08,umask=0x01,name=INST_RETIRED/,cpu/event=0x76,umask=0x01,name=CPU_CLK_UNHALTED_THREAD/,cpu/event=0x3c,umask=0x00,name=CPU_CLK_UNHALTED_REF_TSC/,cpu/event=0x3b,umask=0x00,name=CORE_CLK_UNHALTED_REF/,cpu/event=0x3f,umask=0x01,name=CPU_CLK_UNHALTED_REF_XCLK/,cpu/event=0xac,umask=0x02,name=CYCLE_ACTIVITY_STALLS_L1D_PENDING/ --all-cpus sleep 1 2>&1 | awk '/INST_RETIRED|CPU_CLK_UNHALTED_THREAD|CPU_CLK_UNHALTED_REF_TSC|CORE_CLK_UNHALTED_REF|CPU_CLK_UNHALTED_REF_XCLK|CYCLE_ACTIVITY_STALLS_L1D_PENDING/ {print $1}'
+perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'
 ```
 
-![Output]()
+- `Number of instructions retired`: This is the total number of instructions executed by the processor during the sampling period.
+
+- `Cycles`: This is the total number of cycles executed by the processor during the sampling period.
+
+- `CPU clock`: This is the CPU clock frequency in MHz during the sampling period.
+
+- `CPU clock:u`: This is the unhalted CPU clock frequency in MHz during the sampling period.
+
+![Output](./images/processor-clocks.png)
 
 ---
 
@@ -139,7 +147,7 @@ sudo perf stat -e cpu/event=0x08,umask=0x01,name=INST_RETIRED/,cpu/event=0x76,um
 sudo awk '{ print $2 }' /proc/1/io
 ```
 
-Basically this command outputs second column of the /proc/1/io file. The "1" in the filepath is the process ID (should be changed to the specific ID of application running on cluster). 
+Basically this command outputs second column of the `/proc/1/io file`. The `1` in the filepath is the Process ID (it is defined globally as `GPROCESSID`). 
 
 The first and second rows are respectively all characters read and written by the specified process divided by 1024 to get this number in MB. Right now this command doesn't count write and read "operations rate". It just outputs the number of read and write operations for this specific process ID.
 
@@ -149,11 +157,17 @@ The first and second rows are respectively all characters read and written by th
 
 ```bash
 iostat -d -k | awk '/^[^ ]/ {device=$1} $1 ~ /sda/ {print 1000*$10/($4*$3), 1000*$11/($4*$3), $6/$4, $7/$6}'
+
+/^[^ ]/ {device=$1}              # If the line starts with a non-space character, set the variable "device" to the first field
+$1 ~ /sda/ {                     # If the first field contains "sda"
+    print 1000*$10/($4*$3),      # Print the read time in milliseconds (Field 10 * 1000 / (Field 4 * Field 3))
+          1000*$11/($4*$3),      # Print the write time in milliseconds (Field 11 * 1000 / (Field 4 * Field 3))
+          $6/$4,                 # Print the flush operations per second (Field 6 / Field 4)
+          $7/$6                  # Print the flush time per flush operation in milliseconds (Field 7 / Field 6)
+}
 ```
 
-This command will first run `iostat -d -k` to get the disk statistics, then use `awk` to parse the output. The awk script looks for lines that start with a non-space character (which indicates the start of a new device's statistics) and saves the device name to the device variable. It then looks for lines that contain the string sda (which can be replaced with any other device name as needed) and calculates the read and write times by dividing the 10th and 11th fields (which represent the total number of KB read/written) by the product of the 4th and 3rd fields (which represent the total number of operations and the block size, respectively). This gives the throughput rate in KB/s, which is then multiplied by 1000 and divided by the number of operations to convert to milliseconds per operation.
-
-Later I added flush_rate (the rate of flush operations, in operations per second) and flush_time (the mean time per flush operation, in milliseconds). The flush_rate is calculated as the 6th field (which is the number of flush operations) divided by the 4th field (the total number of operations). The flush_time is calculated as the 7th field (which is the total time spent on flush operations) divided by the 6th field.
+This command will first run `iostat -d -k` to get the disk statistics, then use `awk` to parse the output. The awk script looks for lines that start with a non-space character (which indicates the start of a new device's statistics) and saves the device name to the device variable. It then looks for lines that contain the string sda (*which can be replaced with any other device name as needed*) and calculates all of the metrics.
 
 ![Output](./images/io-read-write-times.png)
 
@@ -167,24 +181,26 @@ Later I added flush_rate (the rate of flush operations, in operations per second
 grep -v -e 'anon' -e 'file' /proc/meminfo | grep -E '^(Cached|SwapCached|SwapTotal|SwapFree|Active|Inactive)' | awk '{print $2}'
 ```
 
-All of the information we can get from the /proc/meminfo file. All of the metrics are saved in kB but, for the sake of the output, we are dividing it by 1024 to have MB.
+All of the information we can get from the `/proc/meminfo` file. All of the metrics are saved in kB but, for the sake of the output, we are dividing it by 1024 to have MB.
 
 ![Output](./images/memory-swap-active-cached.png)
 
-### Page In, Out, Fault, and Free Rates
+### Page In, Out, Fault, Free, Activate and Deactivate Rates
 
 ```bash
-sar -r -B 1 1 | awk 'NR==4{print $3 $4 $5 $7}'
+sar -r -B 1 1 | awk 'NR==4{print $2,$3,$4,$5,$6,$7,$8}'
 ```
 
 This command uses the `-r` and `-B` options to collect memory page and paging statistics, and then selects the relevant fields using `awk`. All of the statistics for pages are measured in pages/second.
+
+The `pgscank/s` column shows the rate of kernel page scans in kilopages per second, and the `pgscand/s` column shows the rate of direct reclaim attempts in kilopages per second.
 
 ![Output](./images/page-in-out.png)
 
 ### Memory Read, Write, and I/O Rates
 
 ```bash
-sar -b 1 1 | awk 'NR==4{print $6/1024 $7/1024 ($6+$7)/1024}'
+sar -b 1 1 | awk 'NR==4{print $6/1024,$7/1024,($6+$7)/1024}'
 ```
 
 This command selects the fourth line of the `sar -b` output, which contains the memory read and write rates in kilobytes per second. The awk command then divides these rates by 1024 to convert them to megabytes per second, and prints the results with descriptive labels. Finally, it calculates the total memory I/O rate by summing the memory read and write rates, and also converts the result to MB/s.
@@ -215,7 +231,7 @@ Both metrics are measured in KB/s.
 cat /proc/net/dev | awk '/^ *eth0:/ {rx=$3; tx=$11; print rx,tx; exit}'
 ```
 
-The file /proc/net/dev keeps track of all received and sent packets and bytes. Right now we are outputting number of packets but it's possible to change the command and output number of bytes.
+The file `/proc/net/dev` keeps track of all received and sent packets and bytes. Right now we are outputting number of packets but it's possible to change the command and output number of bytes.
 
 **There might be a need to change `eth0` to appropriate name of the network interface.**
 
@@ -228,10 +244,10 @@ The file /proc/net/dev keeps track of all received and sent packets and bytes. R
 ### Memory Power
 
 ```bash
-sudo powerstat -d 1 | awk '/Memory Power/ { print $4 }'
+sudo powerstat -d 1 -s cpu,panel
 ```
 
-Unfortunately, it's not possible to obtain accurate power consumption information for memory without measuring it over a period of time. It's possible that `print $4` won't work. They ou can go back to the basic command with `printf`: `sudo powerstat -d 1 | awk '/Memory Power/ {printf("Memory Power: %.2f W\n", $4)}'`, but be careful because there is too many parenthases to parse it using string (you can try to add together two strings and then use it in `exec()` function).
+powerstat needs to be run with root privilege when using `-g`, `-p`, `-r`, `-s` options.
 
 ![Output]()
 
