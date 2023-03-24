@@ -1,7 +1,7 @@
 // Gdansk University of Technology 2023
 // Group project nr 8 realised at WETI KASK
-// Title: An application for monitoring performance and energy consumption in a computing cluster
-// Authors: Damian Strojek, Piotr Garbowski, Jakub Wasniewski
+// Description: An application for monitoring performance and energy consumption in a computing cluster
+// Developers: Damian Strojek, Piotr Garbowski, Jakub Wasniewski
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -19,11 +19,11 @@
 #include <iomanip>
 #include <chrono>
 #include <map>
-//#include <rapl.h>						// [TODO] Not supported yet
-//#include <nvml.h>						// [TODO] Not supported yet
+//#include <rapl.h> [TODO] Not supported yet
+//#include <nvml.h> [TODO] Not supported yet
 
 #define NOTSUPPORTED -666				// Functionality not yet supported
-#define GPROCESSID 1					// PID of process that we are focused on (g stands for global)
+#define GPROCESSID 1					// PID of process that we are focused on (G stands for global)
 
 struct SystemMetrics {
 	int processesRunning;			// Number of processes in the R state
@@ -41,9 +41,12 @@ struct SystemMetrics {
 	};
 
 	void printSystemMetrics(){
-		std::cout << "\n\t[SYSTEM METRICS]\n\nInterrupt Rate = " << this->interruptRate << " interrupts/sec\nContext Switch Rate = " 
-		<< this->contextSwitchRate << " switches/sec\nAll Processes = " << this->processesAll <<  "\nRunning Processes = " << 
-		this->processesRunning << "\nBlocked Processes = " << this->processesBlocked << "\n";
+   		std::cout << "\n\t[SYSTEM METRICS]\n\n"
+			<< "Interrupt Rate = " << this->interruptRate << " interrupts/sec\n"
+			<< "Context Switch Rate = " << this->contextSwitchRate << " switches/sec\n"
+			<< "All Processes = " << this->processesAll << "\n"
+			<< "Running Processes = " << this->processesRunning << "\n"
+			<< "Blocked Processes = " << this->processesBlocked << "\n";
 	};
 };
 
@@ -57,16 +60,18 @@ struct ProcessorMetrics {
 	int timeSoftIRQ;				// SoftIRQ handling time
 	int timeSteal;					// Time spent in other OSs in visualization mode
 	int timeGuest;					// Virtual CPU uptime for other OSs under kernel control
-	int instructionsRetiredRate;	// Number of actualy executed instructions
-	int cyclesRate;					// Number of clock cycles during core operation (Turbo Boost possible)
-	int cyclesReferenceRate;		// Number of reference clock cycles
-	int frequencyRelative;			// Average core clock frequency, also taking into account Turbo Boost
-	int frequencyActiveRelative;	// Average core clock frequency if not in C0 state, also including TB
-	int cacheL2HitRate;				// Number of L2 cache hits
-	int cacheL2MissRate;			// Number of L2 cache misses
-	int cacheL3HitRate;				// Number of L3 cache hits
-	int cacheL3HitSnoopRate;		// Number of L3 cache hits, with references to sibling L2
-	int cacheL3MissRate;			// Number of L3 cache misses
+	int instructionsRetired;		// Number of instructions executed by the processor
+	int cycles;						// Number of cycles executed by the processor
+	float frequencyRelative;		// CPU clock frequency in MHz
+	float unhaltedFrequency;		// unhalted CPU clock frequency in MHz
+	float cacheL2HitRate;			// L2 cache hits for demand data reads / all demand
+									// data reads to L2 cache
+	float cacheL2MissRate;			// L2 cache misses for demand data reads / all demand 
+									// data reads to L2 cache
+	float cacheL3HitRate;			// LLC cache hits / (LLC cache hits + LLC cache misses)
+	float cacheL3HitSnoopRate;		// LLC cache misses / (LLC cache hits + LLC cache misses)
+	float cacheL3MissRate;			// LLC cache hits / (LLC cache hits + snoop stalls on 
+									// the bus due to LLC reference requests)
 
 	ProcessorMetrics(){
 		this->timeUser = -1;
@@ -78,11 +83,10 @@ struct ProcessorMetrics {
 		this->timeSoftIRQ = -1;
 		this->timeSteal = -1;
 		this->timeGuest = -1;
-		this->instructionsRetiredRate = -1;
-		this->cyclesRate = -1;
-		this->cyclesReferenceRate = -1;
+		this->instructionsRetired = -1;
+		this->cycles = -1;
 		this->frequencyRelative = -1;
-		this->frequencyActiveRelative = -1;
+		this->unhaltedFrequency = -1;
 		this->cacheL2HitRate = -1;
 		this->cacheL2MissRate = -1;
 		this->cacheL3HitRate = -1;
@@ -91,27 +95,38 @@ struct ProcessorMetrics {
 	};
 
 	void printProcessorMetrics(){
-		std::cout << "\n\t[PROCESSOR METRICS]\n\nTime User = " << this->timeUser  << "\nTime Nice = " << this->timeNice << "\nTime System = " << 
-		this->timeSystem << "\nTime Idle = " << this->timeIdle << "\nTime I/O Wait = " << this->timeIoWait << "\nTime IRQ = " << this->timeIRQ << 
-		"\nTime Soft IRQ = " << this->timeSoftIRQ << "\nTime Steal = " << this->timeSteal << "\nTime Guest = " << this->timeGuest << 
-		"\nInstructions Retired Rate = " << this->instructionsRetiredRate << "\nCycles rate = " << this->cyclesRate << "\nCycles reference rate = " << 
-		this->cyclesReferenceRate << "\nRelative Frequency = " << this->frequencyRelative << "\nActive Relative Frequency = " << 
-		this->frequencyActiveRelative << "\nCache L2 Hit Rate = " << this->cacheL2HitRate << "\nCache L2 Miss Rate = " << this->cacheL2MissRate << 
-		"\nCache L3 Hit Rate = " << this->cacheL3HitRate << "\nCache L3 Miss Rate = " << this->cacheL3MissRate << "\nCache L3 Hit Snoop Rate = " << 
-		this->cacheL3HitSnoopRate << "\n"; 
+    	std::cout << "\n\t[PROCESSOR METRICS]\n\n"
+			<< "Time User = " << this->timeUser  << "\n"
+			<< "Time Nice = " << this->timeNice << "\n"
+			<< "Time System = " << this->timeSystem << "\n"
+			<< "Time Idle = " << this->timeIdle << "\n"
+			<< "Time I/O Wait = " << this->timeIoWait << "\n"
+			<< "Time IRQ = " << this->timeIRQ << "\n"
+			<< "Time Soft IRQ = " << this->timeSoftIRQ << "\n"
+			<< "Time Steal = " << this->timeSteal << "\n"
+			<< "Time Guest = " << this->timeGuest << "\n"
+			<< "Retired Instructions = " << this->instructionsRetired << "\n"
+			<< "Cycles = " << this->cycles << "\n"
+			<< "Relative Frequency = " << this->frequencyRelative << "\n"
+			<< "Unhalted Frequency = " << this->unhaltedFrequency << "\n"
+			<< "Cache L2 Hit Rate = " << this->cacheL2HitRate << "\n"
+			<< "Cache L2 Miss Rate = " << this->cacheL2MissRate << "\n"
+			<< "Cache L3 Hit Rate = " << this->cacheL3HitRate << "\n"
+			<< "Cache L3 Miss Rate = " << this->cacheL3MissRate << "\n"
+			<< "Cache L3 Hit Snoop Rate = " << this->cacheL3HitSnoopRate << "\n"; 
 	};
 };
 
 struct InputOutputMetrics {
 	int processID;					// Process ID of a given task 
-	int dataRead;					// Data read
-	int readTime;					// Data read time
+	float dataRead;					// Data read
+	float readTime;					// Data read time
 	int readOperationsRate;			// Amount of read operations per second
-	int dataWritten;				// Data written
-	int writeTime;					// Data write time
+	float dataWritten;				// Data written
+	float writeTime;				// Data write time
 	int writeOperationsRate;		// Amount of write operations per second
-	int flushTime;					// Flush execution time
-	int flushOperationsRate;		// Amount of flush operations per second
+	float flushTime;				// Flush execution time
+	float flushOperationsRate;		// Amount of flush operations per second
 
 	InputOutputMetrics(){
 		this->processID = GPROCESSID;
@@ -125,11 +140,17 @@ struct InputOutputMetrics {
 		this->flushOperationsRate = -1;
 	};
 
-	void printInputOuputMetrics(){
-		std::cout << "\n\t[INPUT/OUTPUT METRICS]\n\nProcess ID = " << this->processID << "\nData Read = " << this->dataRead << 
-		" MB\nRead Time = " << this->readTime << " ms\nRead Operations Rate = " << this->readOperationsRate << " operations [TO CHANGE]\nData Written = " 
-		<< this->dataWritten << " MB\nWrite Time = " << this->writeTime << " ms\nWrite Operations Rate = " << this->writeOperationsRate << 
-		" operations [TO CHANGE]\nFlush Time = " << this->flushTime << " ms\nFlush Operations Rate = " << this->flushOperationsRate << " ops/sec\n";
+	void printInputOutputMetrics(){
+    	std::cout << "\n\t[INPUT/OUTPUT METRICS]\n\n"
+			<< "Process ID = " << this->processID << "\n"
+			<< "Data Read = " << this->dataRead << " MB\n"
+			<< "Read Time = " << this->readTime << " ms\n"
+			<< "Read Operations Rate = " << this->readOperationsRate << "\n"
+			<< "Data Written = " << this->dataWritten << " MB\n"
+			<< "Write Time = " << this->writeTime << " ms\n"
+			<< "Write Operations Rate = " << this->writeOperationsRate << "\n"
+			<< "Flush Time = " << this->flushTime << " ms\n"
+			<< "Flush Operations Rate = " << this->flushOperationsRate << "\n";
 	};
 };
 
@@ -141,13 +162,13 @@ struct MemoryMetrics {
 									// fetched back and still in the swap file
 	float memoryActive;				// Data used in the last period
 	float memoryInactive;			// Data used before memoryActive
-	int pageInRate;					// Pages read
-	int pageOutRate;				// Pages saved
-	int pageFaultRate;				// No page status
-	int pageFaultsMajorRate;		// Page missing (need to load from disk)
-	int pageFreeRate;				// Page release
-	int pageActivateRate;			// Page activation
-	int pageDeactivateRate;			// Page deactivation
+	float pageInRate;				// Pages read
+	float pageOutRate;				// Pages saved
+	float pageFaultRate;			// No page status
+	float pageFaultsMajorRate;		// Page missing (need to load from disk)
+	float pageFreeRate;				// Page release
+	float pageActivateRate;			// Page activation
+	float pageDeactivateRate;		// Page deactivation
 	float memoryReadRate;			// Reading from memory
 	float memoryWriteRate;			// Writing to memory
 	float memoryIoRate;				// Requests to read/write data from all I/O devices
@@ -172,13 +193,23 @@ struct MemoryMetrics {
 	};
 
 	void printMemoryMetrics(){
-		std::cout << "\n\t[MEMORY METRICS]\n\nMemory Used = " << this->memoryUsed << " MB\nMemory Cached = " << this->memoryCached << 
-		" MB\nSwap Used = " << this->swapUsed << " MB\nSwap Cached = " << this->swapCached << " MB\nMemory Active = " << this->memoryActive << 
-		" MB\nMemory Inactive = " << this->memoryInactive << " MB\nPage Read Rate = " << this->pageInRate << "\nPage Save Rate = " << 
-		this->pageOutRate << "\nPage Fault Rate = " << this->pageFaultRate << "\nPage Fault Major Rate = " << this->pageFaultsMajorRate << 
-		"\nPage Release Rate = " << this->pageFreeRate << "\nPage Activate Rate = " << this->pageActivateRate << "\nPage Deactivate Rate = " << 
-		this->pageDeactivateRate << "\nMemore Read Rate = " << this->memoryReadRate << " MB/s\nMemory Write Rate = " << this->memoryWriteRate << 
-		" MB/s\nMemory I/O Rate = " << this->memoryIoRate << " MB/s\n";  
+    std::cout << "\n\t[MEMORY METRICS]\n\n"
+              << "Memory Used = " << this->memoryUsed << " MB\n"
+              << "Memory Cached = " << this->memoryCached << " MB\n"
+              << "Swap Used = " << this->swapUsed << " MB\n"
+              << "Swap Cached = " << this->swapCached << " MB\n"
+              << "Memory Active = " << this->memoryActive << " MB\n"
+              << "Memory Inactive = " << this->memoryInactive << " MB\n"
+              << "Page Read Rate = " << this->pageInRate << "\n"
+              << "Page Save Rate = " << this->pageOutRate << "\n"
+              << "Page Fault Rate = " << this->pageFaultRate << "\n"
+              << "Page Fault Major Rate = " << this->pageFaultsMajorRate << "\n"
+              << "Page Release Rate = " << this->pageFreeRate << "\n"
+              << "Page Activate Rate = " << this->pageActivateRate << "\n"
+              << "Page Deactivate Rate = " << this->pageDeactivateRate << "\n"
+              << "Memory Read Rate = " << this->memoryReadRate << " MB/s\n"
+              << "Memory Write Rate = " << this->memoryWriteRate << " MB/s\n"
+              << "Memory I/O Rate = " << this->memoryIoRate << " MB/s\n";
 	};
 };
 
@@ -196,8 +227,11 @@ struct NetworkMetrics {
 	};
 
 	void printNetworkMetrics(){
-		std::cout << "\n\t[NETWORK METRICS]\n\nReceive Packet Rate = " << this->receivePacketRate << " KB/s\nSend Packet Rate = " << 
-		this->sendPacketsRate << " KB/s\nPackets Received = " << this->receivedData << "\nPackets Sent = " << this->sentData << "\n";
+    	std::cout << "\n\t[NETWORK METRICS]\n\n"
+			<< "Receive Packet Rate = " << this->receivePacketRate << " KB/s\n"
+			<< "Send Packet Rate = " << this->sendPacketsRate << " KB/s\n"
+			<< "Packets Received = " << this->receivedData << "\n"
+			<< "Packets Sent = " << this->sentData << "\n";
 	};
 };
 
@@ -215,31 +249,39 @@ struct PowerMetrics {
 	};
 
 	void printPowerMetrics(){
-		std::cout << "\n\t[POWER METRICS]\n\nProcessor = " << this->processorPower << "W\nMemory = " << this->memoryPower << 
-		"W\nGPU = " << this->gpuPower << "W\nGPU = " << this->gpuPowerHours << "Wh\n";
+    	std::cout << "\n\t[POWER METRICS]\n"
+			<< "\nProcessor = " << this->processorPower << "W"
+			<< "\nMemory = " << this->memoryPower << "W"
+			<< "\nGPU = " << this->gpuPower << "W"
+			<< "\nGPU = " << this->gpuPowerHours << "Wh\n";
 	};
 };
 
-std::string exec(const char* cmd);
-void getSystemMetrics(SystemMetrics &systemMetrics);
-void getProcessorMetrics(ProcessorMetrics &processorMetrics);
-void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics);
-void getMemoryMetrics(MemoryMetrics &memoryMetrics);
-void getNetworkMetrics(NetworkMetrics &networkMetrics);
-void getPowerMetrics(PowerMetrics &powerMetrics);
-void writeToFileSystemMetrics(std::ofstream &file, SystemMetrics data);
-void writeToFileProcessorMetrics(std::ofstream &file, ProcessorMetrics data);
-void writeToFileInputOutputMetrics(std::ofstream &file, InputOutputMetrics data);
-void writeToFileMemoryMetrics(std::ofstream &file, MemoryMetrics data);
-void writeToFileNetworkMetrics(std::ofstream &file, NetworkMetrics data);
-void writeToCSV(std::ofstream &file, std::string timestamp, SystemMetrics systemMetrics, ProcessorMetrics processorMetrics, 
-						InputOutputMetrics inputOutputMetrics, MemoryMetrics memoryMetrics, NetworkMetrics networkMetrics);
-void printMetric(std::string metricName, int metricValue, std::string metricUnit);
-void printMetricPair(std::string metricName, int metricValue, std::string metricUnit, 
-						std::string metricNameTwo, int metricValueTwo, std::string metricUnitTwo);
-void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetrics, 
-						InputOutputMetrics* inputOutputMetrics, MemoryMetrics* memoryMetrics, NetworkMetrics* networkMetrics);
+// Fetching the metrics into structures
+void getSystemMetrics(SystemMetrics&);
+void getProcessorMetrics(ProcessorMetrics&);
+void getInputOutputMetrics(InputOutputMetrics&);
+void getMemoryMetrics(MemoryMetrics&);
+void getNetworkMetrics(NetworkMetrics&);
+void getPowerMetrics(PowerMetrics&);
+
+// Write to file functions
+void writeToFileSystemMetrics(std::ofstream&, SystemMetrics);
+void writeToFileProcessorMetrics(std::ofstream&, ProcessorMetrics);
+void writeToFileInputOutputMetrics(std::ofstream&, InputOutputMetrics);
+void writeToFileMemoryMetrics(std::ofstream&, MemoryMetrics);
+void writeToFileNetworkMetrics(std::ofstream&, NetworkMetrics);
+void writeToCSV(std::ofstream&, std::string, SystemMetrics, ProcessorMetrics, 
+					InputOutputMetrics, MemoryMetrics, NetworkMetrics);
+
+// Printing for the user
+void printMetric(std::string, int, std::string);
+void printMetricPair(std::string, int, std::string, std::string, int, std::string);
+void printMetrics(SystemMetrics*, ProcessorMetrics*, InputOutputMetrics*, 
+					MemoryMetrics*, NetworkMetrics*);
+
 int keyboardHit(void);
+std::string exec(const char*);
 
 int main(){
 
@@ -368,82 +410,71 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	stream >> temp;
 	processorMetrics.timeGuest = std::stoi(temp);		// USER_HZ
 
-	/*
-	// Not supported metrics:
-	processorMetrics.cacheL2HitRate = NOTSUPPORTED;
-	processorMetrics.cacheL2MissRate = NOTSUPPORTED;
-	processorMetrics.cacheL3HitRate = NOTSUPPORTED;
-	processorMetrics.cacheL3MissRate = NOTSUPPORTED;
-	processorMetrics.cacheL3HitSnoopRate = NOTSUPPORTED;
-	processorMetrics.instructionsRetiredRate = NOTSUPPORTED;
-	processorMetrics.cyclesRate = NOTSUPPORTED;
-	processorMetrics.cyclesReferenceRate = NOTSUPPORTED;
-	processorMetrics.frequencyRelative = NOTSUPPORTED;
-	processorMetrics.frequencyActiveRelative = NOTSUPPORTED;
-
-	// [TODO] as far as we know perf works only on hardware and we can't test it yet
-	// sudo perf stat -e LLC-loads,LLC-load-misses,L2_RQSTS.ALL,L2_RQSTS.MISS,PERF_COUNT_HW_CPU_CYCLES,PERF_COUNT_HW_INSTRUCTIONS,PERF_COUNT_HW_REF_CPU_CYCLES,PERF_COUNT_HW_CPU_CYCLES:REF_XCLK,PERF_COUNT_HW_CPU_CYCLES:UNHALTED_CORE_CYCLES sleep 1 2>&1 | awk '/LLC-loads/ { ll=$1 } /LLC-load-misses/ { lm=$1 } /L2_RQSTS.ALL/ { l2=$1 } /L2_RQSTS.MISS/ { lm2=$1 } /CPU_CYCLES:/ { cpu=$1 } /INSTRUCTIONS/ { instr=$1 } /REF_CPU_CYCLES/ { ref=$1 } /REF_XCLK/ { xclk=$1 } /UNHALTED_CORE_CYCLES/ { unhalted=$1 } END { printf "L2 Cache Hit Rate: %f%%\n", (l2-lm2)*100/l2; printf "L2 Cache Miss Rate: %f%%\n", lm2*100/l2; printf "L3 Cache Hit Rate: %f%%\n", (ll-lm)*100/ll; printf "L3 Cache Miss Rate: %f%%\n", lm*100/ll; printf "Instructions Retired Rate: %f instructions/cycle\n", instr/cpu; printf "Processor Cycle Metrics: %f cycles/instruction\n", cpu/instr; printf "Processor Cycles Reference Rate: %f cycles/second\n", cpu/ref; printf "Relative Frequency: %f GHz\n", xclk/unhalted/1e9; printf "Active Relative Frequency: %f GHz\n", xclk/cpu/1e9 }'
-	command = "sudo perf stat -e LLC-loads,LLC-load-misses,L2_RQSTS.ALL,L2_RQSTS.MISS,PERF_COUNT_HW_CACHE_L3_HITS sleep 1 2>&1 |" + 
-	" awk '/LLC-loads/ { ll=$1 } /LLC-load-misses/ { lm=$1 } /L2_RQSTS.ALL/ { l2=$1 } /L2_RQSTS.MISS/" + 
-	"{ lm2=$1 } /L3_HITS/ { l3=$1 } END { printf '%f%% ', (l2-lm2)*100/l2; printf '%f%% '" + 
-	", lm2*100/l2; printf '%f%% ', (ll-lm)*100/ll; printf '%f%% ', lm*100/ll; printf '%f%%', l3*100/ll }'";
+	std::string commandString = 
+		"perf stat -e cpu/event=0x24,umask=0x01,name=L2_RQSTS_DEMAND_DATA_RD_HIT/,cpu/"
+		"event=0x24,umask=0x02,name=L2_RQSTS_ALL_DEMAND_DATA_RD/,cpu/event=0x24,umask=0x04,n"
+		"ame=L2_RQSTS_DEMAND_DATA_RD_MISS/,cpu/event=0x2e,umask=0x01,name=LLC_REFERENCES_LLC"
+		"_HIT/,cpu/event=0x2e,umask=0x02,name=LLC_REFERENCES_LLC_MISS/,cpu/event=0x2e,umask="
+		"0x08,name=LLC_REFERENCES_SNOOP_STALL/ --all-cpus sleep 1 2>&1 | awk '/L2_RQSTS_ALL_"
+		"DEMAND_DATA_RD|L2_RQSTS_DEMAND_DATA_RD_HIT|L2_RQSTS_DEMAND_DATA_RD_MISS|LLC_REFEREN"
+		"CES_LLC_HIT|LLC_REFERENCES_LLC_MISS|LLC_REFERENCES_SNOOP_STALL/ {print $1}'";
+	command = commandString.c_str();
 	output = exec(command);
 	std::stringstream streamTwo(output);
+	float L2RqstsHit, L2RqstsMiss, L2RqstsData, LLCHit, LLCMiss, LLCSnoop;
 
 	streamTwo >> temp;
-	processorMetrics.cacheL2HitRate = std::stof(temp);
+	L2RqstsHit = std::stof(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheL2MissRate = std::stof(temp);
+	L2RqstsMiss = std::stof(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheL3HitRate = std::stof(temp);
+	L2RqstsData = std::stof(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheL3MissRate = std::stof(temp);
+	LLCHit = std::stof(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheL3HitSnoopRate = std::stof(temp);
+	LLCMiss = std::stof(temp);
+	streamTwo >> temp;
+	LLCSnoop = std::stof(temp);
 
-	// sudo perf stat -e cpu-cycles,instructions,ref-cycles,cpu-cycles:u,cpu-cycles:u:r0100,cpu-cycles:u:r0200,cpu-cycles:u:r0400,cpu-cycles:u:r0800,cpu-cycles:u:r1000,cpu-cycles:u:r2000,cpu-cycles:u:r4000,cpu-cycles:u:w,cpu-cycles:u:w:r0100,cpu-cycles:u:w:r0200,cpu-cycles:u:w:r0400,cpu-cycles:u:w:r0800,cpu-cycles:u:w:r1000,cpu-cycles:u:w:r2000,cpu-cycles:u:w:r4000 sleep 1 2>&1 | awk '/^cpu-cycles/ { cpu_cycles=$1 } /^instructions/ { instr=$1 } /^ref-cycles/ { ref_cycles=$1 } /^cpu-cycles:u/ { sub(/:/,"_",$1); sub(/u./,"",$1); a[$1]=$1 } /^cpu-cycles:u:/ { sub(/:/,"_",$1); sub(/u./,"",$1); a[$1]=$1 } END { printf "Instructions Retired Rate: %f instructions/cycle\n", instr/cpu_cycles; printf "Processor Cycle Metrics: %f cycles/instruction\n", cpu_cycles/instr; printf "Processor Cycles Reference Rate: %f cycles/second\n", cpu_cycles/ref_cycles; printf "Relative Frequency: %f GHz\n", a["cpu_cycles_u"]/a["cpu_cycles_u_r0100"]/1e9; printf "Active Relative Frequency: %f GHz\n", a["cpu_cycles_u"]/cpu_cycles/1e9 }'
-	command = "sudo perf stat -e cpu-cycles,instructions,ref-cycles,cpu-cycles:u,cpu-cycles:u:r0100,cpu-cycles:u:r0200," + 
-	"cpu-cycles:u:r0400,cpu-cycles:u:r0800,cpu-cycles:u:r1000,cpu-cycles:u:r2000,cpu-cycles:u:r4000,cpu-cycles:u:w," + 
-	"cpu-cycles:u:w:r0100,cpu-cycles:u:w:r0200,cpu-cycles:u:w:r0400,cpu-cycles:u:w:r0800,cpu-cycles:u:w:r1000," + 
-	"cpu-cycles:u:w:r2000,cpu-cycles:u:w:r4000 sleep 1 2>&1 | awk '/^cpu-cycles/ { cpu_cycles=$1 } /^instructions/ { instr=$1 }" + 
-	" /^ref-cycles/ { ref_cycles=$1 } /^cpu-cycles:u/ { sub(/:/,'_',$1); sub(/u./,'',$1); a[$1]=$1 } /^cpu-cycles:u:/ " + 
-	" { sub(/:/,'_',$1); sub(/u./,'',$1); a[$1]=$1 } END { printf '%f ', instr/cpu_cycles; printf '%f ', cpu_cycles/instr;" + 
-	" printf '%f ', cpu_cycles/ref_cycles; printf '%f ', a['cpu_cycles_u']/a['cpu_cycles_u_r0100']/1e9; printf '%f', a['cpu_cycles_u']/cpu_cycles/1e9 }'";
+	processorMetrics.cacheL2HitRate = L2RqstsHit / L2RqstsData;
+	processorMetrics.cacheL2MissRate = L2RqstsMiss / L2RqstsData;
+	processorMetrics.cacheL3HitRate = LLCHit / (LLCHit + LLCMiss);
+	processorMetrics.cacheL3MissRate = LLCMiss / (LLCHit + LLCMiss);
+	processorMetrics.cacheL3HitSnoopRate = LLCHit / (LLCHit + LLCSnoop);
+
+	command = "perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'";
 	output = exec(command);
 	std::stringstream streamThree(output);
 
 	streamThree >> temp;
-	processorMetrics.instructionsRetiredRate = std::stof(temp); // instructions/cycle
+	processorMetrics.instructionsRetired = std::stoi(temp); 	// number of instructions
 	streamThree >> temp;
-	processorMetrics.cyclesRate = std::stof(temp); 				// cycles/instruction
+	processorMetrics.cycles = std::stoi(temp); 					// number of cycles
 	streamThree >> temp;
-	processorMetrics.cyclesReferenceRate = std::stof(temp); 	// cycles/second
+	processorMetrics.frequencyRelative = std::stof(temp);		// MHz
 	streamThree >> temp;
-	processorMetrics.frequencyRelative = std::stof(temp);		// GHz
-	streamThree >> temp;
-	processorMetrics.frequencyActiveRelative = std::stof(temp); // GHz
-	*/
+	processorMetrics.unhaltedFrequency = std::stof(temp); 		// MHz
 
 	processorMetrics.printProcessorMetrics();
 };
 
 void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 
-	const char* command = "sudo awk '{ print $2 }' /proc/1/io";
+	const char* command = "sudo awk '{ print $2 }' /proc/1/io"; // [TODO] Change PID 
 	std::string output = exec(command), temp;
 	std::stringstream stream(output);
 	
 	stream >> temp;
-	inputOutputMetrics.dataRead = std::stoi(temp) / 1024;		// MB
+	inputOutputMetrics.dataRead = std::stof(temp) / 1024;		// MB
 	stream >> temp;
-	inputOutputMetrics.dataWritten = std::stoi(temp) / 1024;	// MB
+	inputOutputMetrics.dataWritten = std::stof(temp) / 1024;	// MB
 	stream >> temp;
-	inputOutputMetrics.readOperationsRate = std::stoi(temp);	// Operations
-	stream >> temp;		
-	inputOutputMetrics.writeOperationsRate = std::stoi(temp);	// Operations
+	inputOutputMetrics.readOperationsRate = std::stoi(temp);	// Number of operations
+	stream >> temp;	
+	inputOutputMetrics.writeOperationsRate = std::stoi(temp);	// Number of operations
 	stream >> temp;
 
-	command = "iostat -d -k | awk '/^[^ ]/ {device=$1} $1 ~ /sda/ {print $10/$4, $11/$4, $6/$4, $7/$6}'";
+	command = "iostat -d -k | awk '/^[^ ]/ {device=$1} $1 ~ /sda/ {print 1000*$10/($4*$3), 1000*$11/($4*$3), $6/$4, $7/$6}'";
 	output = exec(command);
 	std::stringstream streamTwo(output);
 
@@ -456,7 +487,7 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 	streamTwo >> temp;
 	inputOutputMetrics.flushTime = std::stof(temp);				// ms
 
-	inputOutputMetrics.printInputOuputMetrics();
+	inputOutputMetrics.printInputOutputMetrics();
 };
 
 void getMemoryMetrics(MemoryMetrics &memoryMetrics){
@@ -482,36 +513,35 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 	memoryMetrics.swapUsed = std::stof(temp) - std::stof(swapFree);
 	memoryMetrics.swapUsed = memoryMetrics.swapUsed / 1024;				// MB
 
-	command = "sar -r -B 1 1 | awk 'NR==4{print $3 $4 $5 $7}'";
+	command = "sar -r -B 1 1 | awk 'NR==4{print $2,$3,$4,$5,$6,$7,$8}'";
 	output = exec(command);
 	std::stringstream streamTwo(output);
 
 	streamTwo >> temp;
-	memoryMetrics.pageInRate = std::stoi(temp);			// pages/sec
+	memoryMetrics.pageInRate = std::stof(temp);				// pages/sec
 	streamTwo >> temp;
-	memoryMetrics.pageOutRate = std::stoi(temp);		// pages/sec
+	memoryMetrics.pageOutRate = std::stof(temp);			// pages/sec
 	streamTwo >> temp;
-	memoryMetrics.pageFaultRate = std::stoi(temp);		// pages/sec
+	memoryMetrics.pageFaultRate = std::stof(temp);			// pages/sec
 	streamTwo >> temp;
-	memoryMetrics.pageFreeRate = std::stoi(temp);		// pages/sec
+	memoryMetrics.pageFaultsMajorRate = std::stof(temp);	// pages/sec
+	streamTwo >> temp;
+	memoryMetrics.pageFreeRate = std::stof(temp);			// pages/sec
+	streamTwo >> temp;	
+	memoryMetrics.pageActivateRate = std::stof(temp);		// kpages/sec
+	streamTwo >> temp;
+	memoryMetrics.pageDeactivateRate = std::stof(temp);		// kpages/sec
 
-	/*
-	// Not supported metrics:
-	command = "perf stat -e 'kmem:pgactivate,kmem:pgdeactivate' sleep 1"
-	memoryMetrics.pageActivateRate = NOTSUPPORTED;
-	memoryMetrics.pageDeactivateRate = NOTSUPPORTED;
-	*/
-
-	command = "sar -b 1 1 | awk 'NR==4{print $6/1024 $7/1024 ($6+$7)/1024}'";
+	command = "sar -b 1 1 | awk 'NR==4{print $6/1024,$7/1024,($6+$7)/1024}'";
 	output = exec(command);
 	std::stringstream streamThree(output);
 
 	streamThree >> temp;
-	memoryMetrics.memoryReadRate = std::stof(temp);		// MB/s
+	memoryMetrics.memoryReadRate = std::stof(temp);			// MB/s
 	streamThree >> temp;
-	memoryMetrics.memoryWriteRate = std::stof(temp);	// MB/s
+	memoryMetrics.memoryWriteRate = std::stof(temp);		// MB/s
 	streamThree >> temp;
-	memoryMetrics.memoryIoRate = std::stof(temp);		// MB/s
+	memoryMetrics.memoryIoRate = std::stof(temp);			// MB/s
 	
 	memoryMetrics.printMemoryMetrics();
 };
@@ -527,6 +557,7 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	stream >> temp;
 	networkMetrics.sendPacketsRate = std::stof(temp);		// KB/sec
 
+	// Default interface: eth0
 	command = "cat /proc/net/dev | awk '/^ *eth0:/ {rx=$3; tx=$11; print rx,tx; exit}'";
 	output = exec(command);
 	std::stringstream streamTwo(output);
@@ -543,13 +574,11 @@ void getPowerMetrics(PowerMetrics &powerMetrics){
 
 	/*
 	// Not supported metrics:
-	powerMetrics.memoryPower = NOTSUPPORTED;
 	powerMetrics.processorPower = NOTSUPPORTED;
 	powerMetrics.gpuPower = NOTSUPPORTED;
 	powerMetrics.gpuPowerHours = NOTSUPPORTED;
 
-	// sudo powerstat -d 1 | awk '/Memory Power/ {printf("Memory Power: %.2f W\n", $4)}'
-	const char* command = "sudo powerstat -d 1 | awk '/Memory Power/ { print $4 }'";
+	const char* command = "sudo powerstat -d 1 -s cpu,panel";
 	std::string output = exec(command), temp;
 	std::stringstream streamOne(output);
 	streamOne >> temp;
@@ -615,11 +644,10 @@ void writeToFileProcessorMetrics(std::ofstream &file, ProcessorMetrics data){
 	file << (data.timeSoftIRQ != NOTSUPPORTED ? std::to_string(data.timeSoftIRQ) : "not_supported") << ",";
 	file << (data.timeSteal != NOTSUPPORTED ? std::to_string(data.timeSteal) : "not_supported") << ",";
 	file << (data.timeGuest != NOTSUPPORTED ? std::to_string(data.timeGuest) : "not_supported") << ",";
-	file << (data.instructionsRetiredRate != NOTSUPPORTED ? std::to_string(data.instructionsRetiredRate) : "not_supported") << ",";
-	file << (data.cyclesRate != NOTSUPPORTED ? std::to_string(data.cyclesRate) : "not_supported") << ",";
-	file << (data.cyclesReferenceRate != NOTSUPPORTED ? std::to_string(data.cyclesReferenceRate) : "not_supported") << ",";
+	file << (data.instructionsRetired != NOTSUPPORTED ? std::to_string(data.instructionsRetired) : "not_supported") << ",";
+	file << (data.cycles != NOTSUPPORTED ? std::to_string(data.cycles) : "not_supported") << ",";
 	file << (data.frequencyRelative != NOTSUPPORTED ? std::to_string(data.frequencyRelative) : "not_supported") << ",";
-	file << (data.frequencyActiveRelative != NOTSUPPORTED ? std::to_string(data.frequencyActiveRelative) : "not_supported") << ",";
+	file << (data.unhaltedFrequency != NOTSUPPORTED ? std::to_string(data.unhaltedFrequency) : "not_supported") << ",";
 	file << (data.cacheL2HitRate != NOTSUPPORTED ? std::to_string(data.cacheL2HitRate) : "not_supported") << ",";
 	file << (data.cacheL2MissRate != NOTSUPPORTED ? std::to_string(data.cacheL2MissRate) : "not_supported") << ",";
 	file << (data.cacheL3HitRate != NOTSUPPORTED ? std::to_string(data.cacheL3HitRate) : "not_supported") << ",";
