@@ -227,15 +227,21 @@ The file `/proc/net/dev` keeps track of all received and sent packets and bytes.
 
 ## Power Metrics
 
-### Memory Power
+### Power not using RAPL or NVML
 
 ```bash
-sudo powerstat -d 1 -s cpu,panel
+perf stat -e power/energy-cores/,power/energy-ram/,power/energy-pkg/ sleep 1 2>&1 | awk '/Joules/ {print $1}'
 ```
 
-powerstat needs to be run with root privilege when using `-g`, `-p`, `-r`, `-s` options.
+- `power/energy-cores/`: This measures the energy consumed by the CPU cores during the measurement period. The CPU cores are the primary consumers of power in most computing systems, as they perform the majority of the processing work.
 
-![Output]()
+- `power/energy-ram/`: This measures the energy consumed by the RAM (memory) during the measurement period. RAM is a significant consumer of power, as it needs to constantly refresh its memory cells to maintain data integrity.
+
+- `power/energy-pkg/`: This measures the energy consumed by the entire package, which includes the CPU, RAM, and other components such as the chipset and power delivery system. The power/energy-pkg/ metric is generally the most relevant metric for measuring the overall power consumption of a computing system, as it captures the energy consumed by all of the major components.
+
+![Output](./images/power-consumption-perf.png)
+
+Regarding `powerstat` - it needs to be run with root privilege when using `-g`, `-p`, `-r`, `-s` options.`
 
 ### Using RAPL
 

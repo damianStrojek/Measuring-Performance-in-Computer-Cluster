@@ -236,22 +236,28 @@ struct NetworkMetrics {
 };
 
 struct PowerMetrics {
-	int processorPower;					// Power consumed by processor
-	int memoryPower;					// Power consumed by memory
+	float coresPower;					// Power consumed by cores
+	float processorPower;				// Power consumed by processor
+	float memoryPower;					// Power consumed by memory
+	float systemPower;					// Power consumed by system overall
 	unsigned long long gpuPower;		// Power consumed by GPU
 	unsigned long long gpuPowerHours;	// Power consumed by GPU in Wh
 
 	PowerMetrics(){
+		this->coresPower = -1;
 		this->processorPower = -1;
 		this->memoryPower = -1;
+		this->systemPower = -1;
 		this->gpuPower = 1;
 		this->gpuPowerHours = 1;
 	};
 
 	void printPowerMetrics(){
     	std::cout << "\n\t[POWER METRICS]\n"
+			<< "\nCores Power = " << this->coresPower << "W"
 			<< "\nProcessor = " << this->processorPower << "W"
 			<< "\nMemory = " << this->memoryPower << "W"
+			<< "\nSystem = " << this->systemPower << "W"
 			<< "\nGPU = " << this->gpuPower << "W"
 			<< "\nGPU = " << this->gpuPowerHours << "Wh\n";
 	};
@@ -572,18 +578,18 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 
 void getPowerMetrics(PowerMetrics &powerMetrics){
 
-	/*
-	// Not supported metrics:
-	powerMetrics.processorPower = NOTSUPPORTED;
-	powerMetrics.gpuPower = NOTSUPPORTED;
-	powerMetrics.gpuPowerHours = NOTSUPPORTED;
-
-	const char* command = "sudo powerstat -d 1 -s cpu,panel";
+	const char* command = "perf stat -e power/energy-cores/,power/energy-ram/,power/energy-pkg/ sleep 1 2>&1 | awk '/Joules/ {print $1}'";
 	std::string output = exec(command), temp;
 	std::stringstream streamOne(output);
+	
 	streamOne >> temp;
-	powerMetrics.memoryPower = std::stof(temp);		// W
+	powerMetrics.coresPower = std::stof(temp);
+	streamOne >> temp;
+	powerMetrics.memoryPower = std::stof(temp);
+	streamOne >> temp;
+	powerMetrics.systemPower = std::stof(temp);
 
+	/*
 	// [TODO] Test RAPL Library
 	rapl_handle_t handle;
 	if (rapl_open(&handle) != 0)

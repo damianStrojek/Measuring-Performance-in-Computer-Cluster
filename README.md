@@ -37,8 +37,8 @@ docker run -it --mount type=bind,source="$(pwd)",target=/app kask-env
 
 ## Contributors
 
-- [Me - project manager](https://github.com/damianStrojek)
+- [dStrojek [Project Manager, Developer]](https://github.com/damianStrojek) - Working on team workflow, fetching metrics, overall style of the code and repositorium. Creator of documentation.
 
-- [Wisnia - developer](https://github.com/wisnia01)
+- [wisnia [Developer]](https://github.com/wisnia01) - Working on print and save to file functions.
 
-- [Pitya - developer](https://github.com/dideek)
+- [dideek [Developer]](https://github.com/dideek) - Working on synchronization between nodes in computer claster.
