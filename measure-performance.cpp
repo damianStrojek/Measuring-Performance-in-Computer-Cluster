@@ -19,8 +19,8 @@
 #include <iomanip>
 #include <chrono>
 #include <map>
-//#include <rapl.h> [TODO] Not supported yet
-//#include <nvml.h> [TODO] Not supported yet
+#include <rapl.h>
+#include <nvml.h>
 
 #define NOTSUPPORTED -666				// Functionality not yet supported
 #define GPROCESSID 1					// PID of process that we are focused on (G stands for global)
@@ -269,7 +269,7 @@ void getProcessorMetrics(ProcessorMetrics&);
 void getInputOutputMetrics(InputOutputMetrics&);
 void getMemoryMetrics(MemoryMetrics&);
 void getNetworkMetrics(NetworkMetrics&);
-void getPowerMetrics(PowerMetrics&);
+void getPowerMetrics(PowerMetrics&, bool&, bool&);
 
 // Write to file functions
 void writeToFileSystemMetrics(std::ofstream&, SystemMetrics);
@@ -299,17 +299,29 @@ int main(){
 	PowerMetrics powerMetrics;
 
 	const char* dateCommand = "date +'%d%m%y-%H%M%S'",
-		*processCommand = "ps -p 1 > /dev/null && echo '1' || echo '0'";
+		*processCommand = "ps -p 1 > /dev/null && echo '1' || echo '0'";	// [TODO] Add GPROCESSID
 	std::string timestamp = exec(dateCommand);
 	timestamp.pop_back();
 	/*std::string fileName = timestamp += "_metrics.csv";
 	std::ofstream file(fileName, std::ios::out);
 	if(!file.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";*/
 
+	// If there is any error with the RAPL and NVML libraries
+	// we are not trying to measure processor and GPU power
+	bool raplError = 0, nvmlError = 0;
+	if(rapl_init()){
+		raplError = 1;
+		std::cout << "\n\n\t[WARNING] RAPL Library not initialized\n";
+	}
+	if(nvmlInit() != NVML_SUCCESS){
+		nvmlError = 1;
+		std::cout << "\n\n\t[WARNING] NVML Library not initialized\n";
+	}
+
 	// Checking if process with PROCESSID is still running
 	while(std::stoi(exec(processCommand))){
     	if(keyboardHit()){
-			std::cout << "\n\n\t [STOP] Key pressed.\n\n";
+			std::cout << "\n\n\t[STOP] Key pressed.\n\n";
 			break;
 		}	
 		
@@ -318,14 +330,14 @@ int main(){
 
 		//auto start = std::chrono::high_resolution_clock::now();
 
-		std::cout << "\n\n  [TIMESTAMP] " << timestamp << "\n";
+		std::cout << "\n\n\t[TIMESTAMP] " << timestamp << "\n";
 
 		getSystemMetrics(systemMetrics);
 		getProcessorMetrics(processorMetrics);
 		getInputOutputMetrics(inputOutputMetrics);
 		getMemoryMetrics(memoryMetrics);
 		getNetworkMetrics(networkMetrics);
-		getPowerMetrics(powerMetrics);
+		getPowerMetrics(powerMetrics, raplError, nvmlError);
 
 		sleep(2);
 
@@ -341,6 +353,8 @@ int main(){
   	}
 
     //file.close();
+	if(!raplError) rapl_finish();
+	if(!nvmlError) nvmlShutdown();
 	return 0;
 };
 
@@ -355,7 +369,7 @@ std::string exec(const char* cmd){
         result += buffer.data();
 
 	if(!result.length())
-		std::cout << "\n\n\t [ERROR] String returned by exec() has length 0\n";
+		std::cout << "\n\n\t[ERROR] String returned by exec() has length 0\n";
 
     return result;
 };
@@ -576,7 +590,7 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	networkMetrics.printNetworkMetrics();
 };
 
-void getPowerMetrics(PowerMetrics &powerMetrics){
+void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlError){
 
 	const char* command = "perf stat -e power/energy-cores/,power/energy-ram/,power/energy-pkg/ sleep 1 2>&1 | awk '/Joules/ {print $1}'";
 	std::string output = exec(command), temp;
@@ -589,30 +603,24 @@ void getPowerMetrics(PowerMetrics &powerMetrics){
 	streamOne >> temp;
 	powerMetrics.systemPower = std::stof(temp);
 
-	/*
-	// [TODO] Test RAPL Library
-	rapl_handle_t handle;
-	if (rapl_open(&handle) != 0)
-		std::cout << "\n\n\t [ERROR] Opening RAPL interface\n";
-	else {
+	if(!raplError){
 		double energy;
-		if (rapl_energy_total(handle, &energy) != 0)
-			std::cout << "\n\n\t [ERROR] Downloading total energy consumption\n";
+		if (rapl_get_energy(RAPL_PACKAGE, &energy) != 0){
+			std::cerr << "\n\n\t[ERROR] Failed to get package energy consumption\n";
+			raplError = 1;
+			rapl_finish();
+		}
 		else
 			powerMetrics.processorPower = energy;
 	}
-  	rapl_close(handle);
 
-	// [TODO] Test NVIDIA Library
-	nvmlReturn_t result = nvmlInit();
-	if (NVML_SUCCESS != result)
-		std::cout << "\n\n\t [ERROR] Failed to initialize NVML: " << nvmlErrorString(result) << "\n";
-	else {
+	if(!nvmlError){
 		// Get the device handle for the first GPU on the system
 		nvmlDevice_t device;
 		result = nvmlDeviceGetHandleByIndex(0, &device);
 		if (NVML_SUCCESS != result) {
 			std::cout << "\n\n\t [ERROR] Failed to get handle for GPU 0: " <<  nvmlErrorString(result) << "\n";
+			nvmlError = 1;
 			nvmlShutdown();
 		}
 		else {
@@ -621,13 +629,13 @@ void getPowerMetrics(PowerMetrics &powerMetrics){
 			result = nvmlDeviceGetTotalEnergyConsumption(device, &energyConsumed);
 			if (NVML_SUCCESS != result) {
 				std::cout << "\n\n\t [ERROR] Failed to get total energy consumption of GPU 0: " << nvmlErrorString(result) << "\n";
+				nvmlError = 1;
 				nvmlShutdown();
 			}
 			else
 				powerMetrics.gpuPower = result;
 		}
 	}
-	*/
 
 	powerMetrics.printPowerMetrics();
 };

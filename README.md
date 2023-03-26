@@ -25,6 +25,16 @@ Compile using **C++20** and run using **sudo** permissions:
 
 ```bash
 g++ -std=c++20 -o measure-performance measure-performance.cpp
+chmod +x measure-performance
+sudo ./measure-performance
+```
+
+If Intel <a href="https://github.com/LLNL/msr-safe" target="_blank">RAPL</a> and <a href="https://developer.nvidia.com/nvidia-management-library-nvml" target="_blank">NVIDIA Management Library</a> is supported:
+
+```bash
+g++ -std=c++20 -o measure-performance measure-performance.cpp -lsmr_safe -lnvidia-ml
+chmod +x measure-performance
+sudo ./measure-performance
 ```
 
 ## Docker

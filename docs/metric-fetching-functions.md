@@ -249,6 +249,8 @@ Regarding `powerstat` - it needs to be run with root privilege when using `-g`, 
 [TODO]
 ```
 
+The RAPL (Running Average Power Limit) interface is used to monitor the power consumption of an Intel processor. 
+
 ![Output]()
 
 ### Using NVML
