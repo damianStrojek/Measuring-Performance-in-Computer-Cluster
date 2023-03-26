@@ -246,17 +246,49 @@ Regarding `powerstat` - it needs to be run with root privilege when using `-g`, 
 ### Using RAPL
 
 ```bash
-[TODO]
+if(!raplError){
+    double energy;
+    if (rapl_get_energy(RAPL_PACKAGE, &energy) != 0){
+        std::cerr << "\n\n\t[ERROR] Failed to get package energy consumption\n";
+        raplError = 1;
+        rapl_finish();
+    }
+    else
+        powerMetrics.processorPower = energy;
+}
 ```
 
-The RAPL (Running Average Power Limit) interface is used to monitor the power consumption of an Intel processor. 
+The RAPL (Running Average Power Limit) interface is used to monitor the power consumption of an Intel processor. In this code, we first initialize the RAPL library using `rapl_init()` (in the main function and parsing the error state using `raplError`). Then, we use the `rapl_get_power_limit()` and `rapl_get_energy()` functions to get the package power limit and energy consumption, respectively. Finally, we cleanup the RAPL library using `rapl_finish()` (either here or in the main function).
 
 ![Output]()
 
 ### Using NVML
 
 ```bash
-[TODO]
+if(!nvmlError){
+    // Get the device handle for the first GPU on the system
+    nvmlDevice_t device;
+    result = nvmlDeviceGetHandleByIndex(0, &device);
+    if (NVML_SUCCESS != result) {
+        std::cout << "\n\n\t [ERROR] Failed to get handle for GPU 0: " <<  nvmlErrorString(result) << "\n";
+        nvmlError = 1;
+        nvmlShutdown();
+    }
+    else {
+        // Get the total energy consumption of the GPU in millijoules
+        unsigned long long energyConsumed;
+        result = nvmlDeviceGetTotalEnergyConsumption(device, &energyConsumed);
+        if (NVML_SUCCESS != result) {
+            std::cout << "\n\n\t [ERROR] Failed to get total energy consumption of GPU 0: " << nvmlErrorString(result) << "\n";
+            nvmlError = 1;
+            nvmlShutdown();
+        }
+        else
+            powerMetrics.gpuPower = result;
+    }
+}
 ```
+
+In this code, we first initialize the NVML library using `nvmlInit()` (in the `main` function and passing the error state using `nvmlError`). Then, we get the handle of the first available device using `nvmlDeviceGetHandleByIndex()`. Next, we use the `nvmlDeviceGetPowerUsage()` function to get the power usage of the device in milliwatts. Finally, we cleanup the NVML library using `nvmlShutdown()` (either here or at the finish of this application).
 
 ![Output]()
