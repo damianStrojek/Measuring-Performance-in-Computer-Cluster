@@ -19,8 +19,8 @@
 #include <iomanip>
 #include <chrono>
 #include <map>
-//#include <rapl.h> [TODO] Not supported yet
-//#include <nvml.h> [TODO] Not supported yet
+//#include <rapl.h>
+//#include <nvml.h>
 
 #define NOTSUPPORTED -666				// Functionality not yet supported
 #define GPROCESSID 1					// PID of process that we are focused on (G stands for global)
@@ -236,22 +236,28 @@ struct NetworkMetrics {
 };
 
 struct PowerMetrics {
-	int processorPower;					// Power consumed by processor
-	int memoryPower;					// Power consumed by memory
+	float coresPower;					// Power consumed by cores
+	float processorPower;				// Power consumed by processor
+	float memoryPower;					// Power consumed by memory
+	float systemPower;					// Power consumed by system overall
 	unsigned long long gpuPower;		// Power consumed by GPU
 	unsigned long long gpuPowerHours;	// Power consumed by GPU in Wh
 
 	PowerMetrics(){
+		this->coresPower = -1;
 		this->processorPower = -1;
 		this->memoryPower = -1;
+		this->systemPower = -1;
 		this->gpuPower = 1;
 		this->gpuPowerHours = 1;
 	};
 
 	void printPowerMetrics(){
     	std::cout << "\n\t[POWER METRICS]\n"
+			<< "\nCores Power = " << this->coresPower << "W"
 			<< "\nProcessor = " << this->processorPower << "W"
 			<< "\nMemory = " << this->memoryPower << "W"
+			<< "\nSystem = " << this->systemPower << "W"
 			<< "\nGPU = " << this->gpuPower << "W"
 			<< "\nGPU = " << this->gpuPowerHours << "Wh\n";
 	};
@@ -263,7 +269,7 @@ void getProcessorMetrics(ProcessorMetrics&);
 void getInputOutputMetrics(InputOutputMetrics&);
 void getMemoryMetrics(MemoryMetrics&);
 void getNetworkMetrics(NetworkMetrics&);
-void getPowerMetrics(PowerMetrics&);
+void getPowerMetrics(PowerMetrics&, bool&, bool&);
 
 // Write to file functions
 void writeToFileSystemMetrics(std::ofstream&, SystemMetrics);
@@ -293,17 +299,29 @@ int main(){
 	PowerMetrics powerMetrics;
 
 	const char* dateCommand = "date +'%d%m%y-%H%M%S'",
-		*processCommand = "ps -p 1 > /dev/null && echo '1' || echo '0'";
+		*processCommand = "ps -p 1 > /dev/null && echo '1' || echo '0'";	// [TODO] Add GPROCESSID
 	std::string timestamp = exec(dateCommand);
 	timestamp.pop_back();
 	/*std::string fileName = timestamp += "_metrics.csv";
 	std::ofstream file(fileName, std::ios::out);
 	if(!file.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";*/
 
-	// Checking if process with PROCESSID is still running
+	// If there is any error with the RAPL and NVML libraries
+	// we are not trying to measure processor and GPU power
+	bool raplError = 0, nvmlError = 0;
+	/*if(rapl_init()){
+		raplError = 1;
+		std::cout << "\n\n\t[WARNING] RAPL Library not initialized\n";
+	}
+	if(nvmlInit() != NVML_SUCCESS){
+		nvmlError = 1;
+		std::cout << "\n\n\t[WARNING] NVML Library not initialized\n";
+	}*/
+
+	// Checking if process with GPROCESSID is still running
 	while(std::stoi(exec(processCommand))){
     	if(keyboardHit()){
-			std::cout << "\n\n\t [STOP] Key pressed.\n\n";
+			std::cout << "\n\n\t[STOP] Key pressed.\n\n";
 			break;
 		}	
 		
@@ -312,14 +330,14 @@ int main(){
 
 		//auto start = std::chrono::high_resolution_clock::now();
 
-		std::cout << "\n\n  [TIMESTAMP] " << timestamp << "\n";
+		std::cout << "\n\n   [TIMESTAMP] " << timestamp << "\n";
 
 		getSystemMetrics(systemMetrics);
 		getProcessorMetrics(processorMetrics);
 		getInputOutputMetrics(inputOutputMetrics);
 		getMemoryMetrics(memoryMetrics);
 		getNetworkMetrics(networkMetrics);
-		getPowerMetrics(powerMetrics);
+		getPowerMetrics(powerMetrics, raplError, nvmlError);
 
 		sleep(2);
 
@@ -335,6 +353,8 @@ int main(){
   	}
 
     //file.close();
+	/*if(!raplError) rapl_finish();
+	if(!nvmlError) nvmlShutdown();*/
 	return 0;
 };
 
@@ -349,7 +369,7 @@ std::string exec(const char* cmd){
         result += buffer.data();
 
 	if(!result.length())
-		std::cout << "\n\n\t [ERROR] String returned by exec() has length 0\n";
+		std::cout << "\n\n\t[ERROR] String returned by exec() has length 0\n";
 
     return result;
 };
@@ -410,6 +430,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	stream >> temp;
 	processorMetrics.timeGuest = std::stoi(temp);		// USER_HZ
 
+	// Created string and parsed in to const char* because it was too long
 	std::string commandString = 
 		"perf stat -e cpu/event=0x24,umask=0x01,name=L2_RQSTS_DEMAND_DATA_RD_HIT/,cpu/"
 		"event=0x24,umask=0x02,name=L2_RQSTS_ALL_DEMAND_DATA_RD/,cpu/event=0x24,umask=0x04,n"
@@ -460,7 +481,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 
 void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 
-	const char* command = "sudo awk '{ print $2 }' /proc/1/io"; // [TODO] Change PID 
+	const char* command = "awk '{ print $2 }' /proc/$$/io";		// [TODO] Change PID 
 	std::string output = exec(command), temp;
 	std::stringstream stream(output);
 	
@@ -558,7 +579,8 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	networkMetrics.sendPacketsRate = std::stof(temp);		// KB/sec
 
 	// Default interface: eth0
-	command = "cat /proc/net/dev | awk '/^ *eth0:/ {rx=$3; tx=$11; print rx,tx; exit}'";
+	// des01 interface: ep0s31f6
+	command = "cat /proc/net/dev | awk '/^ *enp0s31f6:/ {rx=$3; tx=$11; print rx,tx; exit}'";
 	output = exec(command);
 	std::stringstream streamTwo(output);
 
@@ -570,43 +592,38 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	networkMetrics.printNetworkMetrics();
 };
 
-void getPowerMetrics(PowerMetrics &powerMetrics){
+void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlError){
 
-	/*
-	// Not supported metrics:
-	powerMetrics.processorPower = NOTSUPPORTED;
-	powerMetrics.gpuPower = NOTSUPPORTED;
-	powerMetrics.gpuPowerHours = NOTSUPPORTED;
-
-	const char* command = "sudo powerstat -d 1 -s cpu,panel";
+	const char* command = "perf stat -e power/energy-cores/,power/energy-ram/,power/energy-pkg/ sleep 1 2>&1 | awk '/Joules/ {print $1}'";
 	std::string output = exec(command), temp;
 	std::stringstream streamOne(output);
+	
 	streamOne >> temp;
-	powerMetrics.memoryPower = std::stof(temp);		// W
-
-	// [TODO] Test RAPL Library
-	rapl_handle_t handle;
-	if (rapl_open(&handle) != 0)
-		std::cout << "\n\n\t [ERROR] Opening RAPL interface\n";
-	else {
+	powerMetrics.coresPower = std::stof(temp);
+	streamOne >> temp;
+	powerMetrics.memoryPower = std::stof(temp);
+	streamOne >> temp;
+	powerMetrics.systemPower = std::stof(temp);
+	
+	/*
+	if(!raplError){
 		double energy;
-		if (rapl_energy_total(handle, &energy) != 0)
-			std::cout << "\n\n\t [ERROR] Downloading total energy consumption\n";
+		if (rapl_get_energy(RAPL_PACKAGE, &energy) != 0){
+			std::cerr << "\n\n\t[ERROR] Failed to get package energy consumption\n";
+			raplError = 1;
+			rapl_finish();
+		}
 		else
 			powerMetrics.processorPower = energy;
 	}
-  	rapl_close(handle);
 
-	// [TODO] Test NVIDIA Library
-	nvmlReturn_t result = nvmlInit();
-	if (NVML_SUCCESS != result)
-		std::cout << "\n\n\t [ERROR] Failed to initialize NVML: " << nvmlErrorString(result) << "\n";
-	else {
+	if(!nvmlError){
 		// Get the device handle for the first GPU on the system
 		nvmlDevice_t device;
 		result = nvmlDeviceGetHandleByIndex(0, &device);
 		if (NVML_SUCCESS != result) {
 			std::cout << "\n\n\t [ERROR] Failed to get handle for GPU 0: " <<  nvmlErrorString(result) << "\n";
+			nvmlError = 1;
 			nvmlShutdown();
 		}
 		else {
@@ -615,6 +632,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics){
 			result = nvmlDeviceGetTotalEnergyConsumption(device, &energyConsumed);
 			if (NVML_SUCCESS != result) {
 				std::cout << "\n\n\t [ERROR] Failed to get total energy consumption of GPU 0: " << nvmlErrorString(result) << "\n";
+				nvmlError = 1;
 				nvmlShutdown();
 			}
 			else
@@ -622,7 +640,6 @@ void getPowerMetrics(PowerMetrics &powerMetrics){
 		}
 	}
 	*/
-
 	powerMetrics.printPowerMetrics();
 };
 

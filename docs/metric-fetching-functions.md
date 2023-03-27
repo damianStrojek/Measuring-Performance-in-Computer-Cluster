@@ -227,28 +227,68 @@ The file `/proc/net/dev` keeps track of all received and sent packets and bytes.
 
 ## Power Metrics
 
-### Memory Power
+### Power not using RAPL or NVML
 
 ```bash
-sudo powerstat -d 1 -s cpu,panel
+perf stat -e power/energy-cores/,power/energy-ram/,power/energy-pkg/ sleep 1 2>&1 | awk '/Joules/ {print $1}'
 ```
 
-powerstat needs to be run with root privilege when using `-g`, `-p`, `-r`, `-s` options.
+- `power/energy-cores/`: This measures the energy consumed by the CPU cores during the measurement period. The CPU cores are the primary consumers of power in most computing systems, as they perform the majority of the processing work.
 
-![Output]()
+- `power/energy-ram/`: This measures the energy consumed by the RAM (memory) during the measurement period. RAM is a significant consumer of power, as it needs to constantly refresh its memory cells to maintain data integrity.
+
+- `power/energy-pkg/`: This measures the energy consumed by the entire package, which includes the CPU, RAM, and other components such as the chipset and power delivery system. The power/energy-pkg/ metric is generally the most relevant metric for measuring the overall power consumption of a computing system, as it captures the energy consumed by all of the major components.
+
+![Output](./images/power-consumption-perf.png)
+
+Regarding `powerstat` - it needs to be run with root privilege when using `-g`, `-p`, `-r`, `-s` options.`
 
 ### Using RAPL
 
-```bash
-[TODO]
+```c++
+if(!raplError){
+    double energy;
+    if (rapl_get_energy(RAPL_PACKAGE, &energy) != 0){
+        std::cerr << "\n\n\t[ERROR] Failed to get package energy consumption\n";
+        raplError = 1;
+        rapl_finish();
+    }
+    else
+        powerMetrics.processorPower = energy;
+}
 ```
+
+The RAPL (Running Average Power Limit) interface is used to monitor the power consumption of an Intel processor. In this code, we first initialize the RAPL library using `rapl_init()` (in the main function and parsing the error state using `raplError`). Then, we use the `rapl_get_power_limit()` and `rapl_get_energy()` functions to get the package power limit and energy consumption, respectively. Finally, we cleanup the RAPL library using `rapl_finish()` (either here or in the main function).
 
 ![Output]()
 
 ### Using NVML
 
-```bash
-[TODO]
+```c++
+if(!nvmlError){
+    // Get the device handle for the first GPU on the system
+    nvmlDevice_t device;
+    result = nvmlDeviceGetHandleByIndex(0, &device);
+    if (NVML_SUCCESS != result) {
+        std::cout << "\n\n\t [ERROR] Failed to get handle for GPU 0: " <<  nvmlErrorString(result) << "\n";
+        nvmlError = 1;
+        nvmlShutdown();
+    }
+    else {
+        // Get the total energy consumption of the GPU in millijoules
+        unsigned long long energyConsumed;
+        result = nvmlDeviceGetTotalEnergyConsumption(device, &energyConsumed);
+        if (NVML_SUCCESS != result) {
+            std::cout << "\n\n\t [ERROR] Failed to get total energy consumption of GPU 0: " << nvmlErrorString(result) << "\n";
+            nvmlError = 1;
+            nvmlShutdown();
+        }
+        else
+            powerMetrics.gpuPower = result;
+    }
+}
 ```
+
+In this code, we first initialize the NVML library using `nvmlInit()` (in the `main` function and passing the error state using `nvmlError`). Then, we get the handle of the first available device using `nvmlDeviceGetHandleByIndex()`. Next, we use the `nvmlDeviceGetPowerUsage()` function to get the power usage of the device in milliwatts. Finally, we cleanup the NVML library using `nvmlShutdown()` (either here or at the finish of this application).
 
 ![Output]()

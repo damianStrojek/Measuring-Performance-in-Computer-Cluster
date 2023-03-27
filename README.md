@@ -24,7 +24,18 @@ This application requires you to have following tools installed on each of the n
 Compile using **C++20** and run using **sudo** permissions:
 
 ```bash
-g++ -std=c++20 -o measure-performance measure-performance.cpp
+g++ -std=c++2a -o measure-performance measure-performance.cpp
+# alternatively you can use g++ -std=c++20
+chmod +x measure-performance
+sudo ./measure-performance
+```
+
+If Intel <a href="https://github.com/LLNL/msr-safe" target="_blank">RAPL</a> and <a href="https://developer.nvidia.com/nvidia-management-library-nvml" target="_blank">NVIDIA Management Library</a> is supported:
+
+```bash
+g++ -std=c++20 -o measure-performance measure-performance.cpp -lsmr_safe -lnvidia-ml
+chmod +x measure-performance
+sudo ./measure-performance
 ```
 
 ## Docker
@@ -37,8 +48,8 @@ docker run -it --mount type=bind,source="$(pwd)",target=/app kask-env
 
 ## Contributors
 
-- [Me - project manager](https://github.com/damianStrojek)
+- [dStrojek [Project Manager, Developer]](https://github.com/damianStrojek) - Working on team workflow, fetching metrics, overall style of the code and repositorium. Creator of documentation.
 
-- [Wisnia - developer](https://github.com/wisnia01)
+- [wisnia [Developer]](https://github.com/wisnia01) - Working on print and save to file functions.
 
-- [Pitya - developer](https://github.com/dideek)
+- [dideek [Developer]](https://github.com/dideek) - Working on synchronization between nodes in computer claster.
