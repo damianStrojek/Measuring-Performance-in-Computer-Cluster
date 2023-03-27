@@ -245,7 +245,7 @@ Regarding `powerstat` - it needs to be run with root privilege when using `-g`, 
 
 ### Using RAPL
 
-```bash
+```c++
 if(!raplError){
     double energy;
     if (rapl_get_energy(RAPL_PACKAGE, &energy) != 0){
@@ -264,7 +264,7 @@ The RAPL (Running Average Power Limit) interface is used to monitor the power co
 
 ### Using NVML
 
-```bash
+```c++
 if(!nvmlError){
     // Get the device handle for the first GPU on the system
     nvmlDevice_t device;

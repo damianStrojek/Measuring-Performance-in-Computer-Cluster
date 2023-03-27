@@ -19,8 +19,8 @@
 #include <iomanip>
 #include <chrono>
 #include <map>
-#include <rapl.h>
-#include <nvml.h>
+//#include <rapl.h>
+//#include <nvml.h>
 
 #define NOTSUPPORTED -666				// Functionality not yet supported
 #define GPROCESSID 1					// PID of process that we are focused on (G stands for global)
@@ -309,14 +309,14 @@ int main(){
 	// If there is any error with the RAPL and NVML libraries
 	// we are not trying to measure processor and GPU power
 	bool raplError = 0, nvmlError = 0;
-	if(rapl_init()){
+	/*if(rapl_init()){
 		raplError = 1;
 		std::cout << "\n\n\t[WARNING] RAPL Library not initialized\n";
 	}
 	if(nvmlInit() != NVML_SUCCESS){
 		nvmlError = 1;
 		std::cout << "\n\n\t[WARNING] NVML Library not initialized\n";
-	}
+	}*/
 
 	// Checking if process with PROCESSID is still running
 	while(std::stoi(exec(processCommand))){
@@ -353,8 +353,8 @@ int main(){
   	}
 
     //file.close();
-	if(!raplError) rapl_finish();
-	if(!nvmlError) nvmlShutdown();
+	/*if(!raplError) rapl_finish();
+	if(!nvmlError) nvmlShutdown();*/
 	return 0;
 };
 
@@ -578,7 +578,8 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	networkMetrics.sendPacketsRate = std::stof(temp);		// KB/sec
 
 	// Default interface: eth0
-	command = "cat /proc/net/dev | awk '/^ *eth0:/ {rx=$3; tx=$11; print rx,tx; exit}'";
+	// des01 interface: ep0s31f6
+	command = "cat /proc/net/dev | awk '/^ *enp0s31f6:/ {rx=$3; tx=$11; print rx,tx; exit}'";
 	output = exec(command);
 	std::stringstream streamTwo(output);
 
@@ -602,7 +603,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlErro
 	powerMetrics.memoryPower = std::stof(temp);
 	streamOne >> temp;
 	powerMetrics.systemPower = std::stof(temp);
-
+	/*
 	if(!raplError){
 		double energy;
 		if (rapl_get_energy(RAPL_PACKAGE, &energy) != 0){
@@ -636,7 +637,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlErro
 				powerMetrics.gpuPower = result;
 		}
 	}
-
+	*/
 	powerMetrics.printPowerMetrics();
 };
 
