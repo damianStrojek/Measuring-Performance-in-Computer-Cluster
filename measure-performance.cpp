@@ -318,7 +318,7 @@ int main(){
 		std::cout << "\n\n\t[WARNING] NVML Library not initialized\n";
 	}*/
 
-	// Checking if process with PROCESSID is still running
+	// Checking if process with GPROCESSID is still running
 	while(std::stoi(exec(processCommand))){
     	if(keyboardHit()){
 			std::cout << "\n\n\t[STOP] Key pressed.\n\n";
@@ -330,7 +330,7 @@ int main(){
 
 		//auto start = std::chrono::high_resolution_clock::now();
 
-		std::cout << "\n\n\t[TIMESTAMP] " << timestamp << "\n";
+		std::cout << "\n\n   [TIMESTAMP] " << timestamp << "\n";
 
 		getSystemMetrics(systemMetrics);
 		getProcessorMetrics(processorMetrics);
@@ -430,6 +430,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	stream >> temp;
 	processorMetrics.timeGuest = std::stoi(temp);		// USER_HZ
 
+	// Created string and parsed in to const char* because it was too long
 	std::string commandString = 
 		"perf stat -e cpu/event=0x24,umask=0x01,name=L2_RQSTS_DEMAND_DATA_RD_HIT/,cpu/"
 		"event=0x24,umask=0x02,name=L2_RQSTS_ALL_DEMAND_DATA_RD/,cpu/event=0x24,umask=0x04,n"
@@ -603,6 +604,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlErro
 	powerMetrics.memoryPower = std::stof(temp);
 	streamOne >> temp;
 	powerMetrics.systemPower = std::stof(temp);
+	
 	/*
 	if(!raplError){
 		double energy;
