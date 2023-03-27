@@ -24,7 +24,8 @@ This application requires you to have following tools installed on each of the n
 Compile using **C++20** and run using **sudo** permissions:
 
 ```bash
-g++ -std=c++20 -o measure-performance measure-performance.cpp
+g++ -std=c++2a -o measure-performance measure-performance.cpp
+# alternatively you can use g++ -std=c++20
 chmod +x measure-performance
 sudo ./measure-performance
 ```

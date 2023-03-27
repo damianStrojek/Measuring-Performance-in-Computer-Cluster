@@ -480,7 +480,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 
 void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 
-	const char* command = "sudo awk '{ print $2 }' /proc/1/io"; // [TODO] Change PID 
+	const char* command = "awk '{ print $2 }' /proc/$$/io";		// [TODO] Change PID 
 	std::string output = exec(command), temp;
 	std::stringstream stream(output);
 	
