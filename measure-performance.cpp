@@ -310,7 +310,7 @@ MPI_Datatype createMpiProcessorMetricsType();
 MPI_Datatype createMpiInputOutputMetricsType();
 MPI_Datatype createMpiMemoryMetricsType();
 MPI_Datatype createMpiNetworkMetricsType();
-MPI_Datatype createMpiPowerMetricsMetricsType();
+MPI_Datatype createMpiPowerMetricsType();
 
 int keyboardHit(void);
 std::string exec(const char*);
