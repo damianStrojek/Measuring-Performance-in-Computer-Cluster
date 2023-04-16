@@ -929,7 +929,7 @@ MPI_Datatype createProcessorMetricsType() {
 };
 
 // Create MPI data type for InputOutputMetrics
-void createInputOutputMetricsType() {
+MPI_Datatype createInputOutputMetricsType() {
     int blocklengths[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
     MPI_Datatype types[9] = {MPI_INT, MPI_FLOAT, MPI_FLOAT, MPI_INT,
                              MPI_FLOAT, MPI_FLOAT, MPI_INT,
