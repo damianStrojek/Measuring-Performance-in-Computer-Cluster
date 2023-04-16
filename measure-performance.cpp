@@ -325,7 +325,6 @@ int main(){
 	NetworkMetrics networkMetrics;
 	PowerMetrics powerMetrics;
 	*/
-	AllMetrics allMetrics;
 	const char* dateCommand = "date +'%d%m%y-%H%M%S'",
 		*processCommand = "ps -p 1 > /dev/null && echo '1' || echo '0'";	// [TODO] Add GPROCESSID
 	std::string timestamp = exec(dateCommand);
@@ -347,6 +346,34 @@ int main(){
 	}*/
 
 	// Checking if process with GPROCESSID is still running
+	int rank, size;
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+	AllMetrics allMetrics;
+
+	MPI_Datatype systemMetricsType = createSystemMetricsType();
+    MPI_Datatype processorMetricsType = createProcessorMetricsType();
+    MPI_Datatype inputOutputMetricsType = createInputOutputMetricsType();
+    MPI_Datatype memoryMetricsType = createMemoryMetricsType();
+    MPI_Datatype networkMetricsType = createNetworkMetricsType();
+    MPI_Datatype powerMetricsType = createPowerMetricsType();
+    MPI_Datatype allMetricsType;
+
+	int blocklengths[6] = {1, 1, 1, 1, 1, 1};
+    MPI_Datatype types[6] = {systemMetricsType, processorMetricsType, inputOutputMetricsType, memoryMetricsType, networkMetricsType, powerMetricsType};
+    MPI_Aint offsets[6];
+    offsets[0] = offsetof(struct AllMetrics, systemMetrics);
+    offsets[1] = offsetof(struct AllMetrics, processorMetrics);
+    offsets[2] = offsetof(struct AllMetrics, inputOutputMetrics);
+    offsets[3] = offsetof(struct AllMetrics, memoryMetrics);
+    offsets[4] = offsetof(struct AllMetrics, networkMetrics);
+    offsets[5] = offsetof(struct AllMetrics, powerMetrics);
+    MPI_Type_create_struct(6, blocklengths, offsets, types, &allMetricsType);
+    MPI_Type_commit(&allMetricsType);
+	AllMetrics* allMetricsArray = new AllMetrics[size];
+
 	while(std::stoi(exec(processCommand))){
     	if(keyboardHit()){
 			std::cout << "\n\n\t[STOP] Key pressed.\n\n";
@@ -367,7 +394,22 @@ int main(){
 		getNetworkMetrics(allMetrics.networkMetrics);
 		getPowerMetrics(allMetrics.powerMetrics, raplError, nvmlError);
 		
+		if(rank != 0){
+			MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
+		}
+		else{
+			allMetricsArray[0] = allMetrics;
+			for(int i=1;i<size;i++){
+				MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			}
+			for(i=0;i<size;i++){
+				std::cout << "[ METRICS FROM PROCESS: "<< i<< " ]" << "\n";
+				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, &allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, &allMetricsArray[i].networkMetrics);
+			}
+		}
 
+
+		break;
 		sleep(2);
 
 		//auto end = std::chrono::high_resolution_clock::now();
@@ -384,6 +426,15 @@ int main(){
     //file.close();
 	/*if(!raplError) rapl_finish();
 	if(!nvmlError) nvmlShutdown();*/
+	MPI_Type_free(&systemMetricsType);
+    MPI_Type_free(&processorMetricsType);
+    MPI_Type_free(&inputOutputMetricsType);
+    MPI_Type_free(&memoryMetricsType);
+    MPI_Type_free(&networkMetricsType);
+    MPI_Type_free(&powerMetricsType);
+    MPI_Type_free(&allMetricsType);
+	delete[] allMetricsArray;
+    MPI_Finalize();
 	return 0;
 };
 
