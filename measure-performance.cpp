@@ -263,13 +263,22 @@ struct PowerMetrics {
 	};
 };
 
-struct MetricsStruct{
+struct AllMetrics{
 	SystemMetrics systemMetrics;
 	ProcessorMetrics processorMetrics;
 	InputOutputMetrics inputOutputMetrics;
 	MemoryMetrics memoryMetrics;
 	NetworkMetrics networkMetrics;
 	PowerMetrics powerMetrics;
+
+	AllMetrics(){
+		this->systemMetrics = SystemMetrics();
+		this->processorMetrics = ProcessorMetrics();
+		this->inputOutputMetrics = InputOutputMetrics();
+		this->memoryMetrics = MemoryMetrics();
+		this->networkMetrics = NetworkMetrics();
+		this->powerMetrics = PowerMetrics();
+	}
 };
 
 // Fetching the metrics into structures
@@ -300,13 +309,15 @@ std::string exec(const char*);
 
 int main(){
 
-	SystemMetrics systemMetrics;
+
+	/*SystemMetrics systemMetrics;
 	ProcessorMetrics processorMetrics;
 	InputOutputMetrics inputOutputMetrics;
 	MemoryMetrics memoryMetrics;
 	NetworkMetrics networkMetrics;
 	PowerMetrics powerMetrics;
-
+	*/
+	AllMetrics allMetrics;
 	const char* dateCommand = "date +'%d%m%y-%H%M%S'",
 		*processCommand = "ps -p 1 > /dev/null && echo '1' || echo '0'";	// [TODO] Add GPROCESSID
 	std::string timestamp = exec(dateCommand);
@@ -341,12 +352,13 @@ int main(){
 
 		std::cout << "\n\n   [TIMESTAMP] " << timestamp << "\n";
 
-		getSystemMetrics(systemMetrics);
-		getProcessorMetrics(processorMetrics);
-		getInputOutputMetrics(inputOutputMetrics);
-		getMemoryMetrics(memoryMetrics);
-		getNetworkMetrics(networkMetrics);
-		getPowerMetrics(powerMetrics, raplError, nvmlError);
+		getSystemMetrics(allMetrics.systemMetrics);
+		getProcessorMetrics(allMetrics.processorMetrics);
+		getInputOutputMetrics(allMetrics.inputOutputMetrics);
+		getMemoryMetrics(allMetrics.memoryMetrics);
+		getNetworkMetrics(allMetrics.networkMetrics);
+		getPowerMetrics(allMetrics.powerMetrics, raplError, nvmlError);
+		
 
 		sleep(2);
 
