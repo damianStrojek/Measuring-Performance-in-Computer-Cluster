@@ -270,7 +270,7 @@ struct MetricsStruct{
 	MemoryMetrics memoryMetrics;
 	NetworkMetrics networkMetrics;
 	PowerMetrics powerMetrics;
-}
+};
 
 // Fetching the metrics into structures
 void getSystemMetrics(SystemMetrics&);
