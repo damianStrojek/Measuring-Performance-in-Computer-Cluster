@@ -19,6 +19,7 @@
 #include <iomanip>
 #include <chrono>
 #include <map>
+#include <mpi.h>
 //#include <rapl.h>
 //#include <nvml.h>
 
