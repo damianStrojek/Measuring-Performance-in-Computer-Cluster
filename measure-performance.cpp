@@ -315,7 +315,7 @@ MPI_Datatype createMpiPowerMetricsMetricsType();
 int keyboardHit(void);
 std::string exec(const char*);
 
-int main(){
+int main(int argc, char **argv){
 
 
 	/*SystemMetrics systemMetrics;
@@ -353,12 +353,12 @@ int main(){
 
 	AllMetrics allMetrics;
 
-	MPI_Datatype systemMetricsType = createSystemMetricsType();
-    MPI_Datatype processorMetricsType = createProcessorMetricsType();
-    MPI_Datatype inputOutputMetricsType = createInputOutputMetricsType();
-    MPI_Datatype memoryMetricsType = createMemoryMetricsType();
-    MPI_Datatype networkMetricsType = createNetworkMetricsType();
-    MPI_Datatype powerMetricsType = createPowerMetricsType();
+	MPI_Datatype systemMetricsType = createMpiSystemMetricsType();
+    MPI_Datatype processorMetricsType = createMpiProcessorMetricsType();
+    MPI_Datatype inputOutputMetricsType = createMpiInputOutputMetricsType();
+    MPI_Datatype memoryMetricsType = createMpiMemoryMetricsType();
+    MPI_Datatype networkMetricsType = createMpiNetworkMetricsType();
+    MPI_Datatype powerMetricsType = createMpiPowerMetricsType();
     MPI_Datatype allMetricsType;
 
 	int blocklengths[6] = {1, 1, 1, 1, 1, 1};
@@ -402,7 +402,7 @@ int main(){
 			for(int i=1;i<size;i++){
 				MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			}
-			for(i=0;i<size;i++){
+			for(int i=0;i<size;i++){
 				std::cout << "[ METRICS FROM PROCESS: "<< i<< " ]" << "\n";
 				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, &allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, &allMetricsArray[i].networkMetrics);
 			}
@@ -894,7 +894,7 @@ int keyboardHit(void){
 };
 
 // Create MPI data type for PowerMetrics
-MPI_Datatype createPowerMetricsType() {
+MPI_Datatype createMpiPowerMetricsType() {
     int blockLengths[] = {1, 1, 1, 1, 1, 1};
     MPI_Datatype types[] = {MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_UNSIGNED_LONG_LONG, MPI_UNSIGNED_LONG_LONG};
     MPI_Aint offsets[] = {offsetof(PowerMetrics, coresPower),
@@ -910,7 +910,7 @@ MPI_Datatype createPowerMetricsType() {
 };
 
 // Create MPI data type for NetworkMetrics
-MPI_Datatype createNetworkMetricsType() {
+MPI_Datatype createMpiNetworkMetricsType() {
     int blockLengths[] = {1, 1, 1, 1};
     MPI_Datatype types[] = {MPI_INT, MPI_FLOAT, MPI_INT, MPI_FLOAT};
     MPI_Aint offsets[] = {offsetof(NetworkMetrics, receivedData),
@@ -924,7 +924,7 @@ MPI_Datatype createNetworkMetricsType() {
 };
 
 // Create MPI data type for MemoryMetrics
-MPI_Datatype createMemoryMetricsType() {
+MPI_Datatype createMpiMemoryMetricsType() {
     MPI_Datatype memoryMetricsType;
     MPI_Datatype types[16] = {MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT};
     int block_lengths[16] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
@@ -951,7 +951,7 @@ MPI_Datatype createMemoryMetricsType() {
 };
 
 // Create MPI data type for ProcessorMetrics
-MPI_Datatype createProcessorMetricsType() {
+MPI_Datatype createMpiProcessorMetricsType() {
     int block_lengths[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
     MPI_Datatype types[] = {MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT};
     MPI_Datatype processorMetricsType;
@@ -980,7 +980,7 @@ MPI_Datatype createProcessorMetricsType() {
 };
 
 // Create MPI data type for InputOutputMetrics
-MPI_Datatype createInputOutputMetricsType() {
+MPI_Datatype createMpiInputOutputMetricsType() {
     int blocklengths[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
     MPI_Datatype types[9] = {MPI_INT, MPI_FLOAT, MPI_FLOAT, MPI_INT,
                              MPI_FLOAT, MPI_FLOAT, MPI_INT,
@@ -1002,7 +1002,7 @@ MPI_Datatype createInputOutputMetricsType() {
 };
 
 // Create MPI data type for SystemMetricsType
-MPI_Datatype createSystemMetricsType() {
+MPI_Datatype createMpiSystemMetricsType() {
     int blocklengths[5] = {1, 1, 1, 1, 1};
     MPI_Datatype types[5] = {MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT};
     MPI_Aint offsets[5];
