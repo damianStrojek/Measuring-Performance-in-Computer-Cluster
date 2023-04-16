@@ -477,7 +477,7 @@ void getSystemMetrics(SystemMetrics &systemMetrics){
 	output = exec(command);
 	systemMetrics.processesBlocked = std::stoi(output);	// number of processes
 
-	systemMetrics.printSystemMetrics();
+	//systemMetrics.printSystemMetrics();
 };
 
 void getProcessorMetrics(ProcessorMetrics &processorMetrics){
@@ -556,7 +556,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	streamThree >> temp;
 	processorMetrics.unhaltedFrequency = std::stof(temp); 		// MHz
 
-	processorMetrics.printProcessorMetrics();
+	//processorMetrics.printProcessorMetrics();
 };
 
 void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
@@ -588,7 +588,7 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 	streamTwo >> temp;
 	inputOutputMetrics.flushTime = std::stof(temp);				// ms
 
-	inputOutputMetrics.printInputOutputMetrics();
+	//inputOutputMetrics.printInputOutputMetrics();
 };
 
 void getMemoryMetrics(MemoryMetrics &memoryMetrics){
@@ -644,7 +644,7 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 	streamThree >> temp;
 	memoryMetrics.memoryIoRate = std::stof(temp);			// MB/s
 	
-	memoryMetrics.printMemoryMetrics();
+	//memoryMetrics.printMemoryMetrics();
 };
 
 void getNetworkMetrics(NetworkMetrics &networkMetrics){
@@ -669,7 +669,7 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	streamTwo >> temp;
 	networkMetrics.sentData = std::stoi(temp);				// number of packets
 
-	networkMetrics.printNetworkMetrics();
+	//networkMetrics.printNetworkMetrics();
 };
 
 void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlError){
@@ -720,7 +720,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlErro
 		}
 	}
 	*/
-	powerMetrics.printPowerMetrics();
+	//powerMetrics.printPowerMetrics();
 };
 
 void writeToFileSystemMetrics(std::ofstream &file, SystemMetrics data){
