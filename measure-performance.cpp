@@ -263,6 +263,15 @@ struct PowerMetrics {
 	};
 };
 
+struct MetricsStruct{
+	SystemMetrics systemMetrics;
+	ProcessorMetrics processorMetrics;
+	InputOutputMetrics inputOutputMetrics;
+	MemoryMetrics memoryMetrics;
+	NetworkMetrics networkMetrics;
+	PowerMetrics powerMetrics;
+}
+
 // Fetching the metrics into structures
 void getSystemMetrics(SystemMetrics&);
 void getProcessorMetrics(ProcessorMetrics&);
