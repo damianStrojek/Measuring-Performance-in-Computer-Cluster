@@ -1,4 +1,3 @@
-a.out
-metrics
-*.csv
+.vscode/
 measure-performance
+*.csv
