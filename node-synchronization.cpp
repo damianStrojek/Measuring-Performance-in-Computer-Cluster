@@ -136,14 +136,14 @@ MPI_Datatype createMpiInputOutputMetricsType(){
         MPI_INT, MPI_FLOAT, MPI_FLOAT, 
         MPI_INT, MPI_FLOAT, MPI_FLOAT};
     MPI_Aint offsets[] = {
-        offsetof(struct InputOutputMetrics, processID);
-        offsetof(struct InputOutputMetrics, dataRead);
-        offsetof(struct InputOutputMetrics, readTime);
-        offsetof(struct InputOutputMetrics, readOperationsRate);
-        offsetof(struct InputOutputMetrics, dataWritten);
-        offsetof(struct InputOutputMetrics, writeTime);
-        offsetof(struct InputOutputMetrics, writeOperationsRate);
-        offsetof(struct InputOutputMetrics, flushTime);
+        offsetof(struct InputOutputMetrics, processID),
+        offsetof(struct InputOutputMetrics, dataRead),
+        offsetof(struct InputOutputMetrics, readTime),
+        offsetof(struct InputOutputMetrics, readOperationsRate),
+        offsetof(struct InputOutputMetrics, dataWritten),
+        offsetof(struct InputOutputMetrics, writeTime),
+        offsetof(struct InputOutputMetrics, writeOperationsRate),
+        offsetof(struct InputOutputMetrics, flushTime),
         offsetof(struct InputOutputMetrics, flushOperationsRate)};
 
     MPI_Datatype inputOutputMetricsType;
