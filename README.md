@@ -2,7 +2,7 @@
 
 ## Aim
 
-The aim of the project is to create an application in C++ that will allow you to run a given application (parallel) on a computing cluster and save the values of selected metrics over time.
+The aim of the project is to create an application in C++ that will allow you to run a given parallel application on a computing cluster and save the values of selected system metrics over time.
 
 ## Design Assumptions
 
@@ -24,8 +24,8 @@ This application requires you to have following tools installed on each of the n
 Compile using **C++20** and run using **sudo** permissions:
 
 ```bash
-g++ -std=c++2a -o measure-performance measure-performance.cpp
 # alternatively you can use g++ -std=c++20
+g++ -std=c++2a measure-performance.cpp metrics.cpp metrics-display.cpp metrics-save.cpp node-synchronization.cpp -o measure-performance
 chmod +x measure-performance
 sudo ./measure-performance
 ```
@@ -33,7 +33,7 @@ sudo ./measure-performance
 If Intel <a href="https://github.com/LLNL/msr-safe" target="_blank">RAPL</a> and <a href="https://developer.nvidia.com/nvidia-management-library-nvml" target="_blank">NVIDIA Management Library</a> is supported:
 
 ```bash
-g++ -std=c++20 -o measure-performance measure-performance.cpp -lsmr_safe -lnvidia-ml
+g++ -std=c++2a measure-performance.cpp metrics.cpp metrics-display.cpp metrics-save.cpp node-synchronization.cpp -o measure-performance -lsmr_safe -lnvidia-ml
 chmod +x measure-performance
 sudo ./measure-performance
 ```

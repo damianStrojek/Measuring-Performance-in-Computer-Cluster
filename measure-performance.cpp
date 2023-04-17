@@ -110,7 +110,7 @@ int main(int argc, char **argv){
 			for(int i = 1; i < size; i++)
 				MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			for(int i = 0;i < size; i++){
-				std::cout << "[ METRICS FROM PROCESS: "<< i<< " ]" << "\n";
+				std::cout << "\n\t[PROCESS " << i << " METRICS]\n";
 				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, \
 							&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
 							&allMetricsArray[i].networkMetrics);
