@@ -101,7 +101,7 @@ int main(int argc, char **argv){
 		getInputOutputMetrics(allMetrics.inputOutputMetrics);
 		getMemoryMetrics(allMetrics.memoryMetrics);
 		getNetworkMetrics(allMetrics.networkMetrics);
-		getPowerMetrics(allMetrics.powerMetrics, 0, 0);
+		getPowerMetrics(allMetrics.powerMetrics, raplError, nvmlError);
 	
 		if(rank)
 			MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
