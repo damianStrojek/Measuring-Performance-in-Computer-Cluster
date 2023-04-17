@@ -10,7 +10,7 @@
 #define METRICS_DISPLAY_H
 
 // Internal headers
-#include <metrics.h>
+#include "metrics.h"
 
 // Printing for the user
 void printMetric(std::string, int, std::string);

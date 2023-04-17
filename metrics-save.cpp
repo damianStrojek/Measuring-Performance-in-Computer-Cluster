@@ -9,8 +9,10 @@
 // External libraries
 #include <fstream>
 // Internal headers
-#include <metrics.h>
-#include <metrics-save.h>
+#include "metrics.h"
+#include "metrics-save.h"
+
+#define NOTSUPPORTED 666
 
 void writeToFileSystemMetrics(std::ofstream &file, SystemMetrics data){
 	file << (data.processesRunning != NOTSUPPORTED ? std::to_string(data.processesRunning) : "not_supported") << ",";

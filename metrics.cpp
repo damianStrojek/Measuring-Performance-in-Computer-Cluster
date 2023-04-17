@@ -9,8 +9,11 @@
 // External libraries
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <array>
+#include <memory>
 // Internal headers
-#include <metrics.h>
+#include "metrics.h"
 
 SystemMetrics::SystemMetrics(){
     this->processesRunning = -1;
@@ -415,4 +418,20 @@ AllMetrics::AllMetrics(){
     this->memoryMetrics = MemoryMetrics();
     this->networkMetrics = NetworkMetrics();
     this->powerMetrics = PowerMetrics();
+};
+
+// Execute a Linux command and return the output using std::string
+std::string exec(const char* cmd){
+    std::array<char, 128> buffer;
+    std::string result;
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+    if (!pipe)
+        throw std::runtime_error("popen() failed!");
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+        result += buffer.data();
+
+	if(!result.length())
+		std::cout << "\n\n\t[ERROR] String returned by exec() has length 0\n";
+
+    return result;
 };

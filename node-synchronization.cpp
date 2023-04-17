@@ -6,8 +6,11 @@
 // 				    Jakub Wasniewski @wisnia01
 //
 
-#include <node-synchronization.h>
-#include <metrics.h>
+// External libraries
+#include <mpi.h>
+// Internal headers
+#include "node-synchronization.h"
+#include "metrics.h"
 
 // Create MPI data type for PowerMetrics
 MPI_Datatype createMpiPowerMetricsType(){
