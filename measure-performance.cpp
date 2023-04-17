@@ -19,6 +19,7 @@
 #include <iomanip>
 #include <chrono>
 #include <map>
+#include <mpi.h>
 //#include <rapl.h>
 //#include <nvml.h>
 
@@ -263,6 +264,24 @@ struct PowerMetrics {
 	};
 };
 
+struct AllMetrics{
+	SystemMetrics systemMetrics;
+	ProcessorMetrics processorMetrics;
+	InputOutputMetrics inputOutputMetrics;
+	MemoryMetrics memoryMetrics;
+	NetworkMetrics networkMetrics;
+	PowerMetrics powerMetrics;
+
+	AllMetrics(){
+		this->systemMetrics = SystemMetrics();
+		this->processorMetrics = ProcessorMetrics();
+		this->inputOutputMetrics = InputOutputMetrics();
+		this->memoryMetrics = MemoryMetrics();
+		this->networkMetrics = NetworkMetrics();
+		this->powerMetrics = PowerMetrics();
+	}
+};
+
 // Fetching the metrics into structures
 void getSystemMetrics(SystemMetrics&);
 void getProcessorMetrics(ProcessorMetrics&);
@@ -285,19 +304,27 @@ void printMetric(std::string, int, std::string);
 void printMetricPair(std::string, int, std::string, std::string, int, std::string);
 void printMetrics(SystemMetrics*, ProcessorMetrics*, InputOutputMetrics*, 
 					MemoryMetrics*, NetworkMetrics*);
+// Generating MPI types
+MPI_Datatype createMpiSystemMetricsType();
+MPI_Datatype createMpiProcessorMetricsType();
+MPI_Datatype createMpiInputOutputMetricsType();
+MPI_Datatype createMpiMemoryMetricsType();
+MPI_Datatype createMpiNetworkMetricsType();
+MPI_Datatype createMpiPowerMetricsType();
 
 int keyboardHit(void);
 std::string exec(const char*);
 
-int main(){
+int main(int argc, char **argv){
 
-	SystemMetrics systemMetrics;
+
+	/*SystemMetrics systemMetrics;
 	ProcessorMetrics processorMetrics;
 	InputOutputMetrics inputOutputMetrics;
 	MemoryMetrics memoryMetrics;
 	NetworkMetrics networkMetrics;
 	PowerMetrics powerMetrics;
-
+	*/
 	const char* dateCommand = "date +'%d%m%y-%H%M%S'",
 		*processCommand = "ps -p 1 > /dev/null && echo '1' || echo '0'";	// [TODO] Add GPROCESSID
 	std::string timestamp = exec(dateCommand);
@@ -319,6 +346,34 @@ int main(){
 	}*/
 
 	// Checking if process with GPROCESSID is still running
+	int rank, size;
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+	AllMetrics allMetrics;
+
+	MPI_Datatype systemMetricsType = createMpiSystemMetricsType();
+    MPI_Datatype processorMetricsType = createMpiProcessorMetricsType();
+    MPI_Datatype inputOutputMetricsType = createMpiInputOutputMetricsType();
+    MPI_Datatype memoryMetricsType = createMpiMemoryMetricsType();
+    MPI_Datatype networkMetricsType = createMpiNetworkMetricsType();
+    MPI_Datatype powerMetricsType = createMpiPowerMetricsType();
+    MPI_Datatype allMetricsType;
+
+	int blocklengths[6] = {1, 1, 1, 1, 1, 1};
+    MPI_Datatype types[6] = {systemMetricsType, processorMetricsType, inputOutputMetricsType, memoryMetricsType, networkMetricsType, powerMetricsType};
+    MPI_Aint offsets[6];
+    offsets[0] = offsetof(struct AllMetrics, systemMetrics);
+    offsets[1] = offsetof(struct AllMetrics, processorMetrics);
+    offsets[2] = offsetof(struct AllMetrics, inputOutputMetrics);
+    offsets[3] = offsetof(struct AllMetrics, memoryMetrics);
+    offsets[4] = offsetof(struct AllMetrics, networkMetrics);
+    offsets[5] = offsetof(struct AllMetrics, powerMetrics);
+    MPI_Type_create_struct(6, blocklengths, offsets, types, &allMetricsType);
+    MPI_Type_commit(&allMetricsType);
+	AllMetrics* allMetricsArray = new AllMetrics[size];
+
 	while(std::stoi(exec(processCommand))){
     	if(keyboardHit()){
 			std::cout << "\n\n\t[STOP] Key pressed.\n\n";
@@ -332,13 +387,29 @@ int main(){
 
 		std::cout << "\n\n   [TIMESTAMP] " << timestamp << "\n";
 
-		getSystemMetrics(systemMetrics);
-		getProcessorMetrics(processorMetrics);
-		getInputOutputMetrics(inputOutputMetrics);
-		getMemoryMetrics(memoryMetrics);
-		getNetworkMetrics(networkMetrics);
-		getPowerMetrics(powerMetrics, raplError, nvmlError);
+		getSystemMetrics(allMetrics.systemMetrics);
+		getProcessorMetrics(allMetrics.processorMetrics);
+		getInputOutputMetrics(allMetrics.inputOutputMetrics);
+		getMemoryMetrics(allMetrics.memoryMetrics);
+		getNetworkMetrics(allMetrics.networkMetrics);
+		getPowerMetrics(allMetrics.powerMetrics, raplError, nvmlError);
+		
+		if(rank != 0){
+			MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
+		}
+		else{
+			allMetricsArray[0] = allMetrics;
+			for(int i=1;i<size;i++){
+				MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			}
+			for(int i=0;i<size;i++){
+				std::cout << "[ METRICS FROM PROCESS: "<< i<< " ]" << "\n";
+				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, &allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, &allMetricsArray[i].networkMetrics);
+			}
+		}
 
+
+		break;
 		sleep(2);
 
 		//auto end = std::chrono::high_resolution_clock::now();
@@ -355,6 +426,15 @@ int main(){
     //file.close();
 	/*if(!raplError) rapl_finish();
 	if(!nvmlError) nvmlShutdown();*/
+	MPI_Type_free(&systemMetricsType);
+    MPI_Type_free(&processorMetricsType);
+    MPI_Type_free(&inputOutputMetricsType);
+    MPI_Type_free(&memoryMetricsType);
+    MPI_Type_free(&networkMetricsType);
+    MPI_Type_free(&powerMetricsType);
+    MPI_Type_free(&allMetricsType);
+	delete[] allMetricsArray;
+    MPI_Finalize();
 	return 0;
 };
 
@@ -397,7 +477,7 @@ void getSystemMetrics(SystemMetrics &systemMetrics){
 	output = exec(command);
 	systemMetrics.processesBlocked = std::stoi(output);	// number of processes
 
-	systemMetrics.printSystemMetrics();
+	//systemMetrics.printSystemMetrics();
 };
 
 void getProcessorMetrics(ProcessorMetrics &processorMetrics){
@@ -476,7 +556,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	streamThree >> temp;
 	processorMetrics.unhaltedFrequency = std::stof(temp); 		// MHz
 
-	processorMetrics.printProcessorMetrics();
+	//processorMetrics.printProcessorMetrics();
 };
 
 void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
@@ -508,7 +588,7 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 	streamTwo >> temp;
 	inputOutputMetrics.flushTime = std::stof(temp);				// ms
 
-	inputOutputMetrics.printInputOutputMetrics();
+	//inputOutputMetrics.printInputOutputMetrics();
 };
 
 void getMemoryMetrics(MemoryMetrics &memoryMetrics){
@@ -564,7 +644,7 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 	streamThree >> temp;
 	memoryMetrics.memoryIoRate = std::stof(temp);			// MB/s
 	
-	memoryMetrics.printMemoryMetrics();
+	//memoryMetrics.printMemoryMetrics();
 };
 
 void getNetworkMetrics(NetworkMetrics &networkMetrics){
@@ -589,7 +669,7 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	streamTwo >> temp;
 	networkMetrics.sentData = std::stoi(temp);				// number of packets
 
-	networkMetrics.printNetworkMetrics();
+	//networkMetrics.printNetworkMetrics();
 };
 
 void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlError){
@@ -640,7 +720,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlErro
 		}
 	}
 	*/
-	powerMetrics.printPowerMetrics();
+	//powerMetrics.printPowerMetrics();
 };
 
 void writeToFileSystemMetrics(std::ofstream &file, SystemMetrics data){
@@ -812,3 +892,128 @@ int keyboardHit(void){
 	}
 	return 0;
 };
+
+// Create MPI data type for PowerMetrics
+MPI_Datatype createMpiPowerMetricsType() {
+    int blockLengths[] = {1, 1, 1, 1, 1, 1};
+    MPI_Datatype types[] = {MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_UNSIGNED_LONG_LONG, MPI_UNSIGNED_LONG_LONG};
+    MPI_Aint offsets[] = {offsetof(PowerMetrics, coresPower),
+                          offsetof(PowerMetrics, processorPower),
+                          offsetof(PowerMetrics, memoryPower),
+                          offsetof(PowerMetrics, systemPower),
+                          offsetof(PowerMetrics, gpuPower),
+                          offsetof(PowerMetrics, gpuPowerHours)};
+    MPI_Datatype powerMetricsType;
+    MPI_Type_create_struct(6, blockLengths, offsets, types, &powerMetricsType);
+    MPI_Type_commit(&powerMetricsType);
+    return powerMetricsType;
+};
+
+// Create MPI data type for NetworkMetrics
+MPI_Datatype createMpiNetworkMetricsType() {
+    int blockLengths[] = {1, 1, 1, 1};
+    MPI_Datatype types[] = {MPI_INT, MPI_FLOAT, MPI_INT, MPI_FLOAT};
+    MPI_Aint offsets[] = {offsetof(NetworkMetrics, receivedData),
+                          offsetof(NetworkMetrics, receivePacketRate),
+                          offsetof(NetworkMetrics, sentData),
+                          offsetof(NetworkMetrics, sendPacketsRate)};
+    MPI_Datatype networkMetricsType;
+    MPI_Type_create_struct(4, blockLengths, offsets, types, &networkMetricsType);
+    MPI_Type_commit(&networkMetricsType);
+    return networkMetricsType;
+};
+
+// Create MPI data type for MemoryMetrics
+MPI_Datatype createMpiMemoryMetricsType() {
+    MPI_Datatype memoryMetricsType;
+    MPI_Datatype types[16] = {MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT};
+    int block_lengths[16] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    MPI_Aint offsets[16];
+    offsets[0] = offsetof(struct MemoryMetrics, memoryUsed);
+    offsets[1] = offsetof(struct MemoryMetrics, memoryCached);
+    offsets[2] = offsetof(struct MemoryMetrics, swapUsed);
+    offsets[3] = offsetof(struct MemoryMetrics, swapCached);
+    offsets[4] = offsetof(struct MemoryMetrics, memoryActive);
+    offsets[5] = offsetof(struct MemoryMetrics, memoryInactive);
+    offsets[6] = offsetof(struct MemoryMetrics, pageInRate);
+    offsets[7] = offsetof(struct MemoryMetrics, pageOutRate);
+    offsets[8] = offsetof(struct MemoryMetrics, pageFaultRate);
+    offsets[9] = offsetof(struct MemoryMetrics, pageFaultsMajorRate);
+    offsets[10] = offsetof(struct MemoryMetrics, pageFreeRate);
+    offsets[11] = offsetof(struct MemoryMetrics, pageActivateRate);
+    offsets[12] = offsetof(struct MemoryMetrics, pageDeactivateRate);
+    offsets[13] = offsetof(struct MemoryMetrics, memoryReadRate);
+    offsets[14] = offsetof(struct MemoryMetrics, memoryWriteRate);
+    offsets[15] = offsetof(struct MemoryMetrics, memoryIoRate);
+    MPI_Type_create_struct(16, block_lengths, offsets, types, &memoryMetricsType);
+    MPI_Type_commit(&memoryMetricsType);
+    return memoryMetricsType;
+};
+
+// Create MPI data type for ProcessorMetrics
+MPI_Datatype createMpiProcessorMetricsType() {
+    int block_lengths[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    MPI_Datatype types[] = {MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT};
+    MPI_Datatype processorMetricsType;
+    MPI_Aint offsets[18];
+    offsets[0] = offsetof(struct ProcessorMetrics, timeUser);
+    offsets[1] = offsetof(struct ProcessorMetrics, timeNice);
+    offsets[2] = offsetof(struct ProcessorMetrics, timeSystem);
+    offsets[3] = offsetof(struct ProcessorMetrics, timeIdle);
+    offsets[4] = offsetof(struct ProcessorMetrics, timeIoWait);
+    offsets[5] = offsetof(struct ProcessorMetrics, timeIRQ);
+    offsets[6] = offsetof(struct ProcessorMetrics, timeSoftIRQ);
+    offsets[7] = offsetof(struct ProcessorMetrics, timeSteal);
+    offsets[8] = offsetof(struct ProcessorMetrics, timeGuest);
+    offsets[9] = offsetof(struct ProcessorMetrics, instructionsRetired);
+    offsets[10] = offsetof(struct ProcessorMetrics, cycles);
+    offsets[11] = offsetof(struct ProcessorMetrics, frequencyRelative);
+    offsets[12] = offsetof(struct ProcessorMetrics, unhaltedFrequency);
+    offsets[13] = offsetof(struct ProcessorMetrics, cacheL2HitRate);
+    offsets[14] = offsetof(struct ProcessorMetrics, cacheL2MissRate);
+    offsets[15] = offsetof(struct ProcessorMetrics, cacheL3HitRate);
+    offsets[16] = offsetof(struct ProcessorMetrics, cacheL3HitSnoopRate);
+    offsets[17] = offsetof(struct ProcessorMetrics, cacheL3MissRate);
+    MPI_Type_create_struct(18, block_lengths, offsets, types, &processorMetricsType);
+    MPI_Type_commit(&processorMetricsType);
+    return processorMetricsType;
+};
+
+// Create MPI data type for InputOutputMetrics
+MPI_Datatype createMpiInputOutputMetricsType() {
+    int blocklengths[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+    MPI_Datatype types[9] = {MPI_INT, MPI_FLOAT, MPI_FLOAT, MPI_INT,
+                             MPI_FLOAT, MPI_FLOAT, MPI_INT,
+                             MPI_FLOAT, MPI_FLOAT};
+    MPI_Aint offsets[9];
+	MPI_Datatype inputOutputMetricsType;
+    offsets[0] = offsetof(struct InputOutputMetrics, processID);
+    offsets[1] = offsetof(struct InputOutputMetrics, dataRead);
+    offsets[2] = offsetof(struct InputOutputMetrics, readTime);
+    offsets[3] = offsetof(struct InputOutputMetrics, readOperationsRate);
+    offsets[4] = offsetof(struct InputOutputMetrics, dataWritten);
+    offsets[5] = offsetof(struct InputOutputMetrics, writeTime);
+    offsets[6] = offsetof(struct InputOutputMetrics, writeOperationsRate);
+    offsets[7] = offsetof(struct InputOutputMetrics, flushTime);
+    offsets[8] = offsetof(struct InputOutputMetrics, flushOperationsRate);
+    MPI_Type_create_struct(9, blocklengths, offsets, types, &inputOutputMetricsType);
+    MPI_Type_commit(&inputOutputMetricsType);
+	return inputOutputMetricsType;
+};
+
+// Create MPI data type for SystemMetricsType
+MPI_Datatype createMpiSystemMetricsType() {
+    int blocklengths[5] = {1, 1, 1, 1, 1};
+    MPI_Datatype types[5] = {MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT};
+    MPI_Aint offsets[5];
+    offsets[0] = offsetof(struct SystemMetrics, processesRunning);
+    offsets[1] = offsetof(struct SystemMetrics, processesAll);
+    offsets[2] = offsetof(struct SystemMetrics, processesBlocked);
+    offsets[3] = offsetof(struct SystemMetrics, contextSwitchRate);
+    offsets[4] = offsetof(struct SystemMetrics, interruptRate);
+    MPI_Datatype systemMetricsType;
+    MPI_Type_create_struct(5, blocklengths, offsets, types, &systemMetricsType);
+    MPI_Type_commit(&systemMetricsType);
+    return systemMetricsType;
+}
+
