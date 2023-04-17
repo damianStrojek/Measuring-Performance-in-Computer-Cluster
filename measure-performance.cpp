@@ -1,9 +1,9 @@
 //
-// measure-performance.cpp - main file of a project
+// 	measure-performance.cpp - main file of a project
 //
-// 2022-2023	Damian Strojek @damianStrojek
-// 				Piotr Garbowski @dideek
-// 				Jakub Wasniewski @wisnia01
+// 	2022-2023	Damian Strojek @damianStrojek
+// 			Piotr Garbowski @dideek
+// 			Jakub Wasniewski @wisnia01
 //
 // An application for monitoring performance and energy consumption in a computing cluster
 //
@@ -29,7 +29,7 @@
 #include "metrics-display.h"
 #include "node-synchronization.h"
 
-#define GPROCESSID 1					// PID of process that we are focused on (G stands for global)
+#define GPROCESSID 1				// PID of process that we are focused on (G stands for global)
 
 int keyboardHit(void);
 
@@ -53,24 +53,24 @@ int main(int argc, char **argv){
 	if(!file.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";*/
 
 	int rank, size;
-    MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
+	MPI_Init(&argc, &argv);
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	MPI_Comm_size(MPI_COMM_WORLD, &size);
 
 	AllMetrics allMetrics;
 	MPI_Datatype systemMetricsType = createMpiSystemMetricsType();
-    MPI_Datatype processorMetricsType = createMpiProcessorMetricsType();
-    MPI_Datatype inputOutputMetricsType = createMpiInputOutputMetricsType();
-    MPI_Datatype memoryMetricsType = createMpiMemoryMetricsType();
-    MPI_Datatype networkMetricsType = createMpiNetworkMetricsType();
-    MPI_Datatype powerMetricsType = createMpiPowerMetricsType();
-    MPI_Datatype allMetricsType;
+	MPI_Datatype processorMetricsType = createMpiProcessorMetricsType();
+	MPI_Datatype inputOutputMetricsType = createMpiInputOutputMetricsType();
+	MPI_Datatype memoryMetricsType = createMpiMemoryMetricsType();
+	MPI_Datatype networkMetricsType = createMpiNetworkMetricsType();
+	MPI_Datatype powerMetricsType = createMpiPowerMetricsType();
+	MPI_Datatype allMetricsType;
 
 	int blocklengths[] = {1, 1, 1, 1, 1, 1};
-    MPI_Datatype types[] = {
+    	MPI_Datatype types[] = {
 		systemMetricsType, processorMetricsType, inputOutputMetricsType,
 		memoryMetricsType, networkMetricsType, powerMetricsType};
-    MPI_Aint offsets[] = {
+    	MPI_Aint offsets[] = {
 		offsetof(struct AllMetrics, systemMetrics),
 		offsetof(struct AllMetrics, processorMetrics),
 		offsetof(struct AllMetrics, inputOutputMetrics),
@@ -78,8 +78,8 @@ int main(int argc, char **argv){
 		offsetof(struct AllMetrics, networkMetrics),
 		offsetof(struct AllMetrics, powerMetrics)};
 
-    MPI_Type_create_struct(6, blocklengths, offsets, types, &allMetricsType);
-    MPI_Type_commit(&allMetricsType);
+	MPI_Type_create_struct(6, blocklengths, offsets, types, &allMetricsType);
+	MPI_Type_commit(&allMetricsType);
 	AllMetrics* allMetricsArray = new AllMetrics[size];
 
 	// Checking if process with GPROCESSID is still running
@@ -112,8 +112,8 @@ int main(int argc, char **argv){
 			for(int i = 0;i < size; i++){
 				std::cout << "\n\t[PROCESS " << i << " METRICS]\n";
 				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, \
-							&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
-							&allMetricsArray[i].networkMetrics);
+						&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
+						&allMetricsArray[i].networkMetrics);
 			}
 		}
 
@@ -130,16 +130,16 @@ int main(int argc, char **argv){
 	  	//writeToCSV(file, timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
   	}
 
-    //file.close();
+   	 //file.close();
 	MPI_Type_free(&systemMetricsType);
-    MPI_Type_free(&processorMetricsType);
-    MPI_Type_free(&inputOutputMetricsType);
-    MPI_Type_free(&memoryMetricsType);
-    MPI_Type_free(&networkMetricsType);
-    MPI_Type_free(&powerMetricsType);
-    MPI_Type_free(&allMetricsType);
+	MPI_Type_free(&processorMetricsType);
+	MPI_Type_free(&inputOutputMetricsType);
+	MPI_Type_free(&memoryMetricsType);
+	MPI_Type_free(&networkMetricsType);
+	MPI_Type_free(&powerMetricsType);
+	MPI_Type_free(&allMetricsType);
 	delete[] allMetricsArray;
-    MPI_Finalize();
+   	MPI_Finalize();
 	return 0;
 };
 

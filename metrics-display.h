@@ -1,9 +1,9 @@
 //
-//		metrics-display.h - header file for functions related to displaying the metrics
+//	metrics-display.h - header file for functions related to displaying the metrics
 //
-//		2022-2023	Damian Strojek @damianStrojek
-// 					Piotr Garbowski @dideek
-// 					Jakub Wasniewski @wisnia01
+//	2022-2023	Damian Strojek @damianStrojek
+// 			Piotr Garbowski @dideek
+// 			Jakub Wasniewski @wisnia01
 //
 
 #ifndef METRICS_DISPLAY_H
@@ -16,6 +16,6 @@
 void printMetric(std::string, int, std::string);
 void printMetricPair(std::string, int, std::string, std::string, int, std::string);
 void printMetrics(SystemMetrics*, ProcessorMetrics*, InputOutputMetrics*, 
-					MemoryMetrics*, NetworkMetrics*);
+			MemoryMetrics*, NetworkMetrics*);
 
 #endif

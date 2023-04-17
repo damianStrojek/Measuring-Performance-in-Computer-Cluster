@@ -1,9 +1,9 @@
 //
-//		metrics.cpp - file with definitions of functions related to defining and gathering the metrics
+//	metrics.cpp - file with definitions of functions related to defining and gathering the metrics
 //
-//		2022-2023	Damian Strojek @damianStrojek
-// 					Piotr Garbowski @dideek
-// 					Jakub Wasniewski @wisnia01
+//	2022-2023	Damian Strojek @damianStrojek
+// 			Piotr Garbowski @dideek
+// 			Jakub Wasniewski @wisnia01
 //
 
 // External libraries
@@ -25,11 +25,11 @@ SystemMetrics::SystemMetrics(){
 
 void SystemMetrics::printSystemMetrics(){
     std::cout << "\n\t[SYSTEM METRICS]\n\n"
-			<< "Interrupt Rate = " << this->interruptRate << " interrupts/sec\n"
-			<< "Context Switch Rate = " << this->contextSwitchRate << " switches/sec\n"
-			<< "All Processes = " << this->processesAll << "\n"
-			<< "Running Processes = " << this->processesRunning << "\n"
-			<< "Blocked Processes = " << this->processesBlocked << "\n";
+	<< "Interrupt Rate = " << this->interruptRate << " interrupts/sec\n"
+	<< "Context Switch Rate = " << this->contextSwitchRate << " switches/sec\n"
+	<< "All Processes = " << this->processesAll << "\n"
+	<< "Running Processes = " << this->processesRunning << "\n"
+	<< "Blocked Processes = " << this->processesBlocked << "\n";
 };
 
 void getSystemMetrics(SystemMetrics &systemMetrics){
@@ -124,7 +124,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	stream >> temp;
 	processorMetrics.timeIoWait = std::stoi(temp);		// USER_HZ
 	stream >> temp;
-	processorMetrics.timeIRQ = std::stoi(temp);			// USER_HZ
+	processorMetrics.timeIRQ = std::stoi(temp);		// USER_HZ
 	stream >> temp;
 	processorMetrics.timeSoftIRQ = std::stoi(temp);		// USER_HZ
 	stream >> temp;
@@ -172,7 +172,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	streamThree >> temp;
 	processorMetrics.instructionsRetired = std::stoi(temp); 	// number of instructions
 	streamThree >> temp;
-	processorMetrics.cycles = std::stoi(temp); 					// number of cycles
+	processorMetrics.cycles = std::stoi(temp); 			// number of cycles
 	streamThree >> temp;
 	processorMetrics.frequencyRelative = std::stof(temp);		// MHz
 	streamThree >> temp;
@@ -228,13 +228,13 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 	std::stringstream streamTwo(output);
 
 	streamTwo >> temp;
-	inputOutputMetrics.readTime = std::stof(temp);				// ms
+	inputOutputMetrics.readTime = std::stof(temp);			// ms
 	streamTwo >> temp;
-	inputOutputMetrics.writeTime = std::stof(temp);				// ms
+	inputOutputMetrics.writeTime = std::stof(temp);			// ms
 	streamTwo >> temp;
 	inputOutputMetrics.flushOperationsRate = std::stof(temp);	// operations/sec
 	streamTwo >> temp;
-	inputOutputMetrics.flushTime = std::stof(temp);				// ms
+	inputOutputMetrics.flushTime = std::stof(temp);			// ms
 
 	inputOutputMetrics.printInputOutputMetrics();
 };
@@ -290,7 +290,7 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 	memoryMetrics.memoryCached = memoryMetrics.memoryCached / 1024;		// MB
 	stream >> temp;
 	memoryMetrics.swapCached = std::stof(temp);
-	memoryMetrics.swapCached = memoryMetrics.swapCached / 1024;			// MB
+	memoryMetrics.swapCached = memoryMetrics.swapCached / 1024;		// MB
 	stream >> temp;
 	memoryMetrics.memoryActive = std::stof(temp);
 	memoryMetrics.memoryActive = memoryMetrics.memoryActive / 1024;		// MB
@@ -300,20 +300,20 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 	stream >> temp;
 	stream >> swapFree;
 	memoryMetrics.swapUsed = std::stof(temp) - std::stof(swapFree);
-	memoryMetrics.swapUsed = memoryMetrics.swapUsed / 1024;				// MB
+	memoryMetrics.swapUsed = memoryMetrics.swapUsed / 1024;			// MB
 
 	command = "sar -r -B 1 1 | awk 'NR==4{print $2,$3,$4,$5,$6,$7,$8}'";
 	output = exec(command);
 	std::stringstream streamTwo(output);
 
 	streamTwo >> temp;
-	memoryMetrics.pageInRate = std::stof(temp);				// pages/sec
+	memoryMetrics.pageInRate = std::stof(temp);			// pages/sec
 	streamTwo >> temp;
 	memoryMetrics.pageOutRate = std::stof(temp);			// pages/sec
 	streamTwo >> temp;
 	memoryMetrics.pageFaultRate = std::stof(temp);			// pages/sec
 	streamTwo >> temp;
-	memoryMetrics.pageFaultsMajorRate = std::stof(temp);	// pages/sec
+	memoryMetrics.pageFaultsMajorRate = std::stof(temp);		// pages/sec
 	streamTwo >> temp;
 	memoryMetrics.pageFreeRate = std::stof(temp);			// pages/sec
 	streamTwo >> temp;	
@@ -371,7 +371,7 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	streamTwo >> temp;
 	networkMetrics.receivedData = std::stoi(temp);			// number of packets
 	streamTwo >> temp;
-	networkMetrics.sentData = std::stoi(temp);				// number of packets
+	networkMetrics.sentData = std::stoi(temp);			// number of packets
 
 	networkMetrics.printNetworkMetrics();
 };

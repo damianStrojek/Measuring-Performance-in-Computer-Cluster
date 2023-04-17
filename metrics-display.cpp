@@ -2,8 +2,8 @@
 //      metrics-display.cpp - file with definitions of functions related to displaying the metrics
 //
 //      2022-2023	Damian Strojek @damianStrojek
-// 		    		Piotr Garbowski @dideek
-// 		    		Jakub Wasniewski @wisnia01
+// 		    	Piotr Garbowski @dideek
+// 		    	Jakub Wasniewski @wisnia01
 //
 
 // External libraries
@@ -30,7 +30,7 @@ void printMetric(std::string metricName, int metricValue, std::string metricUnit
 };
 
 void printMetricPair(std::string metricName, int metricValue, std::string metricUnit, 
-						std::string metricNameTwo, int metricValueTwo, std::string metricUnitTwo){
+			std::string metricNameTwo, int metricValueTwo, std::string metricUnitTwo){
 
 	std::string value = std::to_string(metricValue);
 	if(metricValue == NOTSUPPORTED) {
@@ -54,11 +54,11 @@ void printMetricPair(std::string metricName, int metricValue, std::string metric
 };
 
 void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetrics, 
-					InputOutputMetrics* inputOutputMetrics, MemoryMetrics* memoryMetrics, NetworkMetrics* networkMetrics){
+			InputOutputMetrics* inputOutputMetrics, MemoryMetrics* memoryMetrics, NetworkMetrics* networkMetrics){
 
 	auto now = std::chrono::system_clock::now();
   	std::time_t now_c = std::chrono::system_clock::to_time_t(now);
-    std::cout << std::put_time(std::localtime(&now_c), "%Y-%m-%d %X") << '\n';
+  	std::cout << std::put_time(std::localtime(&now_c), "%Y-%m-%d %X") << '\n';
 
 	std::cout << "System:";
 	for(int i=0;i<43;i++) std::cout << ' ';

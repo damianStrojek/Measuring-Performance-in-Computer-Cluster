@@ -1,9 +1,9 @@
 //
-//		metrics-save.cpp - file with definitions of functions related to saving the metrics to a file
+//	metrics-save.cpp - file with definitions of functions related to saving the metrics to a file
 //
-//		2022-2023	Damian Strojek @damianStrojek
-// 					Piotr Garbowski @dideek
-// 					Jakub Wasniewski @wisnia01
+//	2022-2023	Damian Strojek @damianStrojek
+// 			Piotr Garbowski @dideek
+// 			Jakub Wasniewski @wisnia01
 //
 
 // External libraries
@@ -81,7 +81,7 @@ void writeToFileNetworkMetrics(std::ofstream &file, NetworkMetrics data){
 };
 
 void writeToCSV(std::ofstream &file, std::string timestamp, SystemMetrics systemMetrics, ProcessorMetrics processorMetrics, 
-				InputOutputMetrics inputOutputMetrics, MemoryMetrics memoryMetrics, NetworkMetrics networkMetrics){
+		InputOutputMetrics inputOutputMetrics, MemoryMetrics memoryMetrics, NetworkMetrics networkMetrics){
 
 	file << timestamp << ",";
 	writeToFileSystemMetrics(file, systemMetrics);
