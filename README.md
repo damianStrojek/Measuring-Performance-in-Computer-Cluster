@@ -44,7 +44,19 @@ If Intel <a href="https://github.com/LLNL/msr-safe" target="_blank">RAPL</a> and
 ```bash
 mpicxx -std=c++2a measure-performance.cpp metrics.cpp metrics-display.cpp metrics-save.cpp node-synchronization.cpp -o measure-performance -lsmr_safe -lnvidia-ml
 ```
+## MPI
 
+Compile using this instead:
+
+```bash
+mpicxx measure-performance.cpp -o measure-performance
+```
+
+Then start it with:
+```bash
+mpirun -np 2 -mca orte_keep_fqdn_hostnames t -mca btl_tcp_if_exclude docker0,docker_gwbridge,lo -hostfile hostfile.des measure-performance
+```
+Make sure measure-performance is available on every node that is listed in hostfile.des file.
 ## Docker
 
 How to run docker environment:
