@@ -85,52 +85,52 @@ int main(int argc, char **argv){
 	// Checking if process with GPROCESSID is still running
 	while(std::stoi(exec(processCommand))){
 
-    	if(keyboardHit()){
-			std::cout << "\n\n\t[STOP] Key pressed.\n\n";
-			break;
-		}	
+		if(keyboardHit()){
+				std::cout << "\n\n\t[STOP] Key pressed.\n\n";
+				break;
+			}	
+			
+			timestamp = exec(dateCommand);
+			timestamp.pop_back();
+			std::cout << "\n\n   [TIMESTAMP] " << timestamp << "\n";
+
+			//auto start = std::chrono::high_resolution_clock::now();
+
+			getSystemMetrics(allMetrics.systemMetrics);
+			getProcessorMetrics(allMetrics.processorMetrics);
+			getInputOutputMetrics(allMetrics.inputOutputMetrics);
+			getMemoryMetrics(allMetrics.memoryMetrics);
+			getNetworkMetrics(allMetrics.networkMetrics);
+			getPowerMetrics(allMetrics.powerMetrics, raplError, nvmlError);
 		
-		timestamp = exec(dateCommand);
-		timestamp.pop_back();
-		std::cout << "\n\n   [TIMESTAMP] " << timestamp << "\n";
-
-		//auto start = std::chrono::high_resolution_clock::now();
-
-		getSystemMetrics(allMetrics.systemMetrics);
-		getProcessorMetrics(allMetrics.processorMetrics);
-		getInputOutputMetrics(allMetrics.inputOutputMetrics);
-		getMemoryMetrics(allMetrics.memoryMetrics);
-		getNetworkMetrics(allMetrics.networkMetrics);
-		getPowerMetrics(allMetrics.powerMetrics, raplError, nvmlError);
-	
-		if(rank)
-			MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
-		else {
-			allMetricsArray[0] = allMetrics;
-			for(int i = 1; i < size; i++)
-				MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			for(int i = 0;i < size; i++){
-				std::cout << "\n\t[PROCESS " << i << " METRICS]\n";
-				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, \
-						&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
-						&allMetricsArray[i].networkMetrics);
+			if(rank)
+				MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
+			else {
+				allMetricsArray[0] = allMetrics;
+				for(int i = 1; i < size; i++)
+					MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+				for(int i = 0;i < size; i++){
+					std::cout << "\n\t[PROCESS " << i << " METRICS]\n";
+					printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, \
+							&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
+							&allMetricsArray[i].networkMetrics);
+				}
 			}
+
+			sleep(2);
+
+			//auto end = std::chrono::high_resolution_clock::now();
+			//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
+			//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
+
+			// Display metrics
+			//printMetrics(&systemMetrics, &processorMetrics, &inputOutputMetrics, &memoryMetrics, &networkMetrics);
+
+			// Save metrics to file
+			//writeToCSV(file, timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
 		}
 
-		sleep(2);
-
-		//auto end = std::chrono::high_resolution_clock::now();
-		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
-		//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
-
-		// Display metrics
-		//printMetrics(&systemMetrics, &processorMetrics, &inputOutputMetrics, &memoryMetrics, &networkMetrics);
-
-		// Save metrics to file
-	  	//writeToCSV(file, timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
-  	}
-
-   	 //file.close();
+	//file.close();
 	MPI_Type_free(&systemMetricsType);
 	MPI_Type_free(&processorMetricsType);
 	MPI_Type_free(&inputOutputMetricsType);
