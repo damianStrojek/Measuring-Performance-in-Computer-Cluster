@@ -37,7 +37,19 @@ g++ -std=c++20 -o measure-performance measure-performance.cpp -lsmr_safe -lnvidi
 chmod +x measure-performance
 sudo ./measure-performance
 ```
+## MPI
 
+Compile using this instead:
+
+```bash
+mpicxx measure-performance.cpp -o measure-performance
+```
+
+Then start it with:
+```bash
+mpirun -np 2 -mca orte_keep_fqdn_hostnames t -mca btl_tcp_if_exclude docker0,docker_gwbridge,lo -hostfile hostfile.des measure-performance
+```
+Make sure measure-performance is available on every node that is listed in hostfile.des file.
 ## Docker
 
 How to run docker environment:
