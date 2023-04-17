@@ -12,7 +12,7 @@
 // External libraries
 #include <fstream>
 // Internal headers
-#include <metrics.h>
+#include "metrics.h"
 
 // Write to file functions
 void writeToFileSystemMetrics(std::ofstream&, SystemMetrics);

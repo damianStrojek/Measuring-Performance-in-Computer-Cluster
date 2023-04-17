@@ -6,6 +6,9 @@
 // 					Jakub Wasniewski @wisnia01
 //
 
+// External libraries
+#include <string>
+
 #ifndef METRICS_H
 #define METRICS_H
 #define GPROCESSID 1					// PID of process that we are focused on (G stands for global)
@@ -126,5 +129,7 @@ void getInputOutputMetrics(InputOutputMetrics&);
 void getMemoryMetrics(MemoryMetrics&);
 void getNetworkMetrics(NetworkMetrics&);
 void getPowerMetrics(PowerMetrics&, bool&, bool&);
+// Getting the output from system to string
+std::string exec(const char*);
 
 #endif

@@ -7,33 +7,31 @@
 //
 // An application for monitoring performance and energy consumption in a computing cluster
 //
+// g++ measure-performance.cpp metrics.cpp metrics-display.cpp metrics-save.cpp /
+// node-synchronization.cpp -o measure-performance
+//
 // Project realised in years 2022-2023 on
 // Gdansk University of Technology, Department of Computer Systems Architecture
 // 
 
+// External libraries
 #include <iostream>
 #include <string>
-#include <memory>
 #include <cstring>
 #include <stdexcept>
-#include <algorithm>
-#include <sstream>
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <iomanip>
-#include <chrono>
-#include <map>
-#include <mpi.h>
-
-#include <metrics.h>
-#include <metrics-save.h>
-#include <metrics-display.h>
+//#include <mpi.h>
+// Internal headers
+#include "metrics.h"
+#include "metrics-save.h"
+#include "metrics-display.h"
+//#include "node-synchronization.h"
 
 #define GPROCESSID 1					// PID of process that we are focused on (G stands for global)
 
 int keyboardHit(void);
-std::string exec(const char*);
 
 int main(int argc, char **argv){
 
@@ -94,14 +92,22 @@ int main(int argc, char **argv){
 
 		std::cout << "\n\n   [TIMESTAMP] " << timestamp << "\n";
 
-		getSystemMetrics(allMetrics.systemMetrics);
+		bool raplError = 0, nvmlError = 0;
+
+		getSystemMetrics(systemMetrics);
+		getProcessorMetrics(processorMetrics);
+		getInputOutputMetrics(inputOutputMetrics);
+		getMemoryMetrics(memoryMetrics);
+		getNetworkMetrics(networkMetrics);
+		getPowerMetrics(powerMetrics, raplError, nvmlError);
+
+		/*getSystemMetrics(allMetrics.systemMetrics);
 		getProcessorMetrics(allMetrics.processorMetrics);
 		getInputOutputMetrics(allMetrics.inputOutputMetrics);
 		getMemoryMetrics(allMetrics.memoryMetrics);
 		getNetworkMetrics(allMetrics.networkMetrics);
 		getPowerMetrics(allMetrics.powerMetrics, 0, 0);
-		
-		/*
+	
 		if(rank != 0)
 			MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
 		else{
@@ -139,22 +145,6 @@ int main(int argc, char **argv){
 	delete[] allMetricsArray;
     MPI_Finalize();*/
 	return 0;
-};
-
-// Execute a Linux command and return the output using std::string
-std::string exec(const char* cmd){
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-    if (!pipe)
-        throw std::runtime_error("popen() failed!");
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
-        result += buffer.data();
-
-	if(!result.length())
-		std::cout << "\n\n\t[ERROR] String returned by exec() has length 0\n";
-
-    return result;
 };
 
 // Actively checking for the user input to break from the main while loop
