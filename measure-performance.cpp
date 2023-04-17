@@ -7,8 +7,7 @@
 //
 // An application for monitoring performance and energy consumption in a computing cluster
 //
-// g++ measure-performance.cpp metrics.cpp metrics-display.cpp metrics-save.cpp /
-// node-synchronization.cpp -o measure-performance
+// mpicxx -std=c++2a measure-performance.cpp metrics.cpp metrics-display.cpp metrics-save.cpp node-synchronization.cpp -o measure-performance
 //
 // Project realised in years 2022-2023 on
 // Gdansk University of Technology, Department of Computer Systems Architecture
