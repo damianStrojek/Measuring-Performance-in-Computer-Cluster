@@ -117,7 +117,7 @@ int main(int argc, char **argv){
 			}
 
 			sleep(2);
-
+			break;
 			//auto end = std::chrono::high_resolution_clock::now();
 			//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
 			//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
