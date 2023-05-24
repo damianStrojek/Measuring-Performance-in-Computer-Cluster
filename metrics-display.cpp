@@ -39,7 +39,7 @@ void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetri
   	std::cout << std::put_time(std::localtime(&now_c), "%Y-%m-%d %X") << '\n';
 
 	std::cout << "System:";
-	for(int i=0;i<43;i++) std::cout << ' ';
+	for(int i = 0; i < 43; i++) std::cout << ' ';
 
 	std::cout << "Network:" << '\n';
 	printMetricPair("Running Processes", systemMetrics->processesRunning,"", "Received Packets",networkMetrics->receivedData,"");
@@ -49,7 +49,7 @@ void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetri
 	std::cout << '\n';
 
 	std::cout << "Memory:";
-	for(int i=0;i<43;i++) std::cout << ' ';
+	for(int i = 0; i < 43; i++) std::cout << ' ';
 
 	std::cout << "Processor:" << '\n';
 	printMetricPair("Memory Used", memoryMetrics->memoryUsed,"MB","Time User",processorMetrics->timeUser,"USER_HZ");
@@ -60,11 +60,12 @@ void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetri
 	printMetricPair("Memory Inactive", memoryMetrics->memoryInactive,"MB","Time Steal",processorMetrics->timeSteal,"USER_HZ");
 	printMetricPair("Pages Read", memoryMetrics->pageInRate, "pages/s", "Cache L2 Hit Rate", processorMetrics->cacheL2HitRate, "");
 	printMetricPair("Pages Saved", memoryMetrics->pageOutRate, "pages/s", "Cache L2 Miss Rate", processorMetrics->cacheL2MissRate, "");
+	std::cout << '\n';
 
-	std::cout << "Power:";
-	for(int i=0;i<43;i++) std::cout << ' ';
+	std::cout << "I/O for PID 1:";
+	for(int i = 0; i < 43; i++) std::cout << ' ';
 
-	std::cout << '\n'<< "I/O for PID 1:" << '\n';
+	std::cout << "Power:" << '\n';
 	printMetricPair("Data Read ",inputOutputMetrics->dataRead,"MB", "Power for Cores", powerMetrics->coresPower, "W");
 	printMetricPair("Data Written ",inputOutputMetrics->dataWritten,"MB", "Processor Power", powerMetrics->processorPower, "W");
 	printMetricPair("Read Operations ",inputOutputMetrics->readOperationsRate,"/s", "Memory Power", powerMetrics->memoryPower, "W");
