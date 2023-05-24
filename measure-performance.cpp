@@ -29,7 +29,7 @@
 //#include "node-synchronization.h"
 
 #define GPROCESSID 1				// PID of process that we are focused on (G stands for global)
-#define DATA_BATCH 50				// How many times you want to download metrics
+#define DATA_BATCH 5				// How many times you want to download metrics
 
 int main(int argc, char **argv){
 
@@ -105,7 +105,7 @@ int main(int argc, char **argv){
 				std::cout << "\n\t[PROCESS " << i << " METRICS]\n";
 				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, \
 						&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
-						&allMetricsArray[i].networkMetrics, &allMetricsArray[i].powerMetrics);
+						&allMetricsArray[i].networkMetrics);
 			}
 		}
 */
@@ -115,7 +115,7 @@ int main(int argc, char **argv){
 		//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
 
 		// Display metrics
-		printMetrics(&systemMetrics, &processorMetrics, &inputOutputMetrics, &memoryMetrics, &networkMetrics, &powerMetrics);
+		//printMetrics(&systemMetrics, &processorMetrics, &inputOutputMetrics, &memoryMetrics, &networkMetrics);
 
 		// Save metrics to file
 		//writeToCSV(file, timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
