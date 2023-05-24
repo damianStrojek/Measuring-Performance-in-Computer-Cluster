@@ -29,8 +29,7 @@
 #include "node-synchronization.h"
 
 #define GPROCESSID 1				// PID of process that we are focused on (G stands for global)
-
-int keyboardHit(void);
+#define DATA_BATCH 50				// How many times you want to download metrics
 
 int main(int argc, char **argv){
 
@@ -42,8 +41,7 @@ int main(int argc, char **argv){
 	PowerMetrics powerMetrics;
 
 	bool raplError = 0, nvmlError = 0;
-	const char* dateCommand = "date +'%d%m%y-%H%M%S'",
-		*processCommand = "ps -p 1 > /dev/null && echo '1' || echo '0'";	// [TODO] Add GPROCESSID
+	const char* dateCommand = "date +'%d%m%y-%H%M%S'";
 	std::string timestamp = exec(dateCommand);
 	timestamp.pop_back();
 
@@ -81,53 +79,47 @@ int main(int argc, char **argv){
 	MPI_Type_commit(&allMetricsType);
 	AllMetrics* allMetricsArray = new AllMetrics[size];
 
-	// Checking if process with GPROCESSID is still running
-	while(std::stoi(exec(processCommand))){
-
-		if(keyboardHit()){
-				std::cout << "\n\n\t[STOP] Key pressed.\n\n";
-				break;
-			}	
+	// Download metrics in constant batches
+	for(int i = 0; i < DATA_BATCH; i++){
 			
-			timestamp = exec(dateCommand);
-			timestamp.pop_back();
-			std::cout << "\n\n   [TIMESTAMP] " << timestamp << "\n";
+		timestamp = exec(dateCommand);
+		timestamp.pop_back();
+		std::cout << "\n\n   [TIMESTAMP] " << timestamp << "\n";
 
-			//auto start = std::chrono::high_resolution_clock::now();
+		//auto start = std::chrono::high_resolution_clock::now();
 
-			getSystemMetrics(allMetrics.systemMetrics);
-			getProcessorMetrics(allMetrics.processorMetrics);
-			getInputOutputMetrics(allMetrics.inputOutputMetrics);
-			getMemoryMetrics(allMetrics.memoryMetrics);
-			getNetworkMetrics(allMetrics.networkMetrics);
-			getPowerMetrics(allMetrics.powerMetrics, raplError, nvmlError);
-		
-			if(rank)
-				MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
-			else {
-				allMetricsArray[0] = allMetrics;
-				for(int i = 1; i < size; i++)
-					MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-				for(int i = 0;i < size; i++){
-					std::cout << "\n\t[PROCESS " << i << " METRICS]\n";
-					printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, \
-							&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
-							&allMetricsArray[i].networkMetrics);
-				}
+		getSystemMetrics(allMetrics.systemMetrics);
+		getProcessorMetrics(allMetrics.processorMetrics);
+		getInputOutputMetrics(allMetrics.inputOutputMetrics);
+		getMemoryMetrics(allMetrics.memoryMetrics);
+		getNetworkMetrics(allMetrics.networkMetrics);
+		getPowerMetrics(allMetrics.powerMetrics, raplError, nvmlError);
+	
+		if(rank)
+			MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
+		else {
+			allMetricsArray[0] = allMetrics;
+			for(int i = 1; i < size; i++)
+				MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			for(int i = 0;i < size; i++){
+				std::cout << "\n\t[PROCESS " << i << " METRICS]\n";
+				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, \
+						&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
+						&allMetricsArray[i].networkMetrics, &allMetricsArray[i].powerMetrics);
 			}
-
-			sleep(2);
-			break;
-			//auto end = std::chrono::high_resolution_clock::now();
-			//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
-			//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
-
-			// Display metrics
-			//printMetrics(&systemMetrics, &processorMetrics, &inputOutputMetrics, &memoryMetrics, &networkMetrics);
-
-			// Save metrics to file
-			//writeToCSV(file, timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
 		}
+
+		sleep(2);
+		//auto end = std::chrono::high_resolution_clock::now();
+		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
+		//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
+
+		// Display metrics
+		//printMetrics(&systemMetrics, &processorMetrics, &inputOutputMetrics, &memoryMetrics, &networkMetrics, &powerMetrics);
+
+		// Save metrics to file
+		//writeToCSV(file, timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
+	}
 
 	//file.close();
 	MPI_Type_free(&systemMetricsType);
@@ -139,30 +131,5 @@ int main(int argc, char **argv){
 	MPI_Type_free(&allMetricsType);
 	delete[] allMetricsArray;
    	MPI_Finalize();
-	return 0;
-};
-
-// Actively checking for the user input to break from the main while loop
-int keyboardHit(void){
-	struct termios oldt, newt;
-	int ch;
-	int oldf;
-
-	tcgetattr(STDIN_FILENO, &oldt);
-	newt = oldt;
-	newt.c_lflag &= ~(ICANON | ECHO);
-	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-	oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-	fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-
-	ch = getchar();
-
-	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-	fcntl(STDIN_FILENO, F_SETFL, oldf);
-
-	if(ch != EOF) {
-		ungetc(ch, stdin);
-		return 1;
-	}
 	return 0;
 };
