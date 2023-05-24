@@ -84,7 +84,6 @@ int main(int argc, char **argv){
 			
 		timestamp = exec(dateCommand);
 		timestamp.pop_back();
-		std::cout << "\n\n   [TIMESTAMP] " << timestamp << "\n";
 
 		//auto start = std::chrono::high_resolution_clock::now();
 
@@ -102,10 +101,10 @@ int main(int argc, char **argv){
 			for(int i = 1; i < size; i++)
 				MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			for(int i = 0;i < size; i++){
-				std::cout << "\n\t[PROCESS " << i << " METRICS]\n";
+				std::cout << "\n\t[NODE " << i << " METRICS]\n";
 				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, \
 						&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
-						&allMetricsArray[i].networkMetrics);
+						&allMetricsArray[i].networkMetrics, &allMetricsArray[i].powerMetrics);
 			}
 		}
 
@@ -114,13 +113,13 @@ int main(int argc, char **argv){
 		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
 		//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
 
-		// Display metrics
-		//printMetrics(&systemMetrics, &processorMetrics, &inputOutputMetrics, &memoryMetrics, &networkMetrics);
+		// Display metrics from the main node
+		printMetrics(&systemMetrics, &processorMetrics, &inputOutputMetrics, &memoryMetrics, &networkMetrics, &powerMetrics);
 
 		// Save metrics to file
 		//writeToCSV(file, timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
 	}
-
+	
 	//file.close();
 	MPI_Type_free(&systemMetricsType);
 	MPI_Type_free(&processorMetricsType);

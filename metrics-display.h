@@ -13,9 +13,8 @@
 #include "metrics.h"
 
 // Printing for the user
-void printMetric(std::string, int, std::string);
 void printMetricPair(std::string, int, std::string, std::string, int, std::string);
 void printMetrics(SystemMetrics*, ProcessorMetrics*, InputOutputMetrics*, 
-			MemoryMetrics*, NetworkMetrics*);
+			MemoryMetrics*, NetworkMetrics*, PowerMetrics*);
 
 #endif
