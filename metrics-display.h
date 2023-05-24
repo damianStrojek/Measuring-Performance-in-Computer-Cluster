@@ -13,7 +13,7 @@
 #include "metrics.h"
 
 // Printing for the user
-void printMetricPair(std::string, float, std::string, std::string, float, std::string);
+void printMetricPair(std::string, int, std::string, std::string, int, std::string);
 void printMetrics(SystemMetrics*, ProcessorMetrics*, InputOutputMetrics*, 
 			MemoryMetrics*, NetworkMetrics*, PowerMetrics*);
 

@@ -15,8 +15,8 @@
 #include "metrics.h"
 #include "metrics-display.h"
 
-void printMetricPair(std::string metricName, float metricValue, std::string metricUnit, 
-			std::string metricNameTwo, float metricValueTwo, std::string metricUnitTwo){
+void printMetricPair(std::string metricName, int metricValue, std::string metricUnit, 
+			std::string metricNameTwo, int metricValueTwo, std::string metricUnitTwo){
 
 	std::string value = std::to_string(metricValue), value2 = std::to_string(metricValueTwo);
 
