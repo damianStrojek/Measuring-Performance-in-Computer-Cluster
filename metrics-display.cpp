@@ -20,11 +20,11 @@ void printMetricPair(std::string metricName, int metricValue, std::string metric
 
 	std::string value = std::to_string(metricValue), value2 = std::to_string(metricValueTwo);
 
-	std::cout << metricName << std::right << std::setfill('.') << std::setw(30-metricName.length()) << value << metricUnit;
+	std::cout << metricName << std::right << std::setfill('.') << std::setw(30-metricName.length()) << value << " " << metricUnit;
 	for(int i=0; i<20-metricUnit.length(); i++) std::cout << ' ';
 
 	std::cout << std::left << metricNameTwo << std::right << std::setfill('.') << 
-		std::setw(30-metricNameTwo.length()) << value2 << metricUnitTwo << std::endl;
+		std::setw(30-metricNameTwo.length()) << value2 << " " << metricUnitTwo << std::endl;
 
     return;
 };

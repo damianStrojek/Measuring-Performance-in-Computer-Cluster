@@ -158,12 +158,16 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	LLCMiss = std::stof(temp);
 	streamTwo >> temp;
 	LLCSnoop = std::stof(temp);
-
-	processorMetrics.cacheL2HitRate = L2RqstsHit / L2RqstsData;
-	processorMetrics.cacheL2MissRate = L2RqstsMiss / L2RqstsData;
-	processorMetrics.cacheL3HitRate = LLCHit / (LLCHit + LLCMiss);
-	processorMetrics.cacheL3MissRate = LLCMiss / (LLCHit + LLCMiss);
-	processorMetrics.cacheL3HitSnoopRate = LLCHit / (LLCHit + LLCSnoop);
+	
+	if(L2RqstsData){
+		processorMetrics.cacheL2HitRate = L2RqstsHit / L2RqstsData;
+		processorMetrics.cacheL2MissRate = L2RqstsMiss / L2RqstsData;
+	}
+	if(LLCHit || LLCMiss){
+		processorMetrics.cacheL3HitRate = LLCHit / (LLCHit + LLCMiss);
+		processorMetrics.cacheL3MissRate = LLCMiss / (LLCHit + LLCMiss);
+		processorMetrics.cacheL3HitSnoopRate = LLCHit / (LLCHit + LLCSnoop);
+	}
 
 	command = "perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'";
 	output = exec(command);
