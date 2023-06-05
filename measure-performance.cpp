@@ -87,12 +87,12 @@ int main(int argc, char **argv){
 
 		//auto start = std::chrono::high_resolution_clock::now();
 
-		getSystemMetrics(allMetricsArray.systemMetrics);
-		getProcessorMetrics(allMetricsArray.processorMetrics);
-		getInputOutputMetrics(allMetricsArray.inputOutputMetrics);
-		getMemoryMetrics(allMetricsArray.memoryMetrics);
-		getNetworkMetrics(allMetricsArray.networkMetrics);
-		getPowerMetrics(allMetricsArray.powerMetrics, raplError, nvmlError);
+		getSystemMetrics(allMetrics.systemMetrics);
+		getProcessorMetrics(allMetrics.processorMetrics);
+		getInputOutputMetrics(allMetrics.inputOutputMetrics);
+		getMemoryMetrics(allMetrics.memoryMetrics);
+		getNetworkMetrics(allMetrics.networkMetrics);
+		getPowerMetrics(allMetrics.powerMetrics, raplError, nvmlError);
 	
 		if(rank)
 			MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
