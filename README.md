@@ -34,16 +34,10 @@ mpicxx -std=c++2a measure-performance.cpp metrics.cpp metrics-display.cpp metric
 Then start it with:
 
 ```bash
-mpirun -np 2 -mca orte_keep_fqdn_hostnames t -mca btl_tcp_if_exclude docker0,docker_gwbridge,lo -hostfile hostfile.des measure-performance
+mpirun -mca orte_keep_fqdn_hostnames t -mca btl_tcp_if_exclude docker0,docker_gwbridge,lo -hostfile hostfile.des measure-performance
 ```
 
 **Make sure that the same version of measure-performance is available on every node that is listed in hostfile.des file.**
-
-If Intel <a href="https://github.com/LLNL/msr-safe" target="_blank">RAPL</a> and <a href="https://developer.nvidia.com/nvidia-management-library-nvml" target="_blank">NVIDIA Management Library</a> is supported:
-
-```bash
-mpicxx -std=c++2a measure-performance.cpp metrics.cpp metrics-display.cpp metrics-save.cpp node-synchronization.cpp -o measure-performance -lsmr_safe -lnvidia-ml
-```
 
 ## Docker
 
