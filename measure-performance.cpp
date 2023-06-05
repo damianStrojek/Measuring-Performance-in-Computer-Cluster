@@ -87,12 +87,12 @@ int main(int argc, char **argv){
 
 		//auto start = std::chrono::high_resolution_clock::now();
 
-		getSystemMetrics(allMetricsArray->systemMetrics);
-		getProcessorMetrics(allMetricsArray->processorMetrics);
-		getInputOutputMetrics(allMetricsArray->inputOutputMetrics);
-		getMemoryMetrics(allMetricsArray->memoryMetrics);
-		getNetworkMetrics(allMetricsArray->networkMetrics);
-		getPowerMetrics(allMetricsArray->powerMetrics, raplError, nvmlError);
+		getSystemMetrics(allMetricsArray.systemMetrics);
+		getProcessorMetrics(allMetricsArray.processorMetrics);
+		getInputOutputMetrics(allMetricsArray.inputOutputMetrics);
+		getMemoryMetrics(allMetricsArray.memoryMetrics);
+		getNetworkMetrics(allMetricsArray.networkMetrics);
+		getPowerMetrics(allMetricsArray.powerMetrics, raplError, nvmlError);
 	
 		if(rank)
 			MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
@@ -101,14 +101,13 @@ int main(int argc, char **argv){
 			for(int i = 1; i < size; i++)
 				MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			for(int i = 0;i < size; i++){
-				std::cout << "\n\t[NODE " << i << " METRICS]\n";
+				std::cout << "\n\t[NODE " << i << " METRICS]\n\n";
 				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, \
 						&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
 						&allMetricsArray[i].networkMetrics, &allMetricsArray[i].powerMetrics);
 			}
 		}
 
-		sleep(2);
 		//auto end = std::chrono::high_resolution_clock::now();
 		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
 		//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
