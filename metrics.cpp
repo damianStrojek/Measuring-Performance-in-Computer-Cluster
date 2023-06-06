@@ -387,6 +387,13 @@ PowerMetrics::PowerMetrics(){
     this->systemPower = -1;
     this->gpuPower = 1;
     this->gpuPowerHours = 1;
+	this->gpuTemperature = 0;
+	this->gpuFanSpeed = 0;
+	this->gpuMemoryTotal = 0;
+	this->gpuMemoryUsed = 0;
+	this->gpuMemoryFree = 0;
+	this->gpuClocksCurrentSM = 0;
+	this->gpuClocksCurrentMemory = 0;
 };
 
 void PowerMetrics::printPowerMetrics(){
@@ -396,7 +403,15 @@ void PowerMetrics::printPowerMetrics(){
         << "\nMemory = " << this->memoryPower << "W"
         << "\nSystem = " << this->systemPower << "W"
         << "\nGPU = " << this->gpuPower << "W"
-        << "\nGPU = " << this->gpuPowerHours << "Wh\n";
+        << "\nGPUHours = " << this->gpuPowerHours << "Wh"
+		<< "\nGPUtemp = " << this->gpuTemperature << "C"
+		<< "\ngpuFanSpeed = " << this->gpuFanSpeed << "%"
+		<< "\ngpuMemoryTotal = " << this->gpuMemoryTotal << "MiB"
+		<< "\ngpuMemoryUsed = " << this->gpuMemoryUsed << "MiB"
+		<< "\ngpuMemoryFree = " << this->gpuMemoryFree << "MiB"
+		<< "\ngpuClocksCurrentSM = " << this->gpuClocksCurrentSM << "MHz"
+		<< "\ngpuClocksCurrentMemory = " << this->gpuClocksCurrentMemory << "MHz\n";
+
 };
 
 void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlError){
@@ -411,6 +426,26 @@ void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlErro
 	powerMetrics.memoryPower = std::stof(temp);
 	streamOne >> temp;
 	powerMetrics.systemPower = std::stof(temp);
+
+	const char* smi_command = "nvidia-smi --query-gpu=power.draw,temperature.gpu,fan.speed,memory.total,memory.used,memory.free,clocks.current.sm,clocks.current.memory --format=csv,nounits,noheader | tr ',' ' '";
+	output = exec(smi_command);
+	std::stringstream streamTwo(output);
+	streamTwo >> temp;
+	powerMetrics.gpuPower = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuTemperature = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuFanSpeed = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuMemoryTotal = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuMemoryUsed = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuMemoryFree = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuClocksCurrentSM = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuClocksCurrentMemory = std::stof(temp);
 	
 	//powerMetrics.printPowerMetrics();
 };
