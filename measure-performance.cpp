@@ -83,7 +83,7 @@ int main(int argc, char **argv){
 	nlohmann::json jsonArray;
 
 	// Download metrics in constant batches
-	for(int i = 0; i < DATA_BATCH; i++){
+	for(int i = 0; i < 5; i++){
 
 		//auto start = std::chrono::high_resolution_clock::now();
 
@@ -94,7 +94,7 @@ int main(int argc, char **argv){
 		getNetworkMetrics(allMetrics.networkMetrics);
 		getPowerMetrics(allMetrics.powerMetrics);
 
-		if(rank)
+		if(rank != 0)
 			MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
 		else {
 			allMetricsArray[0] = allMetrics;
@@ -106,6 +106,7 @@ int main(int argc, char **argv){
 						&allMetricsArray[j].inputOutputMetrics, &allMetricsArray[j].memoryMetrics, \
 						&allMetricsArray[j].networkMetrics, &allMetricsArray[j].powerMetrics);
 			}
+			std::cout << "Wywolane metricsToJson, rank = " << rank << "\n";
 			jsonArray.push_back(metricsToJson(allMetricsArray,clusterSize));
 
 
