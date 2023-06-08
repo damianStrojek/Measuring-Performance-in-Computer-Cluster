@@ -1,3 +1,4 @@
 .vscode/
 measure-performance
 *.csv
+results/*.json
