@@ -24,7 +24,7 @@ json metricsToJson(AllMetrics* allMetricsArray,int cluster_size){
   	std::time_t now_c = std::chrono::system_clock::to_time_t(now);
 	std::stringstream ss;
 	ss << std::put_time(std::localtime(&now_c), "%Y-%m-%d %X");
-	jsonSingleIteration["_timestamp"] = ss.str();
+	jsonSingleIteration["a_timestamp"] = ss.str();
 	json nodes = json::array();
 	for(int i = 0; i < cluster_size ; i++){
 	AllMetrics allMetrics = allMetricsArray[i];
@@ -117,7 +117,7 @@ json metricsToJson(AllMetrics* allMetricsArray,int cluster_size){
 		{"powerMetrics", {powerMetricsJSON}}
 	};
 	json singleNode;
-	singleNode["_Node"] = i;
+	singleNode["a_Node"] = i;
 	singleNode["Metrics"] = allMetricsJSON;
 	nodes.push_back(singleNode);
 	}
