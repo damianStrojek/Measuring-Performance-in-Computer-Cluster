@@ -103,15 +103,14 @@ struct PowerMetrics {
 	float processorPower;			// Power consumed by processor
 	float memoryPower;			// Power consumed by memory
 	float systemPower;			// Power consumed by system overall
-	float gpuPower;		// Power consumed by GPU
-	unsigned long long gpuPowerHours;	// Power consumed by GPU in Wh
-	float gpuTemperature;
-	float gpuFanSpeed;
-	float gpuMemoryTotal;
-	float gpuMemoryUsed;
-	float gpuMemoryFree;
-	float gpuClocksCurrentSM;
-	float gpuClocksCurrentMemory;
+	float gpuPower;				// Power consumed by GPU
+	float gpuTemperature;			// Temperature of the GPU
+	float gpuFanSpeed;			// Fan speed of the GPU
+	float gpuMemoryTotal;			// Total memory available for GPU
+	float gpuMemoryUsed;			// Memory used by GPU
+	float gpuMemoryFree;			// Memory free to use by GPU
+	float gpuClocksCurrentSM;		// Current clocks
+	float gpuClocksCurrentMemory;		// Current clocks memory
 
 	PowerMetrics();
 	void printPowerMetrics();

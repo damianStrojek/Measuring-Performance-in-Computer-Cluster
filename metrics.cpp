@@ -391,7 +391,13 @@ PowerMetrics::PowerMetrics(){
 	this->memoryPower = -1;
 	this->systemPower = -1;
 	this->gpuPower = 1;
-	this->gpuPowerHours = 1;
+	this->gpuTemperature = -1;
+	this->gpuFanSpeed = -1;
+	this->gpuMemoryTotal = -1;
+	this->gpuMemoryUsed = -1;
+	this->gpuMemoryFree = -1;
+	this->gpuClocksCurrentSM = -1;
+	this->gpuClocksCurrentMemory = -1;
 };
 
 void PowerMetrics::printPowerMetrics(){
@@ -401,7 +407,13 @@ void PowerMetrics::printPowerMetrics(){
 		<< "Memory = " << this->memoryPower << "W\n"
 		<< "System = " << this->systemPower << "W\n"
 		<< "GPU = " << this->gpuPower << "W\n"
-		<< "GPU = " << this->gpuPowerHours << "Wh\n";
+		<< "GPU Temperature = " << this->gpuTemperature << "C\n"		
+		<< "GPU Fan Speed = " << this->gpuFanSpeed << "%\n"
+		<< "GPU Memory Total = " << this->gpuMemoryTotal << "MB\n"
+		<< "GPU Memory Used = " << this->gpuMemoryUsed << "MB\n"
+		<< "GPU Memory Free = " << this->gpuMemoryFree << "MB\n"
+		<< "GPU Clocks Current SM = " << this->gpuClocksCurrentSM << "MHz\n"
+		<< "GPU Clocks Current Memory = " << this->gpuClocksCurrentMemory << "MHz\n";
 };
 
 void getPowerMetrics(PowerMetrics &powerMetrics){
