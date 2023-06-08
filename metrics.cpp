@@ -55,7 +55,7 @@ void getSystemMetrics(SystemMetrics &systemMetrics){
 	output = exec(command);
 	systemMetrics.processesBlocked = std::stoi(output);	// number of processes
 
-	systemMetrics.printSystemMetrics();
+	//systemMetrics.printSystemMetrics();
 };
 
 ProcessorMetrics::ProcessorMetrics(){
@@ -175,7 +175,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	streamThree >> temp;
 	processorMetrics.unhaltedFrequency = std::stof(temp); 		// MHz
 
-	processorMetrics.printProcessorMetrics();
+	//processorMetrics.printProcessorMetrics();
 };
 
 InputOutputMetrics::InputOutputMetrics(){
@@ -233,7 +233,7 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 	streamTwo >> temp;
 	inputOutputMetrics.flushTime = std::stof(temp);			// ms
 
-	inputOutputMetrics.printInputOutputMetrics();
+	//inputOutputMetrics.printInputOutputMetrics();
 };
 
 MemoryMetrics::MemoryMetrics(){
@@ -278,10 +278,13 @@ void MemoryMetrics::printMemoryMetrics(){
 
 void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 
-	const char* command = "grep -v -e 'anon' -e 'file' /proc/meminfo | grep -E '^(Cached|SwapCached|SwapTotal|SwapFree|Active|Inactive)' | awk '{print $2}'";
+	const char* command = "grep -v -e 'anon' -e 'file' /proc/meminfo | grep -E '^(MemTotal|Cached|SwapCached|SwapTotal|SwapFree|Active|Inactive)' | awk '{print $2}'";
 	std::string output = exec(command), temp, swapFree;
 	std::stringstream stream(output);
 
+	stream >> temp;
+	memoryMetrics.memoryUsed = std::stof(temp);
+	memoryMetrics.memoryUsed = memoryMetrics.memoryUsed / 1024;		// MB
 	stream >> temp;
 	memoryMetrics.memoryCached = std::stof(temp);
 	memoryMetrics.memoryCached = memoryMetrics.memoryCached / 1024;		// MB
@@ -329,7 +332,7 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 	streamThree >> temp;
 	memoryMetrics.memoryIoRate = std::stof(temp);			// MB/s
 	
-	memoryMetrics.printMemoryMetrics();
+	//memoryMetrics.printMemoryMetrics();
 };
 
 NetworkMetrics::NetworkMetrics(){
@@ -370,7 +373,7 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 	streamTwo >> temp;
 	networkMetrics.sentData = std::stoi(temp);			// number of packets
 
-	networkMetrics.printNetworkMetrics();
+	//networkMetrics.printNetworkMetrics();
 };
 
 PowerMetrics::PowerMetrics(){
@@ -403,7 +406,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlErro
 	streamOne >> temp;
 	powerMetrics.systemPower = std::stof(temp);
 	
-	powerMetrics.printPowerMetrics();
+	//powerMetrics.printPowerMetrics();
 };
 
 AllMetrics::AllMetrics(){
