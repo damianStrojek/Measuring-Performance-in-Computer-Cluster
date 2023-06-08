@@ -40,6 +40,7 @@ void printMetricPairFloat(std::string metricName, int metricValue, std::string m
 		std::setw(30-metricName.length()) << value << " " << metricUnit;
 	for(int i=0; i<20-metricUnit.length(); i++) std::cout << ' ';
 
+	std::cout << std::fixed << std::setprecision(2);
 	std::cout << std::left << metricNameTwo << std::right << std::setfill('.') << 
 		std::setw(30-metricNameTwo.length()) << value2 << " " << metricUnitTwo << std::endl;
 
@@ -74,8 +75,8 @@ void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetri
 	printMetricPair("Swap Cached", memoryMetrics->swapCached,"MB","Time I/O Wait",processorMetrics->timeIoWait,"USER_HZ");
 	printMetricPair("Memory Active", memoryMetrics->memoryActive,"MB","Time IRQ",processorMetrics->timeIRQ,"USER_HZ");
 	printMetricPair("Memory Inactive", memoryMetrics->memoryInactive,"MB","Time Steal",processorMetrics->timeSteal,"USER_HZ");
-	printMetricPairFloat("Pages Read", memoryMetrics->pageInRate, "pages/s", "Cache LLC Store Miss Rate", processorMetrics->cacheLLCStoreMissRate, "%");
-	printMetricPairFloat("Pages Saved", memoryMetrics->pageOutRate, "pages/s", "Cache LLC Load Miss Rate", processorMetrics->cacheLLCLoadMissRate, "%");
+	printMetricPairFloat("Pages Read", memoryMetrics->pageInRate, "pages/s", "LLC Store Misses", processorMetrics->cacheLLCStoreMissRate, "%");
+	printMetricPairFloat("Pages Saved", memoryMetrics->pageOutRate, "pages/s", "LLC Load Misses", processorMetrics->cacheLLCLoadMissRate, "%");
 	std::cout << '\n';
 
 	std::cout << "I/O for PID 1:";
