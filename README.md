@@ -24,7 +24,7 @@ This application requires you to have following tools installed on each of the n
 
 ## Compile
 
-Compile using **C++20** and run using **sudo** permissions:
+Compile using **C++20**:
 
 ```bash
 # alternatively you can use g++ -std=c++20
