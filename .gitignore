@@ -1,4 +1,6 @@
+# Folders from workspace and with results
 .vscode/
-measure-performance
-*.csv
 results/*.json
+# Executables
+measure-performance
+*.out
