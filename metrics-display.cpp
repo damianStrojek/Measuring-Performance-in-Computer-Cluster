@@ -85,7 +85,7 @@ void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetri
 	printMetricPairFloat("Data Read ",inputOutputMetrics->dataRead,"MB", "Processor Power", powerMetrics->processorPower, "W");
 	printMetricPairFloat("Data Written ",inputOutputMetrics->dataWritten,"MB", "System Power", powerMetrics->systemPower, "W");
 	printMetricPairFloat("Read Operations ",inputOutputMetrics->readOperationsRate,"/s", "Memory Power", powerMetrics->memoryPower, "W");
-	printMetricPair("Write Operations ",inputOutputMetrics->writeOperationsRate,"/s", "GPU Power", powerMetrics->gpuPower, "W");
+	printMetricPairFloat("Write Operations ",inputOutputMetrics->writeOperationsRate,"/s", "GPU Power", powerMetrics->gpuPower, "W");
 	std::cout << '\n';
 
     return;
