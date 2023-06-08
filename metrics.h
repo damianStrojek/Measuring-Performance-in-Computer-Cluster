@@ -118,6 +118,7 @@ struct PowerMetrics {
 };
 
 struct AllMetrics {
+	std::string nodeTimestamp;
 	SystemMetrics systemMetrics;
 	ProcessorMetrics processorMetrics;
 	InputOutputMetrics inputOutputMetrics;

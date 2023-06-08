@@ -29,7 +29,7 @@
 #include "node-synchronization.h"
 
 #define GPROCESSID 1				// PID of process that we are focused on (G stands for global)
-#define DATA_BATCH 10				// How many times you want to download metrics
+#define DATA_BATCH 5				// How many times you want to download metrics
 
 int main(int argc, char **argv){
 
@@ -41,13 +41,13 @@ int main(int argc, char **argv){
 	PowerMetrics powerMetrics;
 
 	bool raplError = 0, nvmlError = 0;
-	const char* dateCommand = "date +'%d%m%y-%H%M%S'";
+	const char* dateCommand = "date +'%d%m-%H%M'";
 	std::string timestamp = exec(dateCommand);
 	timestamp.pop_back();
 
-	/*std::string fileName = timestamp += "_metrics.csv";
-	std::ofstream file(fileName, std::ios::out);
-	if(!file.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";*/
+	std::string fileName = "results/" + allMetrics.timestamp + "_metrics.json";
+	std::ofstream outputFile(fileName, std::ios::out);
+	if(!file.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";
 	
 	int rank, clusterSize;
 	MPI_Init(&argc, &argv);
@@ -100,7 +100,7 @@ int main(int argc, char **argv){
 			allMetricsArray[0] = allMetrics;
 			for(int i = 1; i < clusterSize; i++)
 				MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			for(int i = 0;i < clusterSize; i++){
+			for(int i = 0; i < clusterSize; i++){
 				std::cout << "\n\t[NODE " << i << " METRICS]\n\n";
 				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, \
 						&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
@@ -113,11 +113,10 @@ int main(int argc, char **argv){
 		//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
 
 		// Save metrics to file
-		//writeToCSV(file, timestamp, systemMetrics, processorMetrics, inputOutputMetrics, memoryMetrics, networkMetrics);
+		writeToJSON(outputFile, allMetrics);
 	}
 	
-	//file.close();
-	
+	outputFile.close();
 	MPI_Type_free(&systemMetricsType);
 	MPI_Type_free(&processorMetricsType);
 	MPI_Type_free(&inputOutputMetricsType);

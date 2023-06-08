@@ -430,6 +430,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlErro
 };
 
 AllMetrics::AllMetrics(){
+	this->nodeTimestamp = "";
 	this->systemMetrics = SystemMetrics();
 	this->processorMetrics = ProcessorMetrics();
 	this->inputOutputMetrics = InputOutputMetrics();
