@@ -80,9 +80,6 @@ int main(int argc, char **argv){
 	
 	// Download metrics in constant batches
 	for(int i = 0; i < DATA_BATCH; i++){
-			
-		timestamp = exec(dateCommand);
-		timestamp.pop_back();
 
 		//auto start = std::chrono::high_resolution_clock::now();
 
