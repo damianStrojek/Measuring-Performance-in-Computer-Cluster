@@ -143,17 +143,17 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	output = exec(command);
 	std::stringstream streamTwo(output);
 
-	std::getline(streamTwo, temp);
+	streamTwo >> temp;
 	processorMetrics.cacheL2Requests = std::stoi(temp);
-	std::getline(streamTwo, temp);
+	streamTwo >> temp;
 	processorMetrics.cacheL2Misses = std::stoi(temp);
-	std::getline(streamTwo, temp);
+	streamTwo >> temp;
 	processorMetrics.cacheLLCLoads = std::stoi(temp);
-	std::getline(streamTwo, temp);
+	streamTwo >> temp;
 	processorMetrics.cacheLLCStores = std::stoi(temp);
-	std::getline(streamTwo, temp);
+	streamTwo >> temp;
 	processorMetrics.cacheLLCLoadMisses = std::stoi(temp);
-	std::getline(streamTwo, temp);
+	streamTwo >> temp;
 	processorMetrics.cacheLLCStoreMisses = std::stoi(temp);
 	
 	// Check division by zero and calculate miss rate
@@ -171,7 +171,9 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	streamThree >> temp;
 	processorMetrics.cycles = std::stoi(temp); 			// number of cycles
 	streamThree >> temp;
+	std::cout << "\n[CHECK]" << temp << "\n";
 	processorMetrics.frequencyRelative = std::stof(temp);		// MHz
+	std::cout << "\n[CHECK]" << processorMetrics.frequencyRelative << "\n";
 	streamThree >> temp;
 	processorMetrics.unhaltedFrequency = std::stof(temp); 		// MHz
 
