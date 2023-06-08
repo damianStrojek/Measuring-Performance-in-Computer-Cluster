@@ -16,6 +16,7 @@
 #include "metrics.h"
 
 SystemMetrics::SystemMetrics(){
+
 	this->processesRunning = -1;
 	this->processesAll = -1;
 	this->processesBlocked = -1;
@@ -24,6 +25,7 @@ SystemMetrics::SystemMetrics(){
 };
 
 void SystemMetrics::printSystemMetrics(){
+
 	std::cout << "\n\t[SYSTEM METRICS]\n\n"
 		<< "Interrupt Rate = " << this->interruptRate << " interrupts/sec\n"
 		<< "Context Switch Rate = " << this->contextSwitchRate << " switches/sec\n"
@@ -59,6 +61,7 @@ void getSystemMetrics(SystemMetrics &systemMetrics){
 };
 
 ProcessorMetrics::ProcessorMetrics(){
+
 	this->timeUser = -1;
 	this->timeNice = -1;
 	this->timeSystem = -1;
@@ -83,6 +86,7 @@ ProcessorMetrics::ProcessorMetrics(){
 };
 
 void ProcessorMetrics::printProcessorMetrics(){
+
 	std::cout << "\n\t[PROCESSOR METRICS]\n\n"
 		<< "Time User = " << this->timeUser  << "\n"
 		<< "Time Nice = " << this->timeNice << "\n"
@@ -106,7 +110,6 @@ void ProcessorMetrics::printProcessorMetrics(){
 		<< "Cache LLC Store Misses = " << this->cacheLLCStoreMisses << "\n"
 		<< "Cache LLC Store Miss Rate = " << this->cacheLLCStoreMissRate << "\n";
 };
-
 
 void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 
@@ -179,6 +182,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 };
 
 InputOutputMetrics::InputOutputMetrics(){
+
 	this->processID = GPROCESSID;
 	this->dataRead = -1;
 	this->readTime = -1;
@@ -191,6 +195,7 @@ InputOutputMetrics::InputOutputMetrics(){
 };
 
 void InputOutputMetrics::printInputOutputMetrics(){
+
 	std::cout << "\n\t[INPUT/OUTPUT METRICS]\n\n"
 		<< "Process ID = " << this->processID << "\n"
 		<< "Data Read = " << this->dataRead << " MB\n"
@@ -237,6 +242,7 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 };
 
 MemoryMetrics::MemoryMetrics(){
+
 	this->memoryUsed = -1;
 	this->memoryCached = -1;
 	this->swapUsed = -1;
@@ -256,6 +262,7 @@ MemoryMetrics::MemoryMetrics(){
 };
 
 void MemoryMetrics::printMemoryMetrics(){
+
 	std::cout << "\n\t[MEMORY METRICS]\n\n"
 		<< "Memory Used = " << this->memoryUsed << " MB\n"
 		<< "Memory Cached = " << this->memoryCached << " MB\n"
@@ -336,6 +343,7 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 };
 
 NetworkMetrics::NetworkMetrics(){
+
 	this->receivedData = -1;
 	this->receivePacketRate = -1;
 	this->sentData = -1;
@@ -343,6 +351,7 @@ NetworkMetrics::NetworkMetrics(){
 };
 
 void NetworkMetrics::printNetworkMetrics(){
+
 	std::cout << "\n\t[NETWORK METRICS]\n\n"
 		<< "Receive Packet Rate = " << this->receivePacketRate << " KB/s\n"
 		<< "Send Packet Rate = " << this->sendPacketsRate << " KB/s\n"
@@ -377,6 +386,7 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 };
 
 PowerMetrics::PowerMetrics(){
+
 	this->processorPower = -1;
 	this->memoryPower = -1;
 	this->systemPower = -1;
@@ -385,6 +395,7 @@ PowerMetrics::PowerMetrics(){
 };
 
 void PowerMetrics::printPowerMetrics(){
+
 	std::cout << "\n\t[POWER METRICS]\n"
 		<< "Processor = " << this->processorPower << "W\n"
 		<< "Memory = " << this->memoryPower << "W\n"
@@ -409,6 +420,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlErro
 	const char* smi_command = "nvidia-smi --query-gpu=power.draw,temperature.gpu,fan.speed,memory.total,memory.used,memory.free,clocks.current.sm,clocks.current.memory --format=csv,nounits,noheader | tr ',' ' '";
 	output = exec(smi_command);
 	std::stringstream streamTwo(output);
+	
 	streamTwo >> temp;
 	powerMetrics.gpuPower = std::stof(temp);
 	streamTwo >> temp >> temp;
@@ -430,6 +442,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlErro
 };
 
 AllMetrics::AllMetrics(){
+
 	this->systemMetrics = SystemMetrics();
 	this->processorMetrics = ProcessorMetrics();
 	this->inputOutputMetrics = InputOutputMetrics();
@@ -440,6 +453,7 @@ AllMetrics::AllMetrics(){
 
 // Execute a Linux command and return the output using std::string
 std::string exec(const char* cmd){
+
 	std::array<char, 128> buffer;
 	std::string result;
 	std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
