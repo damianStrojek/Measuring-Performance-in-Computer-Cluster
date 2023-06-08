@@ -157,7 +157,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 
 	float check;
 
-	check = processorMetrics.cacheLLCLoadMisses / processorMetrics.cacheLLCLoads;
+	check = float(processorMetrics.cacheLLCLoadMisses) / float(processorMetrics.cacheLLCLoads);
 	processorMetrics.cacheLLCLoadMissRate = check;
 	std::cout << "CHECK" << check << "\n";
 	std::cout << "CHECK" << processorMetrics.cacheLLCLoadMissRate << "\n";
