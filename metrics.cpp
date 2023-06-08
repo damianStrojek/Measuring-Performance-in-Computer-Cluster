@@ -144,23 +144,23 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	float LLCMissRate;
 
 	streamTwo >> temp;
-	processorMetrics.cacheL2Requests = std::stof(temp);
+	processorMetrics.cacheL2Requests = std::stoi(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheL2Misses = std::stof(temp);
+	processorMetrics.cacheL2Misses = std::stoi(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheLLCLoads = std::stof(temp);
+	processorMetrics.cacheLLCLoads = std::stoi(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheLLCStores = std::stof(temp);
+	processorMetrics.cacheLLCStores = std::stoi(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheLLCLoadMisses = std::stof(temp);
+	processorMetrics.cacheLLCLoadMisses = std::stoi(temp);
 	streamTwo >> temp;
-	processorMetrics.cacheLLCStoreMisses = std::stof(temp);
+	processorMetrics.cacheLLCStoreMisses = std::stoi(temp);
 	
 	// Check division by zero and calculate miss rate
 	if(processorMetrics.cacheLLCLoads)
-		processorMetrics.cacheLLCLoadMissRate = (processorMetrics.cacheLLCLoadMisses / processorMetrics.cacheLLCLoads) * 100;
+		processorMetrics.cacheLLCLoadMissRate = (processorMetrics.cacheLLCLoadMisses / processorMetrics.cacheLLCLoads);
 	if(processorMetrics.cacheLLCStores)
-		processorMetrics.cacheLLCStoreMissRate = (processorMetrics.cacheLLCStoreMisses / processorMetrics.cacheLLCStores) * 100;
+		processorMetrics.cacheLLCStoreMissRate = (processorMetrics.cacheLLCStoreMisses / processorMetrics.cacheLLCStores);
 
 	command = "perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'";
 	output = exec(command);

@@ -40,9 +40,8 @@ void printMetricPairFloat(std::string metricName, int metricValue, std::string m
 		std::setw(30-metricName.length()) << value << " " << metricUnit;
 	for(int i=0; i<20-metricUnit.length(); i++) std::cout << ' ';
 
-	std::cout << std::fixed << std::setprecision(2);
 	std::cout << std::left << metricNameTwo << std::right << std::setfill('.') << 
-		std::setw(30-metricNameTwo.length()) << value2 << " " << metricUnitTwo << std::endl;
+		std::setw(30-metricNameTwo.length()) << std::setprecision(2) <<  value2 << " " << metricUnitTwo << std::endl;
 
     return;
 };
