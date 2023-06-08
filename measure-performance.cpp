@@ -48,7 +48,8 @@ int main(int argc, char **argv){
 	const char* dateCommand = "date +'%d%m-%H%M'";
 	//allMetrics.nodeTimestamp = exec(dateCommand);
 	//allMetrics.nodeTimestamp.pop_back();
-	std:: string date = exec(dateCommand).pop_back();
+	std:: string date = exec(dateCommand);
+	date.pop_back();
 	std::string fileName = "results/" + date + "_metrics.json";
 	std::ofstream outputFile(fileName, std::ios::out);
 	if(!outputFile.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";
