@@ -144,6 +144,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 
 	streamTwo >> std::ws;
 	std::getline(streamTwo, temp);
+	std::cout << "\n\n[CHECK] \n\n" << temp;
 	processorMetrics.cacheL2Requests = std::stoi(temp);
 	std::getline(streamTwo, temp);
 	processorMetrics.cacheL2Misses = std::stoi(temp);
