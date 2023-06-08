@@ -162,7 +162,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	if(processorMetrics.cacheLLCStores > 0)
 		processorMetrics.cacheLLCStoreMissRate = float(processorMetrics.cacheLLCStoreMisses) / float(processorMetrics.cacheLLCStores) * 100;
 
-	command = "perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}' | sed 's/[\xE2\x80\xAF]//g'";
+	command = "perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}' | sed 's/[\xE2\x80\xAF]//g' | tr ',' '.'";
 	output = exec(command);
 	std::stringstream streamThree(output);
 
@@ -171,9 +171,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	streamThree >> temp;
 	processorMetrics.cycles = std::stoi(temp); 			// number of cycles
 	streamThree >> temp;
-	std::cout << "\n[CHECK]" << temp << "\n";
 	processorMetrics.frequencyRelative = std::stof(temp);		// MHz
-	std::cout << "\n[CHECK]" << processorMetrics.frequencyRelative << "\n";
 	streamThree >> temp;
 	processorMetrics.unhaltedFrequency = std::stof(temp); 		// MHz
 
