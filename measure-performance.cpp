@@ -83,7 +83,7 @@ int main(int argc, char **argv){
 	nlohmann::json jsonArray;
 
 	// Download metrics in constant batches
-	for(int i = 0; i < 5; i++){
+	for(int i = 0; i < DATA_BATCH; i++){
 
 		//auto start = std::chrono::high_resolution_clock::now();
 
@@ -106,7 +106,6 @@ int main(int argc, char **argv){
 						&allMetricsArray[j].inputOutputMetrics, &allMetricsArray[j].memoryMetrics, \
 						&allMetricsArray[j].networkMetrics, &allMetricsArray[j].powerMetrics);
 			}
-			std::cout << "Wywolane metricsToJson, rank = " << rank << "\n";
 			jsonArray.push_back(metricsToJson(allMetricsArray,clusterSize));
 
 
@@ -116,10 +115,9 @@ int main(int argc, char **argv){
 		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
 		//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
 		// Save metrics to file
-		if(rank==0) outputFile << jsonArray.dump(4);
 		//writeToJSON(outputFile, allMetrics);
 	}
-	
+	if(rank==0) outputFile << jsonArray.dump(4);
 	outputFile.close();
 	MPI_Type_free(&systemMetricsType);
 	MPI_Type_free(&processorMetricsType);
