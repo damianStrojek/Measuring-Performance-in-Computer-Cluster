@@ -103,7 +103,13 @@ json metricsToJson(AllMetrics* allMetricsArray,int cluster_size){
 		{"memoryPower", allMetrics.powerMetrics.memoryPower},
 		{"systemPower", allMetrics.powerMetrics.systemPower},
 		{"gpuPower", allMetrics.powerMetrics.gpuPower},
-		{"gpuPowerHours", allMetrics.powerMetrics.gpuPowerHours}
+		{"gpuTemperature", allMetrics.powerMetrics.gpuTemperature},
+		{"gpuFanSpeed", allMetrics.powerMetrics.gpuFanSpeed},
+		{"gpuMemoryTotal", allMetrics.powerMetrics.gpuMemoryTotal},
+		{"gpuMemoryUsed", allMetrics.powerMetrics.gpuMemoryUsed},
+		{"gpuMemoryFree", allMetrics.powerMetrics.gpuMemoryFree},
+		{"gpuClocksCurrentSM", allMetrics.powerMetrics.gpuClocksCurrentSM},
+		{"gpuClocksCurrentMemory", allMetrics.powerMetrics.gpuClocksCurrentMemory}
 	};
 
 	json allMetricsJSON = {
