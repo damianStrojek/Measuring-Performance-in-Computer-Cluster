@@ -1,0 +1,780 @@
+
+	[NODE 0 METRICS]
+
+2023-06-08 19:19:12
+System:                                           Network:
+Running Processes............3                     Received Packets.......3521306 
+All Processes.............1014                     Received Packets Rate........3 KB/s
+Context Switch Rate..........3 /s                  Sent Packets...........2522403 
+Interrupt Rate..............15 /s                  Sent Packets Rate............3 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User...............163028 USER_HZ
+Memory Cached.............2942 MB                  Time System..............89210 USER_HZ
+Swap Used..................673 MB                  Time Idle.............69709866 USER_HZ
+Swap Cached................105 MB                  Time I/O Wait............23677 USER_HZ
+Memory Active.............4002 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........2095 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....18.984770 %
+Pages Saved..................0 pages/s             LLC Load Misses......11.559294 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......0.940000 W
+Data Written ................0 MB                  System Power.........12.030000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............6.280000 W
+
+
+	[NODE 1 METRICS]
+
+2023-06-08 19:19:12
+System:                                           Network:
+Running Processes............3                     Received Packets.......9764894 
+All Processes..............633                     Received Packets Rate........0 KB/s
+Context Switch Rate..........8 /s                  Sent Packets...........5815305 
+Interrupt Rate...............5 /s                  Sent Packets Rate............1 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1183412 USER_HZ
+Memory Cached.............8757 MB                  Time System.............487773 USER_HZ
+Swap Used....................3 MB                  Time Idle............446320605 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............65221 USER_HZ
+Memory Active.............6172 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........3715 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....13.936967 %
+Pages Saved..................0 pages/s             LLC Load Misses.......6.957685 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.300000 W
+Data Written ................0 MB                  System Power.........12.390000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.950000 W
+
+
+	[NODE 2 METRICS]
+
+2023-06-08 19:19:12
+System:                                           Network:
+Running Processes............3                     Received Packets......12880278 
+All Processes..............637                     Received Packets Rate........0 KB/s
+Context Switch Rate..........5 /s                  Sent Packets...........5250264 
+Interrupt Rate...............4 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1334722 USER_HZ
+Memory Cached.............8684 MB                  Time System.............706008 USER_HZ
+Swap Used....................3 MB                  Time Idle............694991976 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............67914 USER_HZ
+Memory Active.............5027 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........4637 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....16.453093 %
+Pages Saved..................0 pages/s             LLC Load Misses.......9.235485 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.130000 W
+Data Written ................0 MB                  System Power.........12.220000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.740000 W
+
+
+	[NODE 0 METRICS]
+
+2023-06-08 19:19:19
+System:                                           Network:
+Running Processes............2                     Received Packets.......3521506 
+All Processes.............1013                     Received Packets Rate........2 KB/s
+Context Switch Rate..........3 /s                  Sent Packets...........2522561 
+Interrupt Rate..............15 /s                  Sent Packets Rate............7 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User...............163042 USER_HZ
+Memory Cached.............2942 MB                  Time System..............89233 USER_HZ
+Swap Used..................673 MB                  Time Idle.............69714865 USER_HZ
+Swap Cached................105 MB                  Time I/O Wait............23678 USER_HZ
+Memory Active.............4001 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........2095 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....19.847786 %
+Pages Saved..................0 pages/s             LLC Load Misses......13.107912 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......0.900000 W
+Data Written ................0 MB                  System Power.........11.990000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.710000 W
+
+
+	[NODE 1 METRICS]
+
+2023-06-08 19:19:19
+System:                                           Network:
+Running Processes............2                     Received Packets.......9764962 
+All Processes..............616                     Received Packets Rate........1 KB/s
+Context Switch Rate..........8 /s                  Sent Packets...........5815385 
+Interrupt Rate...............5 /s                  Sent Packets Rate............1 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1183456 USER_HZ
+Memory Cached.............8757 MB                  Time System.............487812 USER_HZ
+Swap Used....................3 MB                  Time Idle............446325565 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............65227 USER_HZ
+Memory Active.............6152 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........3715 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....18.020985 %
+Pages Saved..................0 pages/s             LLC Load Misses.......9.229134 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.160000 W
+Data Written ................0 MB                  System Power.........12.250000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.850000 W
+
+
+	[NODE 2 METRICS]
+
+2023-06-08 19:19:19
+System:                                           Network:
+Running Processes............2                     Received Packets......12880304 
+All Processes..............621                     Received Packets Rate........1 KB/s
+Context Switch Rate..........5 /s                  Sent Packets...........5250299 
+Interrupt Rate...............4 /s                  Sent Packets Rate............1 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1334759 USER_HZ
+Memory Cached.............8684 MB                  Time System.............706047 USER_HZ
+Swap Used....................3 MB                  Time Idle............694996960 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............67918 USER_HZ
+Memory Active.............5006 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........4637 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....18.018637 %
+Pages Saved..................0 pages/s             LLC Load Misses.......8.495511 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.140000 W
+Data Written ................0 MB                  System Power.........12.230000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............6.510000 W
+
+
+	[NODE 0 METRICS]
+
+2023-06-08 19:19:25
+System:                                           Network:
+Running Processes............2                     Received Packets.......3521705 
+All Processes.............1013                     Received Packets Rate........2 KB/s
+Context Switch Rate..........3 /s                  Sent Packets...........2522717 
+Interrupt Rate..............15 /s                  Sent Packets Rate............2 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User...............163058 USER_HZ
+Memory Cached.............2942 MB                  Time System..............89259 USER_HZ
+Swap Used..................673 MB                  Time Idle.............69719859 USER_HZ
+Swap Cached................105 MB                  Time I/O Wait............23678 USER_HZ
+Memory Active.............4001 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........2095 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....19.077435 %
+Pages Saved..................0 pages/s             LLC Load Misses.......7.969469 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......0.900000 W
+Data Written ................0 MB                  System Power.........11.990000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.800000 W
+
+
+	[NODE 1 METRICS]
+
+2023-06-08 19:19:25
+System:                                           Network:
+Running Processes............1                     Received Packets.......9769665 
+All Processes..............600                     Received Packets Rate........0 KB/s
+Context Switch Rate..........8 /s                  Sent Packets...........5818143 
+Interrupt Rate...............5 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1183470 USER_HZ
+Memory Cached.............8757 MB                  Time System.............487831 USER_HZ
+Swap Used....................3 MB                  Time Idle............446330544 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............65227 USER_HZ
+Memory Active.............6139 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........3714 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....20.070232 %
+Pages Saved..................0 pages/s             LLC Load Misses.......9.127121 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.200000 W
+Data Written ................0 MB                  System Power.........12.280000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.950000 W
+
+
+	[NODE 2 METRICS]
+
+2023-06-08 19:19:25
+System:                                           Network:
+Running Processes............2                     Received Packets......12885824 
+All Processes..............605                     Received Packets Rate........0 KB/s
+Context Switch Rate..........5 /s                  Sent Packets...........5253159 
+Interrupt Rate...............4 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1334768 USER_HZ
+Memory Cached.............8685 MB                  Time System.............706069 USER_HZ
+Swap Used....................3 MB                  Time Idle............695001960 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............67918 USER_HZ
+Memory Active.............4997 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........4639 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....23.381935 %
+Pages Saved..................0 pages/s             LLC Load Misses.......8.033581 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.160000 W
+Data Written ................0 MB                  System Power.........12.250000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.640000 W
+
+
+	[NODE 0 METRICS]
+
+2023-06-08 19:19:31
+System:                                           Network:
+Running Processes............2                     Received Packets.......3521928 
+All Processes.............1014                     Received Packets Rate........3 KB/s
+Context Switch Rate..........3 /s                  Sent Packets...........2522898 
+Interrupt Rate..............15 /s                  Sent Packets Rate............2 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User...............163090 USER_HZ
+Memory Cached.............2942 MB                  Time System..............89281 USER_HZ
+Swap Used..................673 MB                  Time Idle.............69724817 USER_HZ
+Swap Cached................105 MB                  Time I/O Wait............23689 USER_HZ
+Memory Active.............4023 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........2095 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....23.513044 %
+Pages Saved..................0 pages/s             LLC Load Misses.......5.812004 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......0.940000 W
+Data Written ................0 MB                  System Power.........12.040000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.800000 W
+
+
+	[NODE 1 METRICS]
+
+2023-06-08 19:19:31
+System:                                           Network:
+Running Processes............2                     Received Packets.......9769699 
+All Processes..............616                     Received Packets Rate........0 KB/s
+Context Switch Rate..........8 /s                  Sent Packets...........5818171 
+Interrupt Rate...............5 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1183501 USER_HZ
+Memory Cached.............8753 MB                  Time System.............487865 USER_HZ
+Swap Used....................3 MB                  Time Idle............446335462 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............65231 USER_HZ
+Memory Active.............6150 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........3717 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....19.520624 %
+Pages Saved.................48 pages/s             LLC Load Misses.......7.759468 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.180000 W
+Data Written ................0 MB                  System Power.........12.270000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............6.040000 W
+
+
+	[NODE 2 METRICS]
+
+2023-06-08 19:19:31
+System:                                           Network:
+Running Processes............2                     Received Packets......12885835 
+All Processes..............621                     Received Packets Rate........0 KB/s
+Context Switch Rate..........5 /s                  Sent Packets...........5253160 
+Interrupt Rate...............4 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1334809 USER_HZ
+Memory Cached.............8684 MB                  Time System.............706104 USER_HZ
+Swap Used....................3 MB                  Time Idle............695006923 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............67921 USER_HZ
+Memory Active.............5012 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........4637 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....18.002701 %
+Pages Saved..................0 pages/s             LLC Load Misses.......8.088013 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.130000 W
+Data Written ................0 MB                  System Power.........12.230000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.740000 W
+
+
+	[NODE 0 METRICS]
+
+2023-06-08 19:19:38
+System:                                           Network:
+Running Processes............2                     Received Packets.......3522138 
+All Processes.............1017                     Received Packets Rate........3 KB/s
+Context Switch Rate..........3 /s                  Sent Packets...........2523069 
+Interrupt Rate..............15 /s                  Sent Packets Rate............2 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User...............163121 USER_HZ
+Memory Cached.............2942 MB                  Time System..............89314 USER_HZ
+Swap Used..................673 MB                  Time Idle.............69729815 USER_HZ
+Swap Cached................105 MB                  Time I/O Wait............23689 USER_HZ
+Memory Active.............4002 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........2095 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....17.991085 %
+Pages Saved..................0 pages/s             LLC Load Misses.......9.967633 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......0.920000 W
+Data Written ................0 MB                  System Power.........12.010000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.610000 W
+
+
+	[NODE 1 METRICS]
+
+2023-06-08 19:19:38
+System:                                           Network:
+Running Processes............2                     Received Packets.......9769862 
+All Processes..............613                     Received Packets Rate........0 KB/s
+Context Switch Rate..........8 /s                  Sent Packets...........5818365 
+Interrupt Rate...............5 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1183514 USER_HZ
+Memory Cached.............8753 MB                  Time System.............487884 USER_HZ
+Swap Used....................3 MB                  Time Idle............446340437 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............65231 USER_HZ
+Memory Active.............6138 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........3717 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....39.333454 %
+Pages Saved..................0 pages/s             LLC Load Misses......20.332338 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.200000 W
+Data Written ................0 MB                  System Power.........12.280000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............6.140000 W
+
+
+	[NODE 2 METRICS]
+
+2023-06-08 19:19:38
+System:                                           Network:
+Running Processes............2                     Received Packets......12885948 
+All Processes..............621                     Received Packets Rate........0 KB/s
+Context Switch Rate..........5 /s                  Sent Packets...........5253211 
+Interrupt Rate...............4 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1334820 USER_HZ
+Memory Cached.............8685 MB                  Time System.............706128 USER_HZ
+Swap Used....................3 MB                  Time Idle............695011933 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............67922 USER_HZ
+Memory Active.............5001 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........4637 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....18.270695 %
+Pages Saved................880 pages/s             LLC Load Misses......16.517395 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.130000 W
+Data Written ................0 MB                  System Power.........12.200000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.840000 W
+
+
+	[NODE 0 METRICS]
+
+2023-06-08 19:19:44
+System:                                           Network:
+Running Processes............2                     Received Packets.......3522363 
+All Processes.............1028                     Received Packets Rate........1 KB/s
+Context Switch Rate..........3 /s                  Sent Packets...........2523267 
+Interrupt Rate..............15 /s                  Sent Packets Rate............1 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User...............163137 USER_HZ
+Memory Cached.............2942 MB                  Time System..............89342 USER_HZ
+Swap Used..................673 MB                  Time Idle.............69734812 USER_HZ
+Swap Cached................105 MB                  Time I/O Wait............23690 USER_HZ
+Memory Active.............4001 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........2095 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses......7.535789 %
+Pages Saved...............8208 pages/s             LLC Load Misses.......5.857976 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......0.920000 W
+Data Written ................0 MB                  System Power.........12.010000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.800000 W
+
+
+	[NODE 1 METRICS]
+
+2023-06-08 19:19:44
+System:                                           Network:
+Running Processes............2                     Received Packets.......9769935 
+All Processes..............596                     Received Packets Rate........4 KB/s
+Context Switch Rate..........8 /s                  Sent Packets...........5818463 
+Interrupt Rate...............5 /s                  Sent Packets Rate............3 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1183530 USER_HZ
+Memory Cached.............8753 MB                  Time System.............487908 USER_HZ
+Swap Used....................3 MB                  Time Idle............446345426 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............65231 USER_HZ
+Memory Active.............6137 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........3717 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....18.396252 %
+Pages Saved..................0 pages/s             LLC Load Misses.......8.574511 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.180000 W
+Data Written ................0 MB                  System Power.........12.270000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.840000 W
+
+
+	[NODE 2 METRICS]
+
+2023-06-08 19:19:44
+System:                                           Network:
+Running Processes............2                     Received Packets......12885992 
+All Processes..............604                     Received Packets Rate........0 KB/s
+Context Switch Rate..........5 /s                  Sent Packets...........5253276 
+Interrupt Rate...............4 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1334834 USER_HZ
+Memory Cached.............8685 MB                  Time System.............706153 USER_HZ
+Swap Used....................3 MB                  Time Idle............695016938 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............67923 USER_HZ
+Memory Active.............5000 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........4637 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....20.491100 %
+Pages Saved..................0 pages/s             LLC Load Misses.......9.289887 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.140000 W
+Data Written ................0 MB                  System Power.........12.200000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.640000 W
+
+
+	[NODE 0 METRICS]
+
+2023-06-08 19:19:50
+System:                                           Network:
+Running Processes............2                     Received Packets.......3522570 
+All Processes.............1013                     Received Packets Rate........4 KB/s
+Context Switch Rate..........3 /s                  Sent Packets...........2523425 
+Interrupt Rate..............15 /s                  Sent Packets Rate...........13 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User...............163154 USER_HZ
+Memory Cached.............2942 MB                  Time System..............89367 USER_HZ
+Swap Used..................673 MB                  Time Idle.............69739787 USER_HZ
+Swap Cached................105 MB                  Time I/O Wait............23691 USER_HZ
+Memory Active.............4001 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........2095 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....19.305162 %
+Pages Saved..................0 pages/s             LLC Load Misses.......8.729150 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......0.930000 W
+Data Written ................0 MB                  System Power.........12.020000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.900000 W
+
+
+	[NODE 1 METRICS]
+
+2023-06-08 19:19:50
+System:                                           Network:
+Running Processes............2                     Received Packets.......9769975 
+All Processes..............596                     Received Packets Rate........0 KB/s
+Context Switch Rate..........8 /s                  Sent Packets...........5818488 
+Interrupt Rate...............5 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1183542 USER_HZ
+Memory Cached.............8753 MB                  Time System.............487934 USER_HZ
+Swap Used....................3 MB                  Time Idle............446350439 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............65231 USER_HZ
+Memory Active.............6137 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........3717 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....17.576651 %
+Pages Saved..................0 pages/s             LLC Load Misses.......9.503908 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.190000 W
+Data Written ................0 MB                  System Power.........12.280000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.950000 W
+
+
+	[NODE 2 METRICS]
+
+2023-06-08 19:19:50
+System:                                           Network:
+Running Processes............2                     Received Packets......12886009 
+All Processes..............604                     Received Packets Rate........0 KB/s
+Context Switch Rate..........5 /s                  Sent Packets...........5253277 
+Interrupt Rate...............4 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1334840 USER_HZ
+Memory Cached.............8685 MB                  Time System.............706177 USER_HZ
+Swap Used....................3 MB                  Time Idle............695021915 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............67923 USER_HZ
+Memory Active.............5001 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........4637 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....18.723087 %
+Pages Saved..................0 pages/s             LLC Load Misses.......9.802410 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.120000 W
+Data Written ................0 MB                  System Power.........12.210000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.640000 W
+
+
+	[NODE 0 METRICS]
+
+2023-06-08 19:19:57
+System:                                           Network:
+Running Processes............2                     Received Packets.......3522801 
+All Processes.............1013                     Received Packets Rate........7 KB/s
+Context Switch Rate..........3 /s                  Sent Packets...........2523611 
+Interrupt Rate..............15 /s                  Sent Packets Rate............6 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User...............163170 USER_HZ
+Memory Cached.............2942 MB                  Time System..............89394 USER_HZ
+Swap Used..................673 MB                  Time Idle.............69744772 USER_HZ
+Swap Cached................105 MB                  Time I/O Wait............23691 USER_HZ
+Memory Active.............4001 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........2095 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....19.277346 %
+Pages Saved..................0 pages/s             LLC Load Misses.......8.329522 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......0.930000 W
+Data Written ................0 MB                  System Power.........12.000000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.800000 W
+
+
+	[NODE 1 METRICS]
+
+2023-06-08 19:19:57
+System:                                           Network:
+Running Processes............2                     Received Packets.......9770108 
+All Processes..............595                     Received Packets Rate........0 KB/s
+Context Switch Rate..........8 /s                  Sent Packets...........5818575 
+Interrupt Rate...............5 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1183553 USER_HZ
+Memory Cached.............8753 MB                  Time System.............487956 USER_HZ
+Swap Used....................3 MB                  Time Idle............446355430 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............65232 USER_HZ
+Memory Active.............6137 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........3717 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....19.565397 %
+Pages Saved..................0 pages/s             LLC Load Misses.......9.568611 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.200000 W
+Data Written ................0 MB                  System Power.........12.290000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.950000 W
+
+
+	[NODE 2 METRICS]
+
+2023-06-08 19:19:57
+System:                                           Network:
+Running Processes............2                     Received Packets......12886681 
+All Processes..............603                     Received Packets Rate........0 KB/s
+Context Switch Rate..........5 /s                  Sent Packets...........5253684 
+Interrupt Rate...............4 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1334849 USER_HZ
+Memory Cached.............8685 MB                  Time System.............706200 USER_HZ
+Swap Used....................3 MB                  Time Idle............695026922 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............67923 USER_HZ
+Memory Active.............4989 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........4637 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....18.552046 %
+Pages Saved..................0 pages/s             LLC Load Misses.......9.169859 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.130000 W
+Data Written ................0 MB                  System Power.........12.210000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.930000 W
+
+
+	[NODE 0 METRICS]
+
+2023-06-08 19:20:03
+System:                                           Network:
+Running Processes............2                     Received Packets.......3523018 
+All Processes.............1013                     Received Packets Rate........3 KB/s
+Context Switch Rate..........3 /s                  Sent Packets...........2523782 
+Interrupt Rate..............15 /s                  Sent Packets Rate............3 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User...............163186 USER_HZ
+Memory Cached.............2942 MB                  Time System..............89422 USER_HZ
+Swap Used..................673 MB                  Time Idle.............69749769 USER_HZ
+Swap Cached................105 MB                  Time I/O Wait............23692 USER_HZ
+Memory Active.............4001 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........2095 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....19.171432 %
+Pages Saved..................0 pages/s             LLC Load Misses.......9.196107 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......0.940000 W
+Data Written ................0 MB                  System Power.........12.030000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............6.000000 W
+
+
+	[NODE 1 METRICS]
+
+2023-06-08 19:20:03
+System:                                           Network:
+Running Processes............2                     Received Packets.......9770139 
+All Processes..............590                     Received Packets Rate........0 KB/s
+Context Switch Rate..........8 /s                  Sent Packets...........5818599 
+Interrupt Rate...............5 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1183564 USER_HZ
+Memory Cached.............8753 MB                  Time System.............487979 USER_HZ
+Swap Used....................3 MB                  Time Idle............446360415 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............65232 USER_HZ
+Memory Active.............6126 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........3717 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....18.583054 %
+Pages Saved..................0 pages/s             LLC Load Misses.......9.163455 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.170000 W
+Data Written ................0 MB                  System Power.........12.260000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............6.040000 W
+
+
+	[NODE 2 METRICS]
+
+2023-06-08 19:20:03
+System:                                           Network:
+Running Processes............1                     Received Packets......12886692 
+All Processes..............598                     Received Packets Rate........0 KB/s
+Context Switch Rate..........5 /s                  Sent Packets...........5253686 
+Interrupt Rate...............4 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1334858 USER_HZ
+Memory Cached.............8685 MB                  Time System.............706221 USER_HZ
+Swap Used....................3 MB                  Time Idle............695031898 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............67923 USER_HZ
+Memory Active.............4988 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........4637 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....18.632734 %
+Pages Saved..................0 pages/s             LLC Load Misses.......8.510941 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.130000 W
+Data Written ................0 MB                  System Power.........12.220000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.550000 W
+
+
+	[NODE 0 METRICS]
+
+2023-06-08 19:20:09
+System:                                           Network:
+Running Processes............1                     Received Packets.......3523200 
+All Processes.............1013                     Received Packets Rate........2 KB/s
+Context Switch Rate..........3 /s                  Sent Packets...........2523929 
+Interrupt Rate..............15 /s                  Sent Packets Rate............1 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User...............163202 USER_HZ
+Memory Cached.............2942 MB                  Time System..............89445 USER_HZ
+Swap Used..................673 MB                  Time Idle.............69754766 USER_HZ
+Swap Cached................105 MB                  Time I/O Wait............23692 USER_HZ
+Memory Active.............4001 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........2095 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....19.166771 %
+Pages Saved..................0 pages/s             LLC Load Misses......12.392414 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......0.920000 W
+Data Written ................0 MB                  System Power.........12.000000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.800000 W
+
+
+	[NODE 1 METRICS]
+
+2023-06-08 19:20:09
+System:                                           Network:
+Running Processes............1                     Received Packets.......9770174 
+All Processes..............590                     Received Packets Rate........0 KB/s
+Context Switch Rate..........8 /s                  Sent Packets...........5818628 
+Interrupt Rate...............5 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1183578 USER_HZ
+Memory Cached.............8753 MB                  Time System.............487997 USER_HZ
+Swap Used....................3 MB                  Time Idle............446365387 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............65233 USER_HZ
+Memory Active.............6126 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........3717 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....17.598360 %
+Pages Saved..................0 pages/s             LLC Load Misses.......8.699140 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.150000 W
+Data Written ................0 MB                  System Power.........12.240000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.950000 W
+
+
+	[NODE 2 METRICS]
+
+2023-06-08 19:20:09
+System:                                           Network:
+Running Processes............2                     Received Packets......12886707 
+All Processes..............598                     Received Packets Rate........0 KB/s
+Context Switch Rate..........5 /s                  Sent Packets...........5253692 
+Interrupt Rate...............4 /s                  Sent Packets Rate............0 KB/s
+
+Memory:                                           Processor:
+Memory Used..............15970 MB                  Time User..............1334867 USER_HZ
+Memory Cached.............8685 MB                  Time System.............706242 USER_HZ
+Swap Used....................3 MB                  Time Idle............695036884 USER_HZ
+Swap Cached..................0 MB                  Time I/O Wait............67923 USER_HZ
+Memory Active.............4988 MB                  Time IRQ.....................0 USER_HZ
+Memory Inactive...........4637 MB                  Time Steal...................0 USER_HZ
+Pages Read...................0 pages/s             LLC Store Misses.....18.375360 %
+Pages Saved..................0 pages/s             LLC Load Misses.......8.224023 %
+
+I/O for PID 1:                                    Power:
+Data Read ...................4 MB                  Processor Power.......1.120000 W
+Data Written ................0 MB                  System Power.........12.200000 W
+Read Operations ............12 /s                  Memory Power..........0.450000 W
+Write Operations ............0 /s                  GPU Power.............5.840000 W
+

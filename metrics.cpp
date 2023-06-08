@@ -211,7 +211,7 @@ void InputOutputMetrics::printInputOutputMetrics(){
 
 void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 
-	const char* command = "awk '{ print $2 }' /proc/$$/io";		// [TODO] Change PID 
+	const char* command = "awk '{ print $2 }' /proc/$$/io";
 	std::string output = exec(command), temp;
 	std::stringstream stream(output);
 	

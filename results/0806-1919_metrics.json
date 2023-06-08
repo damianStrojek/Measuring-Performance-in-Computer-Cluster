@@ -1,0 +1,2902 @@
+[
+    {
+        "Nodes": [
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 47924.30078125,
+                            "flushTime": 1.8431999683380127,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4002.69921875,
+                            "memoryCached": 2942.5234375,
+                            "memoryInactive": 2095.7578125,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83984375,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 4.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 8.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 105.06640625,
+                            "swapUsed": 673.74609375
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 3.8499999046325684,
+                            "receivedData": 3521306,
+                            "sendPacketsRate": 3.130000114440918,
+                            "sentData": 2522403
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 131.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 6.28000020980835,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 0.9399999976158142,
+                            "systemPower": 12.029999732971191
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4709761,
+                            "cacheL2Requests": 5861899,
+                            "cacheLLCLoadMissRate": 11.559293746948242,
+                            "cacheLLCLoadMisses": 71299,
+                            "cacheLLCLoads": 616811,
+                            "cacheLLCStoreMissRate": 18.984769821166992,
+                            "cacheLLCStoreMisses": 100228,
+                            "cacheLLCStores": 527939,
+                            "cycles": 1046972,
+                            "frequencyRelative": 0.6700000166893005,
+                            "instructionsRetired": 933866,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 69709866,
+                            "timeIoWait": 23677,
+                            "timeNice": 2981,
+                            "timeSoftIRQ": 11383,
+                            "timeSteal": 0,
+                            "timeSystem": 89210,
+                            "timeUser": 163028,
+                            "unhaltedFrequency": 0.6700000166893005
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 3,
+                            "interruptRate": 15,
+                            "processesAll": 1014,
+                            "processesBlocked": 0,
+                            "processesRunning": 3
+                        }
+                    ]
+                },
+                "Node": 0
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 83443.203125,
+                            "flushTime": 6.7423601150512695,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 6172.83203125,
+                            "memoryCached": 8757.11328125,
+                            "memoryInactive": 3715.31640625,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.8203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 4.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 7.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.26953125,
+                            "swapUsed": 3.25
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.9200000166893005,
+                            "receivedData": 9764894,
+                            "sendPacketsRate": 1.059999942779541,
+                            "sentData": 5815305
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 65.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.949999809265137,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.2999999523162842,
+                            "systemPower": 12.390000343322754
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 29279981,
+                            "cacheL2Requests": 42379447,
+                            "cacheLLCLoadMissRate": 6.9576849937438965,
+                            "cacheLLCLoadMisses": 259377,
+                            "cacheLLCLoads": 3727921,
+                            "cacheLLCStoreMissRate": 13.936966896057129,
+                            "cacheLLCStoreMisses": 292917,
+                            "cacheLLCStores": 2101727,
+                            "cycles": 1009690,
+                            "frequencyRelative": 0.5099999904632568,
+                            "instructionsRetired": 907638,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 446320605,
+                            "timeIoWait": 65221,
+                            "timeNice": 103154,
+                            "timeSoftIRQ": 79348,
+                            "timeSteal": 0,
+                            "timeSystem": 487773,
+                            "timeUser": 1183412,
+                            "unhaltedFrequency": 0.5099999904632568
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 8,
+                            "interruptRate": 5,
+                            "processesAll": 633,
+                            "processesBlocked": 1,
+                            "processesRunning": 3
+                        }
+                    ]
+                },
+                "Node": 1
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 125679.0,
+                            "flushTime": 7.217929840087891,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 5027.5546875,
+                            "memoryCached": 8684.66015625,
+                            "memoryInactive": 4637.7109375,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 11.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 7.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.15234375,
+                            "swapUsed": 3.5
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.0,
+                            "receivedData": 12880278,
+                            "sendPacketsRate": 0.0,
+                            "sentData": 5250264
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 64.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.739999771118164,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.1299999952316284,
+                            "systemPower": 12.220000267028809
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 23539131,
+                            "cacheL2Requests": 37255123,
+                            "cacheLLCLoadMissRate": 9.235485076904297,
+                            "cacheLLCLoadMisses": 288638,
+                            "cacheLLCLoads": 3125315,
+                            "cacheLLCStoreMissRate": 16.453092575073242,
+                            "cacheLLCStoreMisses": 297055,
+                            "cacheLLCStores": 1805466,
+                            "cycles": 989850,
+                            "frequencyRelative": 0.5099999904632568,
+                            "instructionsRetired": 901677,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 694991976,
+                            "timeIoWait": 67914,
+                            "timeNice": 113855,
+                            "timeSoftIRQ": 90316,
+                            "timeSteal": 0,
+                            "timeSystem": 706008,
+                            "timeUser": 1334722,
+                            "unhaltedFrequency": 0.5099999904632568
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 5,
+                            "interruptRate": 4,
+                            "processesAll": 637,
+                            "processesBlocked": 1,
+                            "processesRunning": 3
+                        }
+                    ]
+                },
+                "Node": 2
+            }
+        ],
+        "timestamp": "2023-06-08 19:19:12"
+    },
+    {
+        "Nodes": [
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 47924.30078125,
+                            "flushTime": 1.8432199954986572,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4001.57421875,
+                            "memoryCached": 2942.53125,
+                            "memoryInactive": 2095.765625,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83984375,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 13.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 6.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 105.06640625,
+                            "swapUsed": 673.74609375
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 2.8399999141693115,
+                            "receivedData": 3521506,
+                            "sendPacketsRate": 7.639999866485596,
+                            "sentData": 2522561
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 131.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.710000038146973,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 0.8999999761581421,
+                            "systemPower": 11.989999771118164
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 5240169,
+                            "cacheL2Requests": 6894089,
+                            "cacheLLCLoadMissRate": 13.107912063598633,
+                            "cacheLLCLoadMisses": 77737,
+                            "cacheLLCLoads": 593054,
+                            "cacheLLCStoreMissRate": 19.84778594970703,
+                            "cacheLLCStoreMisses": 100299,
+                            "cacheLLCStores": 505341,
+                            "cycles": 1010791,
+                            "frequencyRelative": 0.5299999713897705,
+                            "instructionsRetired": 893420,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 69714865,
+                            "timeIoWait": 23678,
+                            "timeNice": 2981,
+                            "timeSoftIRQ": 11392,
+                            "timeSteal": 0,
+                            "timeSystem": 89233,
+                            "timeUser": 163042,
+                            "unhaltedFrequency": 0.5299999713897705
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 3,
+                            "interruptRate": 15,
+                            "processesAll": 1013,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 0
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 83443.203125,
+                            "flushTime": 6.742489814758301,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 6152.18359375,
+                            "memoryCached": 8757.11328125,
+                            "memoryInactive": 3715.31640625,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.8203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 17.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 7.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.26953125,
+                            "swapUsed": 3.25
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 1.149999976158142,
+                            "receivedData": 9764962,
+                            "sendPacketsRate": 1.7999999523162842,
+                            "sentData": 5815385
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 65.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.849999904632568,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.159999966621399,
+                            "systemPower": 12.25
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4374054,
+                            "cacheL2Requests": 5305652,
+                            "cacheLLCLoadMissRate": 9.229133605957031,
+                            "cacheLLCLoadMisses": 52535,
+                            "cacheLLCLoads": 569230,
+                            "cacheLLCStoreMissRate": 18.020984649658203,
+                            "cacheLLCStoreMisses": 88762,
+                            "cacheLLCStores": 492548,
+                            "cycles": 1006162,
+                            "frequencyRelative": 0.5600000023841858,
+                            "instructionsRetired": 893710,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 446325565,
+                            "timeIoWait": 65227,
+                            "timeNice": 103155,
+                            "timeSoftIRQ": 79359,
+                            "timeSteal": 0,
+                            "timeSystem": 487812,
+                            "timeUser": 1183456,
+                            "unhaltedFrequency": 0.5600000023841858
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 8,
+                            "interruptRate": 5,
+                            "processesAll": 616,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 1
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 125679.0,
+                            "flushTime": 7.217979907989502,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 5006.44140625,
+                            "memoryCached": 8684.66015625,
+                            "memoryInactive": 4637.70703125,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 3.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 10.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.15234375,
+                            "swapUsed": 3.5
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 1.059999942779541,
+                            "receivedData": 12880304,
+                            "sendPacketsRate": 1.7000000476837158,
+                            "sentData": 5250299
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 64.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 6.510000228881836,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.1399999856948853,
+                            "systemPower": 12.229999542236328
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4253085,
+                            "cacheL2Requests": 4921690,
+                            "cacheLLCLoadMissRate": 8.495511054992676,
+                            "cacheLLCLoadMisses": 46888,
+                            "cacheLLCLoads": 551915,
+                            "cacheLLCStoreMissRate": 18.01863670349121,
+                            "cacheLLCStoreMisses": 87232,
+                            "cacheLLCStores": 484121,
+                            "cycles": 992043,
+                            "frequencyRelative": 0.6600000262260437,
+                            "instructionsRetired": 878449,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 694996960,
+                            "timeIoWait": 67918,
+                            "timeNice": 113856,
+                            "timeSoftIRQ": 90327,
+                            "timeSteal": 0,
+                            "timeSystem": 706047,
+                            "timeUser": 1334759,
+                            "unhaltedFrequency": 0.6600000262260437
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 5,
+                            "interruptRate": 4,
+                            "processesAll": 621,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 2
+            }
+        ],
+        "timestamp": "2023-06-08 19:19:19"
+    },
+    {
+        "Nodes": [
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 47924.30078125,
+                            "flushTime": 1.8432300090789795,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4001.5859375,
+                            "memoryCached": 2942.53515625,
+                            "memoryInactive": 2095.76953125,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83984375,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 11.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 145.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 105.06640625,
+                            "swapUsed": 673.74609375
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 2.4800000190734863,
+                            "receivedData": 3521705,
+                            "sendPacketsRate": 2.109999895095825,
+                            "sentData": 2522717
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 131.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.800000190734863,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 0.8999999761581421,
+                            "systemPower": 11.989999771118164
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 5078152,
+                            "cacheL2Requests": 6451758,
+                            "cacheLLCLoadMissRate": 7.96946907043457,
+                            "cacheLLCLoadMisses": 53949,
+                            "cacheLLCLoads": 676946,
+                            "cacheLLCStoreMissRate": 19.077434539794922,
+                            "cacheLLCStoreMisses": 98137,
+                            "cacheLLCStores": 514414,
+                            "cycles": 1011875,
+                            "frequencyRelative": 0.5899999737739563,
+                            "instructionsRetired": 898894,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 69719859,
+                            "timeIoWait": 23678,
+                            "timeNice": 2981,
+                            "timeSoftIRQ": 11404,
+                            "timeSteal": 0,
+                            "timeSystem": 89259,
+                            "timeUser": 163058,
+                            "unhaltedFrequency": 0.5899999737739563
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 3,
+                            "interruptRate": 15,
+                            "processesAll": 1013,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 0
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 83443.203125,
+                            "flushTime": 6.742489814758301,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 6139.8203125,
+                            "memoryCached": 8757.109375,
+                            "memoryInactive": 3714.96484375,
+                            "memoryIoRate": 0.0390625,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.8203125,
+                            "memoryWriteRate": 0.0390625,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 905.0,
+                            "pageFaultsMajorRate": 34.0,
+                            "pageFreeRate": 1764.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.26953125,
+                            "swapUsed": 3.25
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.3400000035762787,
+                            "receivedData": 9769665,
+                            "sendPacketsRate": 0.28999999165534973,
+                            "sentData": 5818143
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 65.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.949999809265137,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.2000000476837158,
+                            "systemPower": 12.279999732971191
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4380779,
+                            "cacheL2Requests": 5301477,
+                            "cacheLLCLoadMissRate": 9.127120971679688,
+                            "cacheLLCLoadMisses": 52219,
+                            "cacheLLCLoads": 572130,
+                            "cacheLLCStoreMissRate": 20.070232391357422,
+                            "cacheLLCStoreMisses": 97961,
+                            "cacheLLCStores": 488091,
+                            "cycles": 1025191,
+                            "frequencyRelative": 0.7799999713897705,
+                            "instructionsRetired": 908442,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 446330544,
+                            "timeIoWait": 65227,
+                            "timeNice": 103155,
+                            "timeSoftIRQ": 79369,
+                            "timeSteal": 0,
+                            "timeSystem": 487831,
+                            "timeUser": 1183470,
+                            "unhaltedFrequency": 0.7799999713897705
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 8,
+                            "interruptRate": 5,
+                            "processesAll": 600,
+                            "processesBlocked": 0,
+                            "processesRunning": 1
+                        }
+                    ]
+                },
+                "Node": 1
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 125679.0,
+                            "flushTime": 7.217979907989502,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4997.02734375,
+                            "memoryCached": 8685.99609375,
+                            "memoryInactive": 4639.0078125,
+                            "memoryIoRate": 0.09375,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83203125,
+                            "memoryWriteRate": 0.09375,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 6988.0,
+                            "pageFaultsMajorRate": 38.0,
+                            "pageFreeRate": 3844.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.15234375,
+                            "swapUsed": 3.5
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.05999999865889549,
+                            "receivedData": 12885824,
+                            "sendPacketsRate": 0.0,
+                            "sentData": 5253159
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 64.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.639999866485596,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.159999966621399,
+                            "systemPower": 12.25
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4285569,
+                            "cacheL2Requests": 5016137,
+                            "cacheLLCLoadMissRate": 8.033580780029297,
+                            "cacheLLCLoadMisses": 47406,
+                            "cacheLLCLoads": 590098,
+                            "cacheLLCStoreMissRate": 23.381935119628906,
+                            "cacheLLCStoreMisses": 116392,
+                            "cacheLLCStores": 497786,
+                            "cycles": 1128309,
+                            "frequencyRelative": 0.4300000071525574,
+                            "instructionsRetired": 919336,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 695001960,
+                            "timeIoWait": 67918,
+                            "timeNice": 113857,
+                            "timeSoftIRQ": 90338,
+                            "timeSteal": 0,
+                            "timeSystem": 706069,
+                            "timeUser": 1334768,
+                            "unhaltedFrequency": 0.4300000071525574
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 5,
+                            "interruptRate": 4,
+                            "processesAll": 605,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 2
+            }
+        ],
+        "timestamp": "2023-06-08 19:19:25"
+    },
+    {
+        "Nodes": [
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 47924.30078125,
+                            "flushTime": 1.843250036239624,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4023.00390625,
+                            "memoryCached": 2942.546875,
+                            "memoryInactive": 2095.78125,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83984375,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 1126.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 967.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 105.06640625,
+                            "swapUsed": 673.74609375
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 3.0899999141693115,
+                            "receivedData": 3521928,
+                            "sendPacketsRate": 2.490000009536743,
+                            "sentData": 2522898
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 131.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.800000190734863,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 0.9399999976158142,
+                            "systemPower": 12.039999961853027
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 13967793,
+                            "cacheL2Requests": 20261283,
+                            "cacheLLCLoadMissRate": 5.812004089355469,
+                            "cacheLLCLoadMisses": 123401,
+                            "cacheLLCLoads": 2123209,
+                            "cacheLLCStoreMissRate": 23.513044357299805,
+                            "cacheLLCStoreMisses": 347322,
+                            "cacheLLCStores": 1477146,
+                            "cycles": 1018704,
+                            "frequencyRelative": 0.5400000214576721,
+                            "instructionsRetired": 905580,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 69724817,
+                            "timeIoWait": 23689,
+                            "timeNice": 2981,
+                            "timeSoftIRQ": 11414,
+                            "timeSteal": 0,
+                            "timeSystem": 89281,
+                            "timeUser": 163090,
+                            "unhaltedFrequency": 0.5400000214576721
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 3,
+                            "interruptRate": 15,
+                            "processesAll": 1014,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 0
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 83443.203125,
+                            "flushTime": 6.742499828338623,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 6150.70703125,
+                            "memoryCached": 8753.265625,
+                            "memoryInactive": 3717.0390625,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.8203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 14.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 8.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 48.0,
+                            "swapCached": 0.26953125,
+                            "swapUsed": 3.25
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.6800000071525574,
+                            "receivedData": 9769699,
+                            "sendPacketsRate": 0.6899999976158142,
+                            "sentData": 5818171
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 65.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 6.039999961853027,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.1799999475479126,
+                            "systemPower": 12.270000457763672
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4721879,
+                            "cacheL2Requests": 5625353,
+                            "cacheLLCLoadMissRate": 7.759467601776123,
+                            "cacheLLCLoadMisses": 49450,
+                            "cacheLLCLoads": 637286,
+                            "cacheLLCStoreMissRate": 19.5206241607666,
+                            "cacheLLCStoreMisses": 98854,
+                            "cacheLLCStores": 506408,
+                            "cycles": 1037388,
+                            "frequencyRelative": 0.5099999904632568,
+                            "instructionsRetired": 921831,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 446335462,
+                            "timeIoWait": 65231,
+                            "timeNice": 103190,
+                            "timeSoftIRQ": 79395,
+                            "timeSteal": 0,
+                            "timeSystem": 487865,
+                            "timeUser": 1183501,
+                            "unhaltedFrequency": 0.5099999904632568
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 8,
+                            "interruptRate": 5,
+                            "processesAll": 616,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 1
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 125679.0,
+                            "flushTime": 7.217989921569824,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 5012.61328125,
+                            "memoryCached": 8684.9921875,
+                            "memoryInactive": 4637.7890625,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 4.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 8.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.15234375,
+                            "swapUsed": 3.5
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.11999999731779099,
+                            "receivedData": 12885835,
+                            "sendPacketsRate": 0.0,
+                            "sentData": 5253160
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 64.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.739999771118164,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.1299999952316284,
+                            "systemPower": 12.229999542236328
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4264784,
+                            "cacheL2Requests": 5036965,
+                            "cacheLLCLoadMissRate": 8.0880126953125,
+                            "cacheLLCLoadMisses": 47319,
+                            "cacheLLCLoads": 585051,
+                            "cacheLLCStoreMissRate": 18.002700805664063,
+                            "cacheLLCStoreMisses": 89324,
+                            "cacheLLCStores": 496170,
+                            "cycles": 1036749,
+                            "frequencyRelative": 0.5299999713897705,
+                            "instructionsRetired": 929933,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 695006923,
+                            "timeIoWait": 67921,
+                            "timeNice": 113871,
+                            "timeSoftIRQ": 90356,
+                            "timeSteal": 0,
+                            "timeSystem": 706104,
+                            "timeUser": 1334809,
+                            "unhaltedFrequency": 0.5299999713897705
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 5,
+                            "interruptRate": 4,
+                            "processesAll": 621,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 2
+            }
+        ],
+        "timestamp": "2023-06-08 19:19:31"
+    },
+    {
+        "Nodes": [
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 47924.30078125,
+                            "flushTime": 1.843269944190979,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4002.56640625,
+                            "memoryCached": 2942.55078125,
+                            "memoryInactive": 2095.78515625,
+                            "memoryIoRate": 0.2578119933605194,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83984375,
+                            "memoryWriteRate": 0.2578119933605194,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 4.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 7.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 105.06640625,
+                            "swapUsed": 673.74609375
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 3.4600000381469727,
+                            "receivedData": 3522138,
+                            "sendPacketsRate": 2.700000047683716,
+                            "sentData": 2523069
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 131.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.610000133514404,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 0.9200000166893005,
+                            "systemPower": 12.010000228881836
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4978712,
+                            "cacheL2Requests": 6061289,
+                            "cacheLLCLoadMissRate": 9.967633247375488,
+                            "cacheLLCLoadMisses": 64610,
+                            "cacheLLCLoads": 648198,
+                            "cacheLLCStoreMissRate": 17.991085052490234,
+                            "cacheLLCStoreMisses": 95664,
+                            "cacheLLCStores": 531730,
+                            "cycles": 980774,
+                            "frequencyRelative": 1.2300000190734863,
+                            "instructionsRetired": 891370,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 69729815,
+                            "timeIoWait": 23689,
+                            "timeNice": 2981,
+                            "timeSoftIRQ": 11431,
+                            "timeSteal": 0,
+                            "timeSystem": 89314,
+                            "timeUser": 163121,
+                            "unhaltedFrequency": 1.2300000190734863
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 3,
+                            "interruptRate": 15,
+                            "processesAll": 1017,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 0
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 83443.203125,
+                            "flushTime": 6.742519855499268,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 6138.0078125,
+                            "memoryCached": 8753.26171875,
+                            "memoryInactive": 3717.03515625,
+                            "memoryIoRate": 1.75,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.8203125,
+                            "memoryWriteRate": 1.75,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 34.0,
+                            "pageFaultsMajorRate": 1.0,
+                            "pageFreeRate": 119.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.26953125,
+                            "swapUsed": 3.25
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.3199999928474426,
+                            "receivedData": 9769862,
+                            "sendPacketsRate": 0.20000000298023224,
+                            "sentData": 5818365
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 65.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 6.139999866485596,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.2000000476837158,
+                            "systemPower": 12.279999732971191
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 5259125,
+                            "cacheL2Requests": 6659327,
+                            "cacheLLCLoadMissRate": 20.332338333129883,
+                            "cacheLLCLoadMisses": 129640,
+                            "cacheLLCLoads": 637605,
+                            "cacheLLCStoreMissRate": 39.33345413208008,
+                            "cacheLLCStoreMisses": 226897,
+                            "cacheLLCStores": 576855,
+                            "cycles": 1022951,
+                            "frequencyRelative": 0.8299999833106995,
+                            "instructionsRetired": 898085,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 446340437,
+                            "timeIoWait": 65231,
+                            "timeNice": 103190,
+                            "timeSoftIRQ": 79405,
+                            "timeSteal": 0,
+                            "timeSystem": 487884,
+                            "timeUser": 1183514,
+                            "unhaltedFrequency": 0.8299999833106995
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 8,
+                            "interruptRate": 5,
+                            "processesAll": 613,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 1
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 125679.0,
+                            "flushTime": 7.217989921569824,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 5001.109375,
+                            "memoryCached": 8685.046875,
+                            "memoryInactive": 4637.46484375,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 16.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 7.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 880.0,
+                            "swapCached": 0.15234375,
+                            "swapUsed": 3.5
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.11999999731779099,
+                            "receivedData": 12885948,
+                            "sendPacketsRate": 0.0,
+                            "sentData": 5253211
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 64.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.840000152587891,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.1299999952316284,
+                            "systemPower": 12.199999809265137
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4651947,
+                            "cacheL2Requests": 5370251,
+                            "cacheLLCLoadMissRate": 16.51739501953125,
+                            "cacheLLCLoadMisses": 104456,
+                            "cacheLLCLoads": 632400,
+                            "cacheLLCStoreMissRate": 18.270694732666016,
+                            "cacheLLCStoreMisses": 97573,
+                            "cacheLLCStores": 534041,
+                            "cycles": 1018437,
+                            "frequencyRelative": 0.5,
+                            "instructionsRetired": 909844,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 695011933,
+                            "timeIoWait": 67922,
+                            "timeNice": 113871,
+                            "timeSoftIRQ": 90363,
+                            "timeSteal": 0,
+                            "timeSystem": 706128,
+                            "timeUser": 1334820,
+                            "unhaltedFrequency": 0.5
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 5,
+                            "interruptRate": 4,
+                            "processesAll": 621,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 2
+            }
+        ],
+        "timestamp": "2023-06-08 19:19:38"
+    },
+    {
+        "Nodes": [
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 47924.30078125,
+                            "flushTime": 1.8432899713516235,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4001.609375,
+                            "memoryCached": 2942.55078125,
+                            "memoryInactive": 2095.78515625,
+                            "memoryIoRate": 0.0546875,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83984375,
+                            "memoryWriteRate": 0.0546875,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 4.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 13.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 8208.0,
+                            "swapCached": 105.06640625,
+                            "swapUsed": 673.74609375
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 1.9299999475479126,
+                            "receivedData": 3522363,
+                            "sendPacketsRate": 1.6100000143051147,
+                            "sentData": 2523267
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 131.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.800000190734863,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 0.9200000166893005,
+                            "systemPower": 12.010000228881836
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 5767238,
+                            "cacheL2Requests": 6582267,
+                            "cacheLLCLoadMissRate": 5.857975959777832,
+                            "cacheLLCLoadMisses": 67456,
+                            "cacheLLCLoads": 1151524,
+                            "cacheLLCStoreMissRate": 7.535788536071777,
+                            "cacheLLCStoreMisses": 99770,
+                            "cacheLLCStores": 1323949,
+                            "cycles": 1063806,
+                            "frequencyRelative": 0.5199999809265137,
+                            "instructionsRetired": 954062,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 69734812,
+                            "timeIoWait": 23690,
+                            "timeNice": 2981,
+                            "timeSoftIRQ": 11437,
+                            "timeSteal": 0,
+                            "timeSystem": 89342,
+                            "timeUser": 163137,
+                            "unhaltedFrequency": 0.5199999809265137
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 3,
+                            "interruptRate": 15,
+                            "processesAll": 1028,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 0
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 83443.203125,
+                            "flushTime": 6.746570110321045,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 6137.859375,
+                            "memoryCached": 8753.40234375,
+                            "memoryInactive": 3717.1171875,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.8203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 4.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 9.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.26953125,
+                            "swapUsed": 3.25
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 4.21999979019165,
+                            "receivedData": 9769935,
+                            "sendPacketsRate": 3.9800000190734863,
+                            "sentData": 5818463
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 65.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.840000152587891,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.1799999475479126,
+                            "systemPower": 12.270000457763672
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4379485,
+                            "cacheL2Requests": 5196121,
+                            "cacheLLCLoadMissRate": 8.57451057434082,
+                            "cacheLLCLoadMisses": 50713,
+                            "cacheLLCLoads": 591439,
+                            "cacheLLCStoreMissRate": 18.396251678466797,
+                            "cacheLLCStoreMisses": 92372,
+                            "cacheLLCStores": 502124,
+                            "cycles": 997432,
+                            "frequencyRelative": 0.6600000262260437,
+                            "instructionsRetired": 885509,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 446345426,
+                            "timeIoWait": 65231,
+                            "timeNice": 103192,
+                            "timeSoftIRQ": 79422,
+                            "timeSteal": 0,
+                            "timeSystem": 487908,
+                            "timeUser": 1183530,
+                            "unhaltedFrequency": 0.6600000262260437
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 8,
+                            "interruptRate": 5,
+                            "processesAll": 596,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 1
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 125679.0,
+                            "flushTime": 7.221650123596191,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 5000.96484375,
+                            "memoryCached": 8685.05078125,
+                            "memoryInactive": 4637.5,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 14.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 10.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.15234375,
+                            "swapUsed": 3.5
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.1899999976158142,
+                            "receivedData": 12885992,
+                            "sendPacketsRate": 0.0,
+                            "sentData": 5253276
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 64.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.639999866485596,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.1399999856948853,
+                            "systemPower": 12.199999809265137
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4410701,
+                            "cacheL2Requests": 5354170,
+                            "cacheLLCLoadMissRate": 9.289887428283691,
+                            "cacheLLCLoadMisses": 53967,
+                            "cacheLLCLoads": 580922,
+                            "cacheLLCStoreMissRate": 20.491100311279297,
+                            "cacheLLCStoreMisses": 101500,
+                            "cacheLLCStores": 495337,
+                            "cycles": 1028379,
+                            "frequencyRelative": 0.5299999713897705,
+                            "instructionsRetired": 926780,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 695016938,
+                            "timeIoWait": 67923,
+                            "timeNice": 113871,
+                            "timeSoftIRQ": 90374,
+                            "timeSteal": 0,
+                            "timeSystem": 706153,
+                            "timeUser": 1334834,
+                            "unhaltedFrequency": 0.5299999713897705
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 5,
+                            "interruptRate": 4,
+                            "processesAll": 604,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 2
+            }
+        ],
+        "timestamp": "2023-06-08 19:19:44"
+    },
+    {
+        "Nodes": [
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 47924.30078125,
+                            "flushTime": 1.8450499773025513,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4001.58203125,
+                            "memoryCached": 2942.55859375,
+                            "memoryInactive": 2095.79296875,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83984375,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 14.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 9.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 105.06640625,
+                            "swapUsed": 673.74609375
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 4.900000095367432,
+                            "receivedData": 3522570,
+                            "sendPacketsRate": 13.010000228881836,
+                            "sentData": 2523425
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 131.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.900000095367432,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 0.9300000071525574,
+                            "systemPower": 12.020000457763672
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 5221565,
+                            "cacheL2Requests": 6473992,
+                            "cacheLLCLoadMissRate": 8.72914981842041,
+                            "cacheLLCLoadMisses": 58201,
+                            "cacheLLCLoads": 666743,
+                            "cacheLLCStoreMissRate": 19.30516242980957,
+                            "cacheLLCStoreMisses": 101555,
+                            "cacheLLCStores": 526051,
+                            "cycles": 998708,
+                            "frequencyRelative": 1.2599999904632568,
+                            "instructionsRetired": 912441,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 69739787,
+                            "timeIoWait": 23691,
+                            "timeNice": 2981,
+                            "timeSoftIRQ": 11448,
+                            "timeSteal": 0,
+                            "timeSystem": 89367,
+                            "timeUser": 163154,
+                            "unhaltedFrequency": 1.2599999904632568
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 3,
+                            "interruptRate": 15,
+                            "processesAll": 1013,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 0
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 83443.203125,
+                            "flushTime": 6.746580123901367,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 6137.80078125,
+                            "memoryCached": 8753.40234375,
+                            "memoryInactive": 3717.12109375,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.8203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 13.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 11.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.26953125,
+                            "swapUsed": 3.25
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.41999998688697815,
+                            "receivedData": 9769975,
+                            "sendPacketsRate": 0.23000000417232513,
+                            "sentData": 5818488
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 65.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.949999809265137,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.190000057220459,
+                            "systemPower": 12.279999732971191
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4375011,
+                            "cacheL2Requests": 5162714,
+                            "cacheLLCLoadMissRate": 9.503908157348633,
+                            "cacheLLCLoadMisses": 56170,
+                            "cacheLLCLoads": 591020,
+                            "cacheLLCStoreMissRate": 17.576650619506836,
+                            "cacheLLCStoreMisses": 89578,
+                            "cacheLLCStores": 509642,
+                            "cycles": 1029527,
+                            "frequencyRelative": 0.6700000166893005,
+                            "instructionsRetired": 926278,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 446350439,
+                            "timeIoWait": 65231,
+                            "timeNice": 103192,
+                            "timeSoftIRQ": 79429,
+                            "timeSteal": 0,
+                            "timeSystem": 487934,
+                            "timeUser": 1183542,
+                            "unhaltedFrequency": 0.6700000166893005
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 8,
+                            "interruptRate": 5,
+                            "processesAll": 596,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 1
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 125679.0,
+                            "flushTime": 7.221660137176514,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 5001.20703125,
+                            "memoryCached": 8685.05078125,
+                            "memoryInactive": 4637.5,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 4.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 4.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.15234375,
+                            "swapUsed": 3.5
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.20000000298023224,
+                            "receivedData": 12886009,
+                            "sendPacketsRate": 0.0,
+                            "sentData": 5253277
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 64.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.639999866485596,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.1200000047683716,
+                            "systemPower": 12.210000038146973
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4127911,
+                            "cacheL2Requests": 4887299,
+                            "cacheLLCLoadMissRate": 9.802410125732422,
+                            "cacheLLCLoadMisses": 51118,
+                            "cacheLLCLoads": 521484,
+                            "cacheLLCStoreMissRate": 18.723087310791016,
+                            "cacheLLCStoreMisses": 87742,
+                            "cacheLLCStores": 468630,
+                            "cycles": 1018992,
+                            "frequencyRelative": 0.6200000047683716,
+                            "instructionsRetired": 923862,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 695021915,
+                            "timeIoWait": 67923,
+                            "timeNice": 113871,
+                            "timeSoftIRQ": 90381,
+                            "timeSteal": 0,
+                            "timeSystem": 706177,
+                            "timeUser": 1334840,
+                            "unhaltedFrequency": 0.6200000047683716
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 5,
+                            "interruptRate": 4,
+                            "processesAll": 604,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 2
+            }
+        ],
+        "timestamp": "2023-06-08 19:19:50"
+    },
+    {
+        "Nodes": [
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 47924.30078125,
+                            "flushTime": 1.8450499773025513,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4001.84375,
+                            "memoryCached": 2942.5625,
+                            "memoryInactive": 2095.796875,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83984375,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 15.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 8.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 105.06640625,
+                            "swapUsed": 673.74609375
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 7.210000038146973,
+                            "receivedData": 3522801,
+                            "sendPacketsRate": 6.650000095367432,
+                            "sentData": 2523611
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 131.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.800000190734863,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 0.9300000071525574,
+                            "systemPower": 12.0
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 5631021,
+                            "cacheL2Requests": 6800309,
+                            "cacheLLCLoadMissRate": 8.329522132873535,
+                            "cacheLLCLoadMisses": 56823,
+                            "cacheLLCLoads": 682188,
+                            "cacheLLCStoreMissRate": 19.277345657348633,
+                            "cacheLLCStoreMisses": 103534,
+                            "cacheLLCStores": 537076,
+                            "cycles": 1043943,
+                            "frequencyRelative": 0.5,
+                            "instructionsRetired": 903369,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 69744772,
+                            "timeIoWait": 23691,
+                            "timeNice": 2981,
+                            "timeSoftIRQ": 11461,
+                            "timeSteal": 0,
+                            "timeSystem": 89394,
+                            "timeUser": 163170,
+                            "unhaltedFrequency": 0.5
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 3,
+                            "interruptRate": 15,
+                            "processesAll": 1013,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 0
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 83443.203125,
+                            "flushTime": 6.746580123901367,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 6137.89453125,
+                            "memoryCached": 8753.40234375,
+                            "memoryInactive": 3717.12109375,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.8203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 171.0,
+                            "pageFaultsMajorRate": 3.0,
+                            "pageFreeRate": 3058.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.26953125,
+                            "swapUsed": 3.25
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.8899999856948853,
+                            "receivedData": 9770108,
+                            "sendPacketsRate": 0.9599999785423279,
+                            "sentData": 5818575
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 65.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.949999809265137,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.2000000476837158,
+                            "systemPower": 12.289999961853027
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4581182,
+                            "cacheL2Requests": 5470335,
+                            "cacheLLCLoadMissRate": 9.568611145019531,
+                            "cacheLLCLoadMisses": 57187,
+                            "cacheLLCLoads": 597652,
+                            "cacheLLCStoreMissRate": 19.565397262573242,
+                            "cacheLLCStoreMisses": 99006,
+                            "cacheLLCStores": 506026,
+                            "cycles": 1058969,
+                            "frequencyRelative": 0.6100000143051147,
+                            "instructionsRetired": 936698,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 446355430,
+                            "timeIoWait": 65232,
+                            "timeNice": 103192,
+                            "timeSoftIRQ": 79439,
+                            "timeSteal": 0,
+                            "timeSystem": 487956,
+                            "timeUser": 1183553,
+                            "unhaltedFrequency": 0.6100000143051147
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 8,
+                            "interruptRate": 5,
+                            "processesAll": 595,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 1
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 125679.0,
+                            "flushTime": 7.221660137176514,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4989.078125,
+                            "memoryCached": 8685.67578125,
+                            "memoryInactive": 4637.91015625,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 13.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 11.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.15234375,
+                            "swapUsed": 3.5
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.05999999865889549,
+                            "receivedData": 12886681,
+                            "sendPacketsRate": 0.0,
+                            "sentData": 5253684
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 64.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.929999828338623,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.1299999952316284,
+                            "systemPower": 12.210000038146973
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4337193,
+                            "cacheL2Requests": 5153655,
+                            "cacheLLCLoadMissRate": 9.169858932495117,
+                            "cacheLLCLoadMisses": 50915,
+                            "cacheLLCLoads": 555243,
+                            "cacheLLCStoreMissRate": 18.552045822143555,
+                            "cacheLLCStoreMisses": 87492,
+                            "cacheLLCStores": 471603,
+                            "cycles": 1047173,
+                            "frequencyRelative": 0.5199999809265137,
+                            "instructionsRetired": 916437,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 695026922,
+                            "timeIoWait": 67923,
+                            "timeNice": 113871,
+                            "timeSoftIRQ": 90391,
+                            "timeSteal": 0,
+                            "timeSystem": 706200,
+                            "timeUser": 1334849,
+                            "unhaltedFrequency": 0.5199999809265137
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 5,
+                            "interruptRate": 4,
+                            "processesAll": 603,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 2
+            }
+        ],
+        "timestamp": "2023-06-08 19:19:57"
+    },
+    {
+        "Nodes": [
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 47924.30078125,
+                            "flushTime": 1.8452600240707397,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4001.76953125,
+                            "memoryCached": 2942.56640625,
+                            "memoryInactive": 2095.80078125,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83984375,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 4.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 40.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 105.06640625,
+                            "swapUsed": 673.74609375
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 3.799999952316284,
+                            "receivedData": 3523018,
+                            "sendPacketsRate": 3.059999942779541,
+                            "sentData": 2523782
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 131.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 6.0,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 0.9399999976158142,
+                            "systemPower": 12.029999732971191
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4964580,
+                            "cacheL2Requests": 6361062,
+                            "cacheLLCLoadMissRate": 9.196106910705566,
+                            "cacheLLCLoadMisses": 58069,
+                            "cacheLLCLoads": 631452,
+                            "cacheLLCStoreMissRate": 19.171432495117188,
+                            "cacheLLCStoreMisses": 98221,
+                            "cacheLLCStores": 512330,
+                            "cycles": 1010818,
+                            "frequencyRelative": 0.5600000023841858,
+                            "instructionsRetired": 904433,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 69749769,
+                            "timeIoWait": 23692,
+                            "timeNice": 2981,
+                            "timeSoftIRQ": 11471,
+                            "timeSteal": 0,
+                            "timeSystem": 89422,
+                            "timeUser": 163186,
+                            "unhaltedFrequency": 0.5600000023841858
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 3,
+                            "interruptRate": 15,
+                            "processesAll": 1013,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 0
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 83443.203125,
+                            "flushTime": 6.7465901374816895,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 6126.40625,
+                            "memoryCached": 8753.3984375,
+                            "memoryInactive": 3717.1171875,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.8203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 14.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 12.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.26953125,
+                            "swapUsed": 3.25
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.20000000298023224,
+                            "receivedData": 9770139,
+                            "sendPacketsRate": 0.20000000298023224,
+                            "sentData": 5818599
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 65.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 6.039999961853027,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.1699999570846558,
+                            "systemPower": 12.260000228881836
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4337302,
+                            "cacheL2Requests": 5293065,
+                            "cacheLLCLoadMissRate": 9.16345500946045,
+                            "cacheLLCLoadMisses": 52408,
+                            "cacheLLCLoads": 571924,
+                            "cacheLLCStoreMissRate": 18.583053588867188,
+                            "cacheLLCStoreMisses": 92743,
+                            "cacheLLCStores": 499073,
+                            "cycles": 1022751,
+                            "frequencyRelative": 0.4699999988079071,
+                            "instructionsRetired": 902613,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 446360415,
+                            "timeIoWait": 65232,
+                            "timeNice": 103192,
+                            "timeSoftIRQ": 79444,
+                            "timeSteal": 0,
+                            "timeSystem": 487979,
+                            "timeUser": 1183564,
+                            "unhaltedFrequency": 0.4699999988079071
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 8,
+                            "interruptRate": 5,
+                            "processesAll": 590,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 1
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 125679.0,
+                            "flushTime": 7.221670150756836,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4988.92578125,
+                            "memoryCached": 8685.67578125,
+                            "memoryInactive": 4637.90625,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 6.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 13.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.15234375,
+                            "swapUsed": 3.5
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.05999999865889549,
+                            "receivedData": 12886692,
+                            "sendPacketsRate": 0.05999999865889549,
+                            "sentData": 5253686
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 64.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.550000190734863,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.1299999952316284,
+                            "systemPower": 12.220000267028809
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4229997,
+                            "cacheL2Requests": 5071953,
+                            "cacheLLCLoadMissRate": 8.510940551757813,
+                            "cacheLLCLoadMisses": 46702,
+                            "cacheLLCLoads": 548729,
+                            "cacheLLCStoreMissRate": 18.632734298706055,
+                            "cacheLLCStoreMisses": 89049,
+                            "cacheLLCStores": 477917,
+                            "cycles": 1004870,
+                            "frequencyRelative": 0.5699999928474426,
+                            "instructionsRetired": 890876,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 695031898,
+                            "timeIoWait": 67923,
+                            "timeNice": 113871,
+                            "timeSoftIRQ": 90406,
+                            "timeSteal": 0,
+                            "timeSystem": 706221,
+                            "timeUser": 1334858,
+                            "unhaltedFrequency": 0.5699999928474426
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 5,
+                            "interruptRate": 4,
+                            "processesAll": 598,
+                            "processesBlocked": 0,
+                            "processesRunning": 1
+                        }
+                    ]
+                },
+                "Node": 2
+            }
+        ],
+        "timestamp": "2023-06-08 19:20:03"
+    },
+    {
+        "Nodes": [
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 47924.30078125,
+                            "flushTime": 1.8452600240707397,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4001.7890625,
+                            "memoryCached": 2942.5703125,
+                            "memoryInactive": 2095.8046875,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83984375,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 15.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 8.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 105.06640625,
+                            "swapUsed": 673.74609375
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 2.059999942779541,
+                            "receivedData": 3523200,
+                            "sendPacketsRate": 1.5499999523162842,
+                            "sentData": 2523929
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 131.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.800000190734863,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 0.9200000166893005,
+                            "systemPower": 12.0
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4930257,
+                            "cacheL2Requests": 6188148,
+                            "cacheLLCLoadMissRate": 12.392414093017578,
+                            "cacheLLCLoadMisses": 79450,
+                            "cacheLLCLoads": 641118,
+                            "cacheLLCStoreMissRate": 19.166770935058594,
+                            "cacheLLCStoreMisses": 99925,
+                            "cacheLLCStores": 521345,
+                            "cycles": 1027283,
+                            "frequencyRelative": 1.0,
+                            "instructionsRetired": 908510,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 69754766,
+                            "timeIoWait": 23692,
+                            "timeNice": 2981,
+                            "timeSoftIRQ": 11479,
+                            "timeSteal": 0,
+                            "timeSystem": 89445,
+                            "timeUser": 163202,
+                            "unhaltedFrequency": 0.9900000095367432
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 3,
+                            "interruptRate": 15,
+                            "processesAll": 1013,
+                            "processesBlocked": 0,
+                            "processesRunning": 1
+                        }
+                    ]
+                },
+                "Node": 0
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 83443.203125,
+                            "flushTime": 6.7465901374816895,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 6126.265625,
+                            "memoryCached": 8753.3984375,
+                            "memoryInactive": 3717.11328125,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.8203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 13.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 16.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.26953125,
+                            "swapUsed": 3.25
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.8199999928474426,
+                            "receivedData": 9770174,
+                            "sendPacketsRate": 0.47999998927116394,
+                            "sentData": 5818628
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 65.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.949999809265137,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.149999976158142,
+                            "systemPower": 12.239999771118164
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4469826,
+                            "cacheL2Requests": 5131221,
+                            "cacheLLCLoadMissRate": 8.699139595031738,
+                            "cacheLLCLoadMisses": 51632,
+                            "cacheLLCLoads": 593530,
+                            "cacheLLCStoreMissRate": 17.598360061645508,
+                            "cacheLLCStoreMisses": 90193,
+                            "cacheLLCStores": 512508,
+                            "cycles": 998131,
+                            "frequencyRelative": 1.2599999904632568,
+                            "instructionsRetired": 907112,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 446365387,
+                            "timeIoWait": 65233,
+                            "timeNice": 103192,
+                            "timeSoftIRQ": 79452,
+                            "timeSteal": 0,
+                            "timeSystem": 487997,
+                            "timeUser": 1183578,
+                            "unhaltedFrequency": 1.2599999904632568
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 8,
+                            "interruptRate": 5,
+                            "processesAll": 590,
+                            "processesBlocked": 0,
+                            "processesRunning": 1
+                        }
+                    ]
+                },
+                "Node": 1
+            },
+            {
+                "Metrics": {
+                    "inputOutputMetrics": [
+                        {
+                            "dataRead": 4.19140625,
+                            "dataWritten": 0.0,
+                            "flushOperationsRate": 125679.0,
+                            "flushTime": 7.221670150756836,
+                            "processID": 1,
+                            "readOperationsRate": 12,
+                            "readTime": 0.0,
+                            "writeOperationsRate": 0,
+                            "writeTime": 0.0
+                        }
+                    ],
+                    "memoryMetrics": [
+                        {
+                            "memoryActive": 4988.4765625,
+                            "memoryCached": 8685.67578125,
+                            "memoryInactive": 4637.90625,
+                            "memoryIoRate": 0.0,
+                            "memoryReadRate": 0.0,
+                            "memoryUsed": 15970.83203125,
+                            "memoryWriteRate": 0.0,
+                            "pageActivateRate": 0.0,
+                            "pageDeactivateRate": 0.0,
+                            "pageFaultRate": 15.0,
+                            "pageFaultsMajorRate": 0.0,
+                            "pageFreeRate": 17.0,
+                            "pageInRate": 0.0,
+                            "pageOutRate": 0.0,
+                            "swapCached": 0.15234375,
+                            "swapUsed": 3.5
+                        }
+                    ],
+                    "networkMetrics": [
+                        {
+                            "receivePacketRate": 0.3799999952316284,
+                            "receivedData": 12886707,
+                            "sendPacketsRate": 0.0,
+                            "sentData": 5253692
+                        }
+                    ],
+                    "powerMetrics": [
+                        {
+                            "gpuClocksCurrentMemory": 405.0,
+                            "gpuClocksCurrentSM": 405.0,
+                            "gpuFanSpeed": 64.0,
+                            "gpuMemoryFree": 405.0,
+                            "gpuMemoryTotal": 139.0,
+                            "gpuMemoryUsed": 405.0,
+                            "gpuPower": 5.840000152587891,
+                            "gpuTemperature": 25.0,
+                            "memoryPower": 0.44999998807907104,
+                            "processorPower": 1.1200000047683716,
+                            "systemPower": 12.199999809265137
+                        }
+                    ],
+                    "processorMetrics": [
+                        {
+                            "cacheL2Misses": 4132032,
+                            "cacheL2Requests": 4897554,
+                            "cacheLLCLoadMissRate": 8.22402286529541,
+                            "cacheLLCLoadMisses": 45436,
+                            "cacheLLCLoads": 552479,
+                            "cacheLLCStoreMissRate": 18.3753604888916,
+                            "cacheLLCStoreMisses": 87882,
+                            "cacheLLCStores": 478260,
+                            "cycles": 999455,
+                            "frequencyRelative": 0.5600000023841858,
+                            "instructionsRetired": 909971,
+                            "timeGuest": 0,
+                            "timeIRQ": 0,
+                            "timeIdle": 695036884,
+                            "timeIoWait": 67923,
+                            "timeNice": 113871,
+                            "timeSoftIRQ": 90418,
+                            "timeSteal": 0,
+                            "timeSystem": 706242,
+                            "timeUser": 1334867,
+                            "unhaltedFrequency": 0.5600000023841858
+                        }
+                    ],
+                    "systemMetrics": [
+                        {
+                            "contextSwitchRate": 5,
+                            "interruptRate": 4,
+                            "processesAll": 598,
+                            "processesBlocked": 0,
+                            "processesRunning": 2
+                        }
+                    ]
+                },
+                "Node": 2
+            }
+        ],
+        "timestamp": "2023-06-08 19:20:09"
+    }
+]
