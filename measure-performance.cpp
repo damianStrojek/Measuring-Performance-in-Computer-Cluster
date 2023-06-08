@@ -46,8 +46,6 @@ int main(int argc, char **argv){
 	AllMetrics allMetrics;
 
 	const char* dateCommand = "date +'%d%m-%H%M'";
-	//allMetrics.nodeTimestamp = exec(dateCommand);
-	//allMetrics.nodeTimestamp.pop_back();
 	std:: string date = exec(dateCommand);
 	date.pop_back();
 	std::string fileName = "results/" + date + "_metrics.json";
@@ -116,8 +114,8 @@ int main(int argc, char **argv){
 		//auto end = std::chrono::high_resolution_clock::now();
 		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
 		//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
-		if(rank==0) outputFile << jsonArray.dump(4);
 		// Save metrics to file
+		if(rank==0) outputFile << jsonArray.dump(4);
 		//writeToJSON(outputFile, allMetrics);
 	}
 	

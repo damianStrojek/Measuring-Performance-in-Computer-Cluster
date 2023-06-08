@@ -107,7 +107,6 @@ json metricsToJson(AllMetrics* allMetricsArray,int cluster_size){
 	};
 
 	json allMetricsJSON = {
-		//{"nodeTimestamp", allMetrics.nodeTimestamp},
 		{"systemMetrics", {systemMetricsJSON}},
 		{"processorMetrics", {processorMetricsJSON}},
 		{"inputOutputMetrics", {inputOutputMetricsJSON}},
