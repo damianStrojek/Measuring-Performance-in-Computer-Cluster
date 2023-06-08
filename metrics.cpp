@@ -154,22 +154,12 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	processorMetrics.cacheLLCLoadMisses = std::stoi(temp);
 	std::getline(streamTwo, temp);
 	processorMetrics.cacheLLCStoreMisses = std::stoi(temp);
-
-	float check;
-
-	check = float(processorMetrics.cacheLLCLoadMisses) / float(processorMetrics.cacheLLCLoads);
-	processorMetrics.cacheLLCLoadMissRate = check;
-	std::cout << "CHECK" << check << "\n";
-	std::cout << "CHECK" << processorMetrics.cacheLLCLoadMissRate << "\n";
-	std::cout << "CHECK" << processorMetrics.cacheLLCLoadMisses / processorMetrics.cacheLLCLoads;
-
-	/*
+	
 	// Check division by zero and calculate miss rate
 	if(processorMetrics.cacheLLCLoads > 0)
-		processorMetrics.cacheLLCLoadMissRate = processorMetrics.cacheLLCLoadMisses / processorMetrics.cacheLLCLoads;
+		processorMetrics.cacheLLCLoadMissRate = float(processorMetrics.cacheLLCLoadMisses) / float(processorMetrics.cacheLLCLoads) * 100; 
 	if(processorMetrics.cacheLLCStores > 0)
-		processorMetrics.cacheLLCStoreMissRate = processorMetrics.cacheLLCStoreMisses / processorMetrics.cacheLLCStores;
-	*/
+		processorMetrics.cacheLLCStoreMissRate = float(processorMetrics.cacheLLCStoreMisses) / float(processorMetrics.cacheLLCStores) * 100;
 
 	command = "perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'";
 	output = exec(command);
