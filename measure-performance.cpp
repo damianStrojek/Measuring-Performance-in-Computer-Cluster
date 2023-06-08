@@ -46,9 +46,9 @@ int main(int argc, char **argv){
 	std::string timestamp = exec(dateCommand);
 	timestamp.pop_back();
 
-	std::string fileName = "results/" + allMetrics.timestamp + "_metrics.json";
+	std::string fileName = "results/" + allMetrics.nodeTimestamp + "_metrics.json";
 	std::ofstream outputFile(fileName, std::ios::out);
-	if(!file.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";
+	if(!outputFile.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";
 	
 	int rank, clusterSize;
 	MPI_Init(&argc, &argv);
