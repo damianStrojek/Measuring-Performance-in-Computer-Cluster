@@ -10,6 +10,7 @@
 #include <fstream>
 #include "json.hpp"
 #include <chrono>
+#include <sstream>
 // Internal headers
 #include "metrics.h"
 #include "metrics-save.h"
@@ -21,7 +22,9 @@ json metricsToJson(AllMetrics* allMetricsArray,int cluster_size){
 	json jsonSingleIteration;
 	auto now = std::chrono::system_clock::now();
   	std::time_t now_c = std::chrono::system_clock::to_time_t(now);
-	jsonSingleIteration["a_timestamp"] = std::put_time(std::localtime(&now_c), "%Y-%m-%d %X");
+	std::stringstream ss;
+	ss << std::put_time(std::localtime(&now_c), "%Y-%m-%d %X");
+	jsonSingleIteration["_timestamp"] = ss.str();
 	json nodes = json::array();
 	for(int i = 0; i < cluster_size ; i++){
 	AllMetrics allMetrics = allMetricsArray[i];
@@ -114,7 +117,7 @@ json metricsToJson(AllMetrics* allMetricsArray,int cluster_size){
 		{"powerMetrics", {powerMetricsJSON}}
 	};
 	json singleNode;
-	singleNode["a_Node"] = i;
+	singleNode["_Node"] = i;
 	singleNode["Metrics"] = allMetricsJSON;
 	nodes.push_back(singleNode);
 	}
