@@ -137,8 +137,9 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	processorMetrics.timeSteal = std::stoi(temp);		// USER_HZ
 	stream >> temp;
 	processorMetrics.timeGuest = std::stoi(temp);		// USER_HZ
-
-	command = "perf stat -e 'l2_rqsts.references,l2_rqsts.miss,LLC-loads,LLC-stores,LLC-load-misses,LLC-store-misses' --all-cpus sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}' | sed 's/[^0-9]//g'";
+	
+	// sed 's/[\xE2\x80\xAF]//g' is getting rid of special white space characters
+	command = "perf stat -e 'l2_rqsts.references,l2_rqsts.miss,LLC-loads,LLC-stores,LLC-load-misses,LLC-store-misses' --all-cpus sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}' | sed 's/[\xE2\x80\xAF]//g'";
 	output = exec(command);
 	std::stringstream streamTwo(output);
 
@@ -161,7 +162,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	if(processorMetrics.cacheLLCStores > 0)
 		processorMetrics.cacheLLCStoreMissRate = float(processorMetrics.cacheLLCStoreMisses) / float(processorMetrics.cacheLLCStores) * 100;
 
-	command = "perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'";
+	command = "perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}' | sed 's/[\xE2\x80\xAF]//g'";
 	output = exec(command);
 	std::stringstream streamThree(output);
 

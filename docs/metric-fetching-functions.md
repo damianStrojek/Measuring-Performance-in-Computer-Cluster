@@ -236,26 +236,7 @@ perf stat -e power/energy-cores/,power/energy-ram/,power/energy-pkg/ sleep 1 2>&
 
 Regarding `powerstat` - it needs to be run with root privilege when using `-g`, `-p`, `-r`, `-s` options.`
 
-### Using RAPL
-
-```c++
-if(!raplError){
-    double energy;
-    if (rapl_get_energy(RAPL_PACKAGE, &energy) != 0){
-        std::cerr << "\n\n\t[ERROR] Failed to get package energy consumption\n";
-        raplError = 1;
-        rapl_finish();
-    }
-    else
-        powerMetrics.processorPower = energy;
-}
-```
-
-The RAPL (Running Average Power Limit) interface is used to monitor the power consumption of an Intel processor. In this code, we first initialize the RAPL library using `rapl_init()` (in the main function and parsing the error state using `raplError`). Then, we use the `rapl_get_power_limit()` and `rapl_get_energy()` functions to get the package power limit and energy consumption, respectively. Finally, we cleanup the RAPL library using `rapl_finish()` (either here or in the main function).
-
-![Output]()
-
-### Using NVML
+### Old method of using NVML
 
 ```c++
 if(!nvmlError){
