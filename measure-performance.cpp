@@ -33,6 +33,7 @@
 
 #define GPROCESSID 1				// PID of process that we are focused on (G stands for global)
 #define DATA_BATCH 5				// How many times you want to download metrics
+using json = nlohmann::json;
 
 int main(int argc, char **argv){
 

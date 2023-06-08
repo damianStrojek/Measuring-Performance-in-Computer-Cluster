@@ -21,7 +21,7 @@ json metricsToJson(AllMetrics* allMetricsArray,int cluster_size,int timestamp_co
 	jsonSingleIteration["timestamp"] = "Timestamp "+timestamp_counter;
 	json nodes = json::array();
 	for(int i = 0; i < cluster_size ; i++){
-	AllMetrics allmetrics = allMetricsArray[i];
+	AllMetrics allMetrics = allMetricsArray[i];
 	// create JSON objects for the sub-structures
 	json systemMetricsJSON = {
 		{"processesRunning", allMetrics.systemMetrics.processesRunning},

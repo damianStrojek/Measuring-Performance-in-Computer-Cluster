@@ -430,7 +430,7 @@ void getPowerMetrics(PowerMetrics &powerMetrics){
 };
 
 AllMetrics::AllMetrics(){
-	this->nodeTimestamp = "";
+	//this->nodeTimestamp = "";
 	this->systemMetrics = SystemMetrics();
 	this->processorMetrics = ProcessorMetrics();
 	this->inputOutputMetrics = InputOutputMetrics();
