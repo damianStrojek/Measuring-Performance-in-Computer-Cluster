@@ -108,7 +108,7 @@ int main(int argc, char **argv){
 						&allMetricsArray[j].inputOutputMetrics, &allMetricsArray[j].memoryMetrics, \
 						&allMetricsArray[j].networkMetrics, &allMetricsArray[j].powerMetrics);
 			}
-			jsonArray.push_back(metricsToJson(allMetricsArray,clusterSize,i));
+			jsonArray.push_back(metricsToJson(allMetricsArray,clusterSize));
 
 
 		}

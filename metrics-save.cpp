@@ -9,16 +9,19 @@
 // External libraries
 #include <fstream>
 #include "json.hpp"
+#include <chrono>
 // Internal headers
 #include "metrics.h"
 #include "metrics-save.h"
 
 using json = nlohmann::json;
 
-json metricsToJson(AllMetrics* allMetricsArray,int cluster_size,int timestamp_counter){
+json metricsToJson(AllMetrics* allMetricsArray,int cluster_size){
 	
 	json jsonSingleIteration;
-	jsonSingleIteration["timestamp"] = "Timestamp "+timestamp_counter;
+	auto now = std::chrono::system_clock::now();
+  	std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+	jsonSingleIteration["a_timestamp"] = std::put_time(std::localtime(&now_c), "%Y-%m-%d %X");
 	json nodes = json::array();
 	for(int i = 0; i < cluster_size ; i++){
 	AllMetrics allMetrics = allMetricsArray[i];
@@ -111,7 +114,7 @@ json metricsToJson(AllMetrics* allMetricsArray,int cluster_size,int timestamp_co
 		{"powerMetrics", {powerMetricsJSON}}
 	};
 	json singleNode;
-	singleNode["Node"] = i;
+	singleNode["a_Node"] = i;
 	singleNode["Metrics"] = allMetricsJSON;
 	nodes.push_back(singleNode);
 	}
