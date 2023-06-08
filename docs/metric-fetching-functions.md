@@ -13,20 +13,21 @@ Below is a list of paths from which we fetched data:
 - `/proc/loadavg`
 - `/proc/cpuinfo`
 - `/proc/stat`
-- `/proc/<gPROCESSID>/io`
+- `/proc/[gPROCESSID]/io`
 - `/proc/meminfo`
 - `/proc/net/dev`
 
-And list of tools/commands:
+And list of tools/commands used when information from files is not sufficient:
 
 - date
 - vmstat
 - ps
+- perf
 - iostat
 - sar
 - ifstat
-- powerstat
-- cut, grep, cat, awk, tail
+- nvidia-smi
+- cut, grep, cat, awk, tail, tr, sed, sleep
 
 ## System Metrics
 
@@ -87,7 +88,7 @@ All of the times are measured in `USER_HZ` which is typically 1/100 of a second.
 ### L2 and LLC Cache Hit and Miss Rates
 
 ```bash
-perf stat -e "l2_rqsts.references,l2_rqsts.miss,LLC-loads,LLC-stores,LLC-load-misses,LLC-store-misses" --all-cpus sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'
+perf stat -e "l2_rqsts.references,l2_rqsts.miss,LLC-loads,LLC-stores,LLC-load-misses,LLC-store-misses" --all-cpus sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}' | sed 's/[\xE2\x80\xAF]//g'
 ```
 
 `l2_rqsts.references`: This metric represents the number of L2 cache requests issued by the processor. It measures the total number of times the processor accessed the L2 cache.
@@ -111,7 +112,7 @@ These metrics provide insights into the cache behavior of the processor during t
 ### Cycles Rates and Relative Frequencies
 
 ```bash
-perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'
+perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}' |  sed 's/[\xE2\x80\xAF]//g' | tr ',' '.'
 ```
 
 - `Number of instructions retired`: This is the total number of instructions executed by the processor during the sampling period.
@@ -142,7 +143,11 @@ The first and second rows are respectively all characters read and written by th
 
 ```bash
 iostat -d -k | awk '/^[^ ]/ {device=$1} $1 ~ /sda/ {print 1000*$10/($4*$3), 1000*$11/($4*$3), $6/$4, $7/$6}'
+```
 
+Explanation of the one-liner:
+
+```bash
 /^[^ ]/ {device=$1}              # If the line starts with a non-space character, set the variable "device" to the first field
 $1 ~ /sda/ {                     # If the first field contains "sda"
     print 1000*$10/($4*$3),      # Print the read time in milliseconds (Field 10 * 1000 / (Field 4 * Field 3))
@@ -161,7 +166,7 @@ This command will first run `iostat -d -k` to get the disk statistics, then use 
 ### Active, Inactive, Cached, and Used Memory and Swap
 
 ```bash
-grep -v -e 'anon' -e 'file' /proc/meminfo | grep -E '^(Cached|SwapCached|SwapTotal|SwapFree|Active|Inactive)' | awk '{print $2}'
+grep -v -e 'anon' -e 'file' /proc/meminfo | grep -E '^(MemTotal|Cached|SwapCached|SwapTotal|SwapFree|Active|Inactive)' | awk '{print $2}'
 ```
 
 All of the information we can get from the `/proc/meminfo` file. All of the metrics are saved in kB but, for the sake of the output, we are dividing it by 1024 to have MB.
@@ -209,7 +214,7 @@ Both metrics are measured in KB/s.
 ### Sent and Received Data
 
 ```bash
-cat /proc/net/dev | awk '/^ *eth0:/ {rx=$3; tx=$11; print rx,tx; exit}'
+cat /proc/net/dev | awk '/^ *enp0s31f6:/ {rx=$3; tx=$11; print rx,tx; exit}'
 ```
 
 The file `/proc/net/dev` keeps track of all received and sent packets and bytes. Right now we are outputting number of packets but it's possible to change the command and output number of bytes.
@@ -220,10 +225,10 @@ The file `/proc/net/dev` keeps track of all received and sent packets and bytes.
 
 ## Power Metrics
 
-### Power not using RAPL or NVML
+### Processor, Memory Power using RAPL
 
 ```bash
-perf stat -e power/energy-cores/,power/energy-ram/,power/energy-pkg/ sleep 1 2>&1 | awk '/Joules/ {print $1}'
+perf stat -e power/energy-cores/,power/energy-ram/,power/energy-pkg/ sleep 1 2>&1 | awk '/Joules/ {print $1}' | tr ',' '.'
 ```
 
 - `power/energy-cores/`: This measures the energy consumed by the CPU cores during the measurement period. The CPU cores are the primary consumers of power in most computing systems, as they perform the majority of the processing work.
@@ -234,7 +239,23 @@ perf stat -e power/energy-cores/,power/energy-ram/,power/energy-pkg/ sleep 1 2>&
 
 ![Output](./images/power-consumption-perf.png)
 
-Regarding `powerstat` - it needs to be run with root privilege when using `-g`, `-p`, `-r`, `-s` options.`
+### NVIDIA NVML Interface
+
+```bash
+nvidia-smi --query-gpu=power.draw,temperature.gpu,fan.speed,memory.total,memory.used,memory.free,clocks.current.sm,clocks.current.memory --format=csv,nounits,noheader | tr ',' ' '
+```
+
+This oneliner performs a command-line operation using the nvidia-smi tool and some additional commands. Here's a breakdown of what each component does:
+
+`nvidia-smi`: This is a command-line utility provided by NVIDIA for monitoring and managing NVIDIA GPU devices. It provides information about various aspects of the GPUs installed on the system.
+
+`--query-gpu=power.draw,temperature.gpu,fan.speed,memory.total,memory.used,memory.free,clocks.current.sm,clocks.current.memory`: This argument specifies the specific GPU metrics or properties to query using nvidia-smi. The comma-separated list contains the following metrics: power draw, GPU temperature, fan speed, total memory, used memory, free memory, current SM (Streaming Multiprocessor) clock frequency, and current memory clock frequency.
+
+`--format=csv,nounits,noheader`: This argument specifies the output format for the queried GPU metrics. It sets the format to Comma-Separated Values (CSV) and removes any unit labels or header information from the output.
+
+`| tr ',' ' '`: This part uses the tr command to perform a character translation. It takes the output from the previous command (nvidia-smi) and replaces any commas (',') with spaces (' '). This transformation is done to change the CSV format into a more readable and space-separated format.
+
+Overall, this oneliner retrieves specific metrics from NVIDIA GPUs using nvidia-smi, formats the output as CSV without units or headers, and then converts commas into spaces for easier reading.
 
 ### Old method of using NVML
 
