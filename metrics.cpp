@@ -155,12 +155,20 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	processorMetrics.cacheLLCLoadMisses = std::stoi(temp);
 	std::getline(streamTwo, temp);
 	processorMetrics.cacheLLCStoreMisses = std::stoi(temp);
-	
+
+	float check;
+
+	check = processorMetrics.cacheLLCLoadMisses / processorMetrics.cacheLLCLoads;
+	processorMetrics.cacheLLCLoadMissRate = check;
+
+
+	/*
 	// Check division by zero and calculate miss rate
 	if(processorMetrics.cacheLLCLoads > 0)
 		processorMetrics.cacheLLCLoadMissRate = processorMetrics.cacheLLCLoadMisses / processorMetrics.cacheLLCLoads;
 	if(processorMetrics.cacheLLCStores > 0)
 		processorMetrics.cacheLLCStoreMissRate = processorMetrics.cacheLLCStoreMisses / processorMetrics.cacheLLCStores;
+	*/
 
 	command = "perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'";
 	output = exec(command);
