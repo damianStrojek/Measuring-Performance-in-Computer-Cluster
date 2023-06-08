@@ -13,14 +13,9 @@
 #include <fstream>
 // Internal headers
 #include "metrics.h"
+#include "json.hpp"
+// Write to file function
+nlohmann::json metricsToJson(AllMetrics* allMetricsArray,int cluster_size);
 
-// Write to file functions
-void writeToFileSystemMetrics(std::ofstream&, SystemMetrics);
-void writeToFileProcessorMetrics(std::ofstream&, ProcessorMetrics);
-void writeToFileInputOutputMetrics(std::ofstream&, InputOutputMetrics);
-void writeToFileMemoryMetrics(std::ofstream&, MemoryMetrics);
-void writeToFileNetworkMetrics(std::ofstream&, NetworkMetrics);
-void writeToCSV(std::ofstream&, std::string, SystemMetrics, ProcessorMetrics, 
-		InputOutputMetrics, MemoryMetrics, NetworkMetrics);
 
 #endif

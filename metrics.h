@@ -118,6 +118,7 @@ struct PowerMetrics {
 };
 
 struct AllMetrics {
+	//std::string nodeTimestamp;
 	SystemMetrics systemMetrics;
 	ProcessorMetrics processorMetrics;
 	InputOutputMetrics inputOutputMetrics;
@@ -134,7 +135,7 @@ void getProcessorMetrics(ProcessorMetrics&);
 void getInputOutputMetrics(InputOutputMetrics&);
 void getMemoryMetrics(MemoryMetrics&);
 void getNetworkMetrics(NetworkMetrics&);
-void getPowerMetrics(PowerMetrics&, bool&, bool&);
+void getPowerMetrics(PowerMetrics&);
 // Getting the output from system to string
 std::string exec(const char*);
 
