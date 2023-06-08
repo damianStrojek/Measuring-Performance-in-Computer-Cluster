@@ -36,11 +36,6 @@ void writeToFileProcessorMetrics(std::ofstream &file, ProcessorMetrics data){
 	file << (data.cycles != NOTSUPPORTED ? std::to_string(data.cycles) : "not_supported") << ",";
 	file << (data.frequencyRelative != NOTSUPPORTED ? std::to_string(data.frequencyRelative) : "not_supported") << ",";
 	file << (data.unhaltedFrequency != NOTSUPPORTED ? std::to_string(data.unhaltedFrequency) : "not_supported") << ",";
-	file << (data.cacheL2HitRate != NOTSUPPORTED ? std::to_string(data.cacheL2HitRate) : "not_supported") << ",";
-	file << (data.cacheL2MissRate != NOTSUPPORTED ? std::to_string(data.cacheL2MissRate) : "not_supported") << ",";
-	file << (data.cacheL3HitRate != NOTSUPPORTED ? std::to_string(data.cacheL3HitRate) : "not_supported") << ",";
-	file << (data.cacheL3HitSnoopRate != NOTSUPPORTED ? std::to_string(data.cacheL3HitSnoopRate) : "not_supported") << ",";
-	file << (data.cacheL3MissRate != NOTSUPPORTED ? std::to_string(data.cacheL3MissRate) : "not_supported") << ",";
 };
 
 void writeToFileInputOutputMetrics(std::ofstream &file, InputOutputMetrics data){

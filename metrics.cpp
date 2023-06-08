@@ -16,20 +16,20 @@
 #include "metrics.h"
 
 SystemMetrics::SystemMetrics(){
-    this->processesRunning = -1;
-    this->processesAll = -1;
-    this->processesBlocked = -1;
-    this->contextSwitchRate = -1;
-    this->interruptRate = -1;
+	this->processesRunning = -1;
+	this->processesAll = -1;
+	this->processesBlocked = -1;
+	this->contextSwitchRate = -1;
+	this->interruptRate = -1;
 };
 
 void SystemMetrics::printSystemMetrics(){
-    std::cout << "\n\t[SYSTEM METRICS]\n\n"
-	<< "Interrupt Rate = " << this->interruptRate << " interrupts/sec\n"
-	<< "Context Switch Rate = " << this->contextSwitchRate << " switches/sec\n"
-	<< "All Processes = " << this->processesAll << "\n"
-	<< "Running Processes = " << this->processesRunning << "\n"
-	<< "Blocked Processes = " << this->processesBlocked << "\n";
+	std::cout << "\n\t[SYSTEM METRICS]\n\n"
+		<< "Interrupt Rate = " << this->interruptRate << " interrupts/sec\n"
+		<< "Context Switch Rate = " << this->contextSwitchRate << " switches/sec\n"
+		<< "All Processes = " << this->processesAll << "\n"
+		<< "Running Processes = " << this->processesRunning << "\n"
+		<< "Blocked Processes = " << this->processesBlocked << "\n";
 };
 
 void getSystemMetrics(SystemMetrics &systemMetrics){
@@ -59,46 +59,52 @@ void getSystemMetrics(SystemMetrics &systemMetrics){
 };
 
 ProcessorMetrics::ProcessorMetrics(){
-    this->timeUser = -1;
-    this->timeNice = -1;
-    this->timeSystem = -1;
-    this->timeIdle = -1;
-    this->timeIoWait = -1;
-    this->timeIRQ = -1;
-    this->timeSoftIRQ = -1;
-    this->timeSteal = -1;
-    this->timeGuest = -1;
-    this->instructionsRetired = -1;
-    this->cycles = -1;
-    this->frequencyRelative = -1;
-    this->unhaltedFrequency = -1;
-    this->cacheL2HitRate = -1;
-    this->cacheL2MissRate = -1;
-    this->cacheL3HitRate = -1;
-    this->cacheL3HitSnoopRate = -1;
-    this->cacheL3MissRate = -1;
+	this->timeUser = -1;
+	this->timeNice = -1;
+	this->timeSystem = -1;
+	this->timeIdle = -1;
+	this->timeIoWait = -1;
+	this->timeIRQ = -1;
+	this->timeSoftIRQ = -1;
+	this->timeSteal = -1;
+	this->timeGuest = -1;
+	this->instructionsRetired = -1;
+	this->cycles = -1;
+	this->frequencyRelative = -1;
+	this->unhaltedFrequency = -1;
+	this->cacheL2Misses = -1;
+	this->cacheL2Requests = -1;
+	this->cacheLLCLoadMisses = -1;
+	this->cacheLLCLoadMissRate = -1;
+	this->cacheLLCLoads = -1;
+	this->cacheLLCStoreMisses = -1;
+	this->cacheLLCStoreMissRate = -1;
+	this->cacheLLCStores = -1;
 };
 
 void ProcessorMetrics::printProcessorMetrics(){
-    std::cout << "\n\t[PROCESSOR METRICS]\n\n"
-        << "Time User = " << this->timeUser  << "\n"
-        << "Time Nice = " << this->timeNice << "\n"
-        << "Time System = " << this->timeSystem << "\n"
-        << "Time Idle = " << this->timeIdle << "\n"
-        << "Time I/O Wait = " << this->timeIoWait << "\n"
-        << "Time IRQ = " << this->timeIRQ << "\n"
-        << "Time Soft IRQ = " << this->timeSoftIRQ << "\n"
-        << "Time Steal = " << this->timeSteal << "\n"
-        << "Time Guest = " << this->timeGuest << "\n"
-        << "Retired Instructions = " << this->instructionsRetired << "\n"
-        << "Cycles = " << this->cycles << "\n"
-        << "Relative Frequency = " << this->frequencyRelative << "\n"
-        << "Unhalted Frequency = " << this->unhaltedFrequency << "\n"
-        << "Cache L2 Hit Rate = " << this->cacheL2HitRate << "\n"
-        << "Cache L2 Miss Rate = " << this->cacheL2MissRate << "\n"
-        << "Cache L3 Hit Rate = " << this->cacheL3HitRate << "\n"
-        << "Cache L3 Miss Rate = " << this->cacheL3MissRate << "\n"
-        << "Cache L3 Hit Snoop Rate = " << this->cacheL3HitSnoopRate << "\n"; 
+	std::cout << "\n\t[PROCESSOR METRICS]\n\n"
+		<< "Time User = " << this->timeUser  << "\n"
+		<< "Time Nice = " << this->timeNice << "\n"
+		<< "Time System = " << this->timeSystem << "\n"
+		<< "Time Idle = " << this->timeIdle << "\n"
+		<< "Time I/O Wait = " << this->timeIoWait << "\n"
+		<< "Time IRQ = " << this->timeIRQ << "\n"
+		<< "Time Soft IRQ = " << this->timeSoftIRQ << "\n"
+		<< "Time Steal = " << this->timeSteal << "\n"
+		<< "Time Guest = " << this->timeGuest << "\n"
+		<< "Retired Instructions = " << this->instructionsRetired << "\n"
+		<< "Cycles = " << this->cycles << "\n"
+		<< "Relative Frequency = " << this->frequencyRelative << "\n"
+		<< "Unhalted Frequency = " << this->unhaltedFrequency << "\n"
+		<< "Cache L2 Requests = " << this->cacheL2Requests << "\n"
+		<< "Cache L2 Misses = " << this->cacheL2Misses << "\n"
+		<< "Cache LLC Loads = " << this->cacheLLCLoads << "\n"
+		<< "Cache LLC Load Misses = " << this->cacheLLCLoadMisses << "\n"
+		<< "Cache LLC Load Miss Rate = " << this->cacheLLCLoadMissRate << "\n"
+		<< "Cache LLC Stores = " << this->cacheLLCStores << "\n"
+		<< "Cache LLC Store Misses = " << this->cacheLLCStoreMisses << "\n"
+		<< "Cache LLC Store Miss Rate = " << this->cacheLLCStoreMissRate << "\n";
 };
 
 
@@ -173,28 +179,28 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 };
 
 InputOutputMetrics::InputOutputMetrics(){
-    this->processID = GPROCESSID;
-    this->dataRead = -1;
-    this->readTime = -1;
-    this->readOperationsRate = -1;
-    this->dataWritten = -1;
-    this->writeTime = -1;
-    this->writeOperationsRate = -1;
-    this->flushTime = -1;
-    this->flushOperationsRate = -1;
+	this->processID = GPROCESSID;
+	this->dataRead = -1;
+	this->readTime = -1;
+	this->readOperationsRate = -1;
+	this->dataWritten = -1;
+	this->writeTime = -1;
+	this->writeOperationsRate = -1;
+	this->flushTime = -1;
+	this->flushOperationsRate = -1;
 };
 
 void InputOutputMetrics::printInputOutputMetrics(){
-    std::cout << "\n\t[INPUT/OUTPUT METRICS]\n\n"
-        << "Process ID = " << this->processID << "\n"
-        << "Data Read = " << this->dataRead << " MB\n"
-        << "Read Time = " << this->readTime << " ms\n"
-        << "Read Operations Rate = " << this->readOperationsRate << "\n"
-        << "Data Written = " << this->dataWritten << " MB\n"
-        << "Write Time = " << this->writeTime << " ms\n"
-        << "Write Operations Rate = " << this->writeOperationsRate << "\n"
-        << "Flush Time = " << this->flushTime << " ms\n"
-        << "Flush Operations Rate = " << this->flushOperationsRate << "\n";
+	std::cout << "\n\t[INPUT/OUTPUT METRICS]\n\n"
+		<< "Process ID = " << this->processID << "\n"
+		<< "Data Read = " << this->dataRead << " MB\n"
+		<< "Read Time = " << this->readTime << " ms\n"
+		<< "Read Operations Rate = " << this->readOperationsRate << "\n"
+		<< "Data Written = " << this->dataWritten << " MB\n"
+		<< "Write Time = " << this->writeTime << " ms\n"
+		<< "Write Operations Rate = " << this->writeOperationsRate << "\n"
+		<< "Flush Time = " << this->flushTime << " ms\n"
+		<< "Flush Operations Rate = " << this->flushOperationsRate << "\n";
 };
 
 
@@ -231,42 +237,42 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 };
 
 MemoryMetrics::MemoryMetrics(){
-    this->memoryUsed = -1;
-    this->memoryCached = -1;
-    this->swapUsed = -1;
-    this->swapCached = -1;
-    this->memoryActive = -1;
-    this->memoryInactive = -1;
-    this->pageInRate = -1;
-    this->pageOutRate = -1;
-    this->pageFaultRate = -1;
-    this->pageFaultsMajorRate = -1;
-    this->pageFreeRate = -1;
-    this->pageActivateRate = -1;
-    this->pageDeactivateRate = -1;
-    this->memoryReadRate = -1;
-    this->memoryWriteRate = -1;
-    this->memoryIoRate = -1;
+	this->memoryUsed = -1;
+	this->memoryCached = -1;
+	this->swapUsed = -1;
+	this->swapCached = -1;
+	this->memoryActive = -1;
+	this->memoryInactive = -1;
+	this->pageInRate = -1;
+	this->pageOutRate = -1;
+	this->pageFaultRate = -1;
+	this->pageFaultsMajorRate = -1;
+	this->pageFreeRate = -1;
+	this->pageActivateRate = -1;
+	this->pageDeactivateRate = -1;
+	this->memoryReadRate = -1;
+	this->memoryWriteRate = -1;
+	this->memoryIoRate = -1;
 };
 
 void MemoryMetrics::printMemoryMetrics(){
-    std::cout << "\n\t[MEMORY METRICS]\n\n"
-        << "Memory Used = " << this->memoryUsed << " MB\n"
-        << "Memory Cached = " << this->memoryCached << " MB\n"
-        << "Swap Used = " << this->swapUsed << " MB\n"
-        << "Swap Cached = " << this->swapCached << " MB\n"
-        << "Memory Active = " << this->memoryActive << " MB\n"
-        << "Memory Inactive = " << this->memoryInactive << " MB\n"
-        << "Page Read Rate = " << this->pageInRate << "\n"
-        << "Page Save Rate = " << this->pageOutRate << "\n"
-        << "Page Fault Rate = " << this->pageFaultRate << "\n"
-        << "Page Fault Major Rate = " << this->pageFaultsMajorRate << "\n"
-        << "Page Release Rate = " << this->pageFreeRate << "\n"
-        << "Page Activate Rate = " << this->pageActivateRate << "\n"
-        << "Page Deactivate Rate = " << this->pageDeactivateRate << "\n"
-        << "Memory Read Rate = " << this->memoryReadRate << " MB/s\n"
-        << "Memory Write Rate = " << this->memoryWriteRate << " MB/s\n"
-        << "Memory I/O Rate = " << this->memoryIoRate << " MB/s\n";
+	std::cout << "\n\t[MEMORY METRICS]\n\n"
+		<< "Memory Used = " << this->memoryUsed << " MB\n"
+		<< "Memory Cached = " << this->memoryCached << " MB\n"
+		<< "Swap Used = " << this->swapUsed << " MB\n"
+		<< "Swap Cached = " << this->swapCached << " MB\n"
+		<< "Memory Active = " << this->memoryActive << " MB\n"
+		<< "Memory Inactive = " << this->memoryInactive << " MB\n"
+		<< "Page Read Rate = " << this->pageInRate << "\n"
+		<< "Page Save Rate = " << this->pageOutRate << "\n"
+		<< "Page Fault Rate = " << this->pageFaultRate << "\n"
+		<< "Page Fault Major Rate = " << this->pageFaultsMajorRate << "\n"
+		<< "Page Release Rate = " << this->pageFreeRate << "\n"
+		<< "Page Activate Rate = " << this->pageActivateRate << "\n"
+		<< "Page Deactivate Rate = " << this->pageDeactivateRate << "\n"
+		<< "Memory Read Rate = " << this->memoryReadRate << " MB/s\n"
+		<< "Memory Write Rate = " << this->memoryWriteRate << " MB/s\n"
+		<< "Memory I/O Rate = " << this->memoryIoRate << " MB/s\n";
 };
 
 
@@ -327,18 +333,18 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 };
 
 NetworkMetrics::NetworkMetrics(){
-    this->receivedData = -1;
-    this->receivePacketRate = -1;
-    this->sentData = -1;
-    this->sendPacketsRate = -1;
+	this->receivedData = -1;
+	this->receivePacketRate = -1;
+	this->sentData = -1;
+	this->sendPacketsRate = -1;
 };
 
 void NetworkMetrics::printNetworkMetrics(){
-    std::cout << "\n\t[NETWORK METRICS]\n\n"
-        << "Receive Packet Rate = " << this->receivePacketRate << " KB/s\n"
-        << "Send Packet Rate = " << this->sendPacketsRate << " KB/s\n"
-        << "Packets Received = " << this->receivedData << "\n"
-        << "Packets Sent = " << this->sentData << "\n";
+	std::cout << "\n\t[NETWORK METRICS]\n\n"
+		<< "Receive Packet Rate = " << this->receivePacketRate << " KB/s\n"
+		<< "Send Packet Rate = " << this->sendPacketsRate << " KB/s\n"
+		<< "Packets Received = " << this->receivedData << "\n"
+		<< "Packets Sent = " << this->sentData << "\n";
 };
 
 
@@ -368,22 +374,22 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 };
 
 PowerMetrics::PowerMetrics(){
-    this->coresPower = -1;
-    this->processorPower = -1;
-    this->memoryPower = -1;
-    this->systemPower = -1;
-    this->gpuPower = 1;
-    this->gpuPowerHours = 1;
+	this->coresPower = -1;
+	this->processorPower = -1;
+	this->memoryPower = -1;
+	this->systemPower = -1;
+	this->gpuPower = 1;
+	this->gpuPowerHours = 1;
 };
 
 void PowerMetrics::printPowerMetrics(){
-    std::cout << "\n\t[POWER METRICS]\n"
-        << "\nCores Power = " << this->coresPower << "W"
-        << "\nProcessor = " << this->processorPower << "W"
-        << "\nMemory = " << this->memoryPower << "W"
-        << "\nSystem = " << this->systemPower << "W"
-        << "\nGPU = " << this->gpuPower << "W"
-        << "\nGPU = " << this->gpuPowerHours << "Wh\n";
+	std::cout << "\n\t[POWER METRICS]\n"
+		<< "\nCores Power = " << this->coresPower << "W"
+		<< "\nProcessor = " << this->processorPower << "W"
+		<< "\nMemory = " << this->memoryPower << "W"
+		<< "\nSystem = " << this->systemPower << "W"
+		<< "\nGPU = " << this->gpuPower << "W"
+		<< "\nGPU = " << this->gpuPowerHours << "Wh\n";
 };
 
 void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlError){
@@ -403,26 +409,26 @@ void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlErro
 };
 
 AllMetrics::AllMetrics(){
-    this->systemMetrics = SystemMetrics();
-    this->processorMetrics = ProcessorMetrics();
-    this->inputOutputMetrics = InputOutputMetrics();
-    this->memoryMetrics = MemoryMetrics();
-    this->networkMetrics = NetworkMetrics();
-    this->powerMetrics = PowerMetrics();
+	this->systemMetrics = SystemMetrics();
+	this->processorMetrics = ProcessorMetrics();
+	this->inputOutputMetrics = InputOutputMetrics();
+	this->memoryMetrics = MemoryMetrics();
+	this->networkMetrics = NetworkMetrics();
+	this->powerMetrics = PowerMetrics();
 };
 
 // Execute a Linux command and return the output using std::string
 std::string exec(const char* cmd){
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-    if (!pipe)
-        throw std::runtime_error("popen() failed!");
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
-        result += buffer.data();
+	std::array<char, 128> buffer;
+	std::string result;
+	std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+	if (!pipe)
+		throw std::runtime_error("popen() failed!");
+	while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+		result += buffer.data();
 
-	if(!result.length())
-		std::cout << "\n\n\t[ERROR] String returned by exec() has length 0\n";
+		if(!result.length())
+			std::cout << "\n\n\t[ERROR] String returned by exec() has length 0\n";
 
-    return result;
+	return result;
 };
