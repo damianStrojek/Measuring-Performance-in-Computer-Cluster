@@ -85,8 +85,6 @@ int main(int argc, char **argv){
 	// Download metrics in constant batches
 	for(int i = 0; i < DATA_BATCH; i++){
 
-		//auto start = std::chrono::high_resolution_clock::now();
-
 		getSystemMetrics(allMetrics.systemMetrics);
 		getProcessorMetrics(allMetrics.processorMetrics);
 		getInputOutputMetrics(allMetrics.inputOutputMetrics);
@@ -106,18 +104,13 @@ int main(int argc, char **argv){
 						&allMetricsArray[j].inputOutputMetrics, &allMetricsArray[j].memoryMetrics, \
 						&allMetricsArray[j].networkMetrics, &allMetricsArray[j].powerMetrics);
 			}
+
 			jsonArray.push_back(metricsToJson(allMetricsArray,clusterSize));
-
-
 		}
-		
-		//auto end = std::chrono::high_resolution_clock::now();
-		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
-		//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
-		// Save metrics to file
-		if(rank==0) outputFile << jsonArray.dump(4);
-		//writeToJSON(outputFile, allMetrics);
 	}
+
+	// Save metrics to file
+	if(!rank) outputFile << jsonArray.dump(4);
 	
 	outputFile.close();
 	MPI_Type_free(&systemMetricsType);
