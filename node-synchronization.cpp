@@ -44,7 +44,7 @@ MPI_Datatype createMpiProcessorMetricsType(){
         MPI_INT, MPI_INT, MPI_INT, MPI_INT, 
         MPI_INT, MPI_INT, MPI_INT, MPI_FLOAT, 
         MPI_FLOAT, MPI_INT, MPI_INT, MPI_INT, 
-        MPI_INT, MPI_INT, MPI_FLOAT, MPI_INT
+        MPI_INT, MPI_INT, MPI_FLOAT, MPI_INT,
         MPI_FLOAT};
     MPI_Aint offsets[] = {
         offsetof(struct ProcessorMetrics, timeUser),
