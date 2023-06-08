@@ -98,12 +98,12 @@ void writeToJSON(std::ofstream &outputFile, AllMetrics allMetrics){
 
 	json allMetricsJSON = {
 		{"nodeTimestamp", allMetrics.nodeTimestamp},
-		{"systemMetrics", systemMetricsJSON},
-		{"processorMetrics", processorMetricsJSON},
-		{"inputOutputMetrics", inputOutputMetricsJSON},
-		{"memoryMetrics", memoryMetricsJSON},
-		{"networkMetrics", networkMetricsJSON},
-		{"powerMetrics", powerMetricsJSON}
+		{"systemMetrics", {systemMetricsJSON}},
+		{"processorMetrics", {processorMetricsJSON}},
+		{"inputOutputMetrics", {inputOutputMetricsJSON}},
+		{"memoryMetrics", {memoryMetricsJSON}},
+		{"networkMetrics", {networkMetricsJSON}},
+		{"powerMetrics", {powerMetricsJSON}}
 	};
 
 	// Save the JSON line into a file

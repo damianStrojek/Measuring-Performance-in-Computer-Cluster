@@ -8,9 +8,11 @@
 // An application for monitoring performance and energy consumption in a computing cluster
 //
 // mpicxx -std=c++2a measure-performance.cpp metrics.cpp metrics-display.cpp metrics-save.cpp node-synchronization.cpp -o measure-performance
+// mpirun -mca orte_keep_fqdn_hostnames t -mca btl_tcp_if_exclude docker0,docker_gwbridge,lo -hostfile hostfile.des measure-performance
 //
-// Project realised in years 2022-2023 on
+// Project realised in academic years 2022-2023
 // Gdansk University of Technology, Department of Computer Systems Architecture
+// Supervised by PhD Eng Pawel Czarnul
 // 
 
 // External libraries
