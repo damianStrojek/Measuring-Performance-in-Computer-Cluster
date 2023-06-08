@@ -39,6 +39,7 @@ int main(int argc, char **argv){
 	MemoryMetrics memoryMetrics;
 	NetworkMetrics networkMetrics;
 	PowerMetrics powerMetrics;
+	AllMetrics allMetrics;
 
 	bool raplError = 0, nvmlError = 0;
 	const char* dateCommand = "date +'%d%m-%H%M'";
@@ -54,7 +55,6 @@ int main(int argc, char **argv){
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &clusterSize);
 
-	AllMetrics allMetrics;
 	MPI_Datatype systemMetricsType = createMpiSystemMetricsType();
 	MPI_Datatype processorMetricsType = createMpiProcessorMetricsType();
 	MPI_Datatype inputOutputMetricsType = createMpiInputOutputMetricsType();
