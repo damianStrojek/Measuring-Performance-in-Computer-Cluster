@@ -49,10 +49,10 @@ int main(int argc, char **argv){
 	std::ofstream file(fileName, std::ios::out);
 	if(!file.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";*/
 	
-	int rank, size;
+	int rank, clusterSize;
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	MPI_Comm_size(MPI_COMM_WORLD, &size);
+	MPI_Comm_size(MPI_COMM_WORLD, &clusterSize);
 
 	AllMetrics allMetrics;
 	MPI_Datatype systemMetricsType = createMpiSystemMetricsType();
@@ -77,8 +77,8 @@ int main(int argc, char **argv){
 
 	MPI_Type_create_struct(6, blocklengths, offsets, types, &allMetricsType);
 	MPI_Type_commit(&allMetricsType);
-	AllMetrics* allMetricsArray = new AllMetrics[size];
-
+	AllMetrics* allMetricsArray = new AllMetrics[clusterSize];
+	
 	// Download metrics in constant batches
 	for(int i = 0; i < DATA_BATCH; i++){
 			
@@ -93,22 +93,21 @@ int main(int argc, char **argv){
 		getMemoryMetrics(allMetrics.memoryMetrics);
 		getNetworkMetrics(allMetrics.networkMetrics);
 		getPowerMetrics(allMetrics.powerMetrics, raplError, nvmlError);
-	
+
 		if(rank)
 			MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
 		else {
 			allMetricsArray[0] = allMetrics;
-			for(int i = 1; i < size; i++)
+			for(int i = 1; i < clusterSize; i++)
 				MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			for(int i = 0;i < size; i++){
-				std::cout << "\n\t[NODE " << i << " METRICS]\n";
+			for(int i = 0;i < clusterSize; i++){
+				std::cout << "\n\t[NODE " << i << " METRICS]\n\n";
 				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, \
 						&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
 						&allMetricsArray[i].networkMetrics, &allMetricsArray[i].powerMetrics);
 			}
 		}
-
-		sleep(2);
+		
 		//auto end = std::chrono::high_resolution_clock::now();
 		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
 		//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
@@ -118,6 +117,7 @@ int main(int argc, char **argv){
 	}
 	
 	//file.close();
+	
 	MPI_Type_free(&systemMetricsType);
 	MPI_Type_free(&processorMetricsType);
 	MPI_Type_free(&inputOutputMetricsType);
