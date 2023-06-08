@@ -374,7 +374,6 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 };
 
 PowerMetrics::PowerMetrics(){
-	this->coresPower = -1;
 	this->processorPower = -1;
 	this->memoryPower = -1;
 	this->systemPower = -1;
@@ -384,7 +383,6 @@ PowerMetrics::PowerMetrics(){
 
 void PowerMetrics::printPowerMetrics(){
 	std::cout << "\n\t[POWER METRICS]\n"
-		<< "Cores Power = " << this->coresPower << "W\n"
 		<< "Processor = " << this->processorPower << "W\n"
 		<< "Memory = " << this->memoryPower << "W\n"
 		<< "System = " << this->systemPower << "W\n"
@@ -394,12 +392,12 @@ void PowerMetrics::printPowerMetrics(){
 
 void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlError){
 
-	const char* command = "perf stat -e power/energy-cores/,power/energy-ram/,power/energy-pkg/ sleep 1 2>&1 | awk '/Joules/ {print $1}'";
+	const char* command = "perf stat -e power/energy-cores/,power/energy-ram/,power/energy-pkg/ sleep 1 2>&1 | awk '/Joules/ {print $1}' | tr ',' '.'";
 	std::string output = exec(command), temp;
 	std::stringstream streamOne(output);
 	
 	streamOne >> temp;
-	powerMetrics.coresPower = std::stof(temp);
+	powerMetrics.processorPower = std::stof(temp);
 	streamOne >> temp;
 	powerMetrics.memoryPower = std::stof(temp);
 	streamOne >> temp;

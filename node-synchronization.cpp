@@ -160,12 +160,11 @@ MPI_Datatype createMpiNetworkMetricsType(){
 // Create MPI data type for PowerMetrics
 MPI_Datatype createMpiPowerMetricsType(){
 
-    int blockLengths[] = {1, 1, 1, 1, 1, 1};
+    int blockLengths[] = {1, 1, 1, 1, 1};
     MPI_Datatype types[] = {
         MPI_FLOAT, MPI_FLOAT, MPI_FLOAT,
-        MPI_FLOAT, MPI_UNSIGNED_LONG_LONG, MPI_UNSIGNED_LONG_LONG};
+        MPI_UNSIGNED_LONG_LONG, MPI_UNSIGNED_LONG_LONG};
     MPI_Aint offsets[] = {
-        offsetof(PowerMetrics, coresPower),
         offsetof(PowerMetrics, processorPower),
         offsetof(PowerMetrics, memoryPower),
         offsetof(PowerMetrics, systemPower),
@@ -173,7 +172,7 @@ MPI_Datatype createMpiPowerMetricsType(){
         offsetof(PowerMetrics, gpuPowerHours)};
     
     MPI_Datatype powerMetricsType;
-    MPI_Type_create_struct(6, blockLengths, offsets, types, &powerMetricsType);
+    MPI_Type_create_struct(5, blockLengths, offsets, types, &powerMetricsType);
     MPI_Type_commit(&powerMetricsType);
 
     return powerMetricsType;

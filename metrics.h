@@ -100,7 +100,6 @@ struct NetworkMetrics {
 };
 
 struct PowerMetrics {
-	float coresPower;			// Power consumed by cores
 	float processorPower;			// Power consumed by processor
 	float memoryPower;			// Power consumed by memory
 	float systemPower;			// Power consumed by system overall

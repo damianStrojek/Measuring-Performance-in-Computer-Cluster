@@ -82,9 +82,9 @@ void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetri
 	for(int i = 0; i < 36; i++) std::cout << ' ';
 
 	std::cout << "Power:" << '\n';
-	printMetricPair("Data Read ",inputOutputMetrics->dataRead,"MB", "Power for Cores", powerMetrics->coresPower, "W");
-	printMetricPair("Data Written ",inputOutputMetrics->dataWritten,"MB", "Processor Power", powerMetrics->processorPower, "W");
-	printMetricPair("Read Operations ",inputOutputMetrics->readOperationsRate,"/s", "Memory Power", powerMetrics->memoryPower, "W");
+	printMetricPairFloat("Data Read ",inputOutputMetrics->dataRead,"MB", "Processor Power", powerMetrics->processorPower, "W");
+	printMetricPairFloat("Data Written ",inputOutputMetrics->dataWritten,"MB", "System Power", powerMetrics->systemPower, "W");
+	printMetricPairFloat("Read Operations ",inputOutputMetrics->readOperationsRate,"/s", "Memory Power", powerMetrics->memoryPower, "W");
 	printMetricPair("Write Operations ",inputOutputMetrics->writeOperationsRate,"/s", "GPU Power", powerMetrics->gpuPower, "W");
 	std::cout << '\n';
 
