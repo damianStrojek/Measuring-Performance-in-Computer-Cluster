@@ -1,6 +1,6 @@
 # Folders from workspace and with results
 .vscode/
-results/*.json
+#results/*.json
 # Executables
 measure-performance
 *.out
