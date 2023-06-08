@@ -15,7 +15,7 @@
 #include "metrics.h"
 #include "json.hpp"
 // Write to file function
-json metricsToJson(AllMetrics* allMetricsArray,int cluster_size,int timestamp_counter);
+nlohmann::json metricsToJson(AllMetrics* allMetricsArray,int cluster_size,int timestamp_counter);
 
 
 #endif
