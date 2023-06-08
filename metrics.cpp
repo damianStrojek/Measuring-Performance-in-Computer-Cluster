@@ -142,17 +142,17 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	output = exec(command);
 	std::stringstream streamTwo(output);
 
-	streamTwo >> temp;
+	std::getline(streamTwo, temp);
 	processorMetrics.cacheL2Requests = std::stoi(temp);
-	streamTwo >> temp;
+	std::getline(streamTwo, temp);
 	processorMetrics.cacheL2Misses = std::stoi(temp);
-	streamTwo >> temp;
+	std::getline(streamTwo, temp);
 	processorMetrics.cacheLLCLoads = std::stoi(temp);
-	streamTwo >> temp;
+	std::getline(streamTwo, temp);
 	processorMetrics.cacheLLCStores = std::stoi(temp);
-	streamTwo >> temp;
+	std::getline(streamTwo, temp);
 	processorMetrics.cacheLLCLoadMisses = std::stoi(temp);
-	streamTwo >> temp;
+	std::getline(streamTwo, temp);
 	processorMetrics.cacheLLCStoreMisses = std::stoi(temp);
 	
 	// Check division by zero and calculate miss rate
