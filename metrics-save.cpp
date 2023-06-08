@@ -15,8 +15,13 @@
 
 using json = nlohmann::json;
 
-void writeToJSON(std::ofstream &outputFile, AllMetrics allMetrics){
+json metricsToJson(AllMetrics* allMetricsArray,int cluster_size,int timestamp_counter){
 	
+	json jsonSingleIteration;
+	jsonSingleIteration["timestamp"] = "Timestamp "+timestamp_counter;
+	json nodes = json::array();
+	for(int i = 0; i < cluster_size ; i++){
+		
 	// create JSON objects for the sub-structures
 	json systemMetricsJSON = {
 		{"processesRunning", allMetrics.systemMetrics.processesRunning},
@@ -105,7 +110,12 @@ void writeToJSON(std::ofstream &outputFile, AllMetrics allMetrics){
 		{"networkMetrics", {networkMetricsJSON}},
 		{"powerMetrics", {powerMetricsJSON}}
 	};
-
+	json singleNode;
+	singleNode["Node"] = i;
+	singleNode["Metrics"] = allMetricsJSON;
+	nodes.push_back(singleNode);
+	}
+	jsonSingleIteration["Nodes"] = nodes;
 	// Save the JSON line into a file
-	outputFile << allMetricsJSON;
+	return jsonSingleIteration;
 };

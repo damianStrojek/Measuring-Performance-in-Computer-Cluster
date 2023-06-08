@@ -24,6 +24,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <mpi.h>
+#include "json.hpp"
 // Internal headers
 #include "metrics.h"
 #include "metrics-save.h"
@@ -44,10 +45,10 @@ int main(int argc, char **argv){
 	AllMetrics allMetrics;
 
 	const char* dateCommand = "date +'%d%m-%H%M'";
-	allMetrics.nodeTimestamp = exec(dateCommand);
-	allMetrics.nodeTimestamp.pop_back();
+	//allMetrics.nodeTimestamp = exec(dateCommand);
+	//allMetrics.nodeTimestamp.pop_back();
 
-	std::string fileName = "results/" + allMetrics.nodeTimestamp + "_metrics.json";
+	std::string fileName = "results/" + exec(dateCommand) + "_metrics.json";
 	std::ofstream outputFile(fileName, std::ios::out);
 	if(!outputFile.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";
 	
@@ -79,7 +80,8 @@ int main(int argc, char **argv){
 	MPI_Type_create_struct(6, blocklengths, offsets, types, &allMetricsType);
 	MPI_Type_commit(&allMetricsType);
 	AllMetrics* allMetricsArray = new AllMetrics[clusterSize];
-	
+	nlohmann::json jsonArray;
+
 	// Download metrics in constant batches
 	for(int i = 0; i < DATA_BATCH; i++){
 
@@ -96,22 +98,25 @@ int main(int argc, char **argv){
 			MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);
 		else {
 			allMetricsArray[0] = allMetrics;
-			for(int i = 1; i < clusterSize; i++)
-				MPI_Recv(&allMetricsArray[i], 1, allMetricsType, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			for(int i = 0; i < clusterSize; i++){
-				std::cout << "\n\t[NODE " << i << " METRICS]\n\n";
-				printMetrics(&allMetricsArray[i].systemMetrics, &allMetricsArray[i].processorMetrics, \
-						&allMetricsArray[i].inputOutputMetrics, &allMetricsArray[i].memoryMetrics, \
-						&allMetricsArray[i].networkMetrics, &allMetricsArray[i].powerMetrics);
+			for(int j = 1; j < clusterSize; j++)
+				MPI_Recv(&allMetricsArray[j], 1, allMetricsType, j, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			for(int j = 0; j < clusterSize; j++){
+				std::cout << "\n\t[NODE " << j << " METRICS]\n\n";
+				printMetrics(&allMetricsArray[j].systemMetrics, &allMetricsArray[j].processorMetrics, \
+						&allMetricsArray[j].inputOutputMetrics, &allMetricsArray[j].memoryMetrics, \
+						&allMetricsArray[j].networkMetrics, &allMetricsArray[j].powerMetrics);
 			}
+			jsonArray.push_back(metricsToJson(allMetricsArray,clusterSize,i));
+
+
 		}
 		
 		//auto end = std::chrono::high_resolution_clock::now();
 		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end-start);
 		//std::cout << "Time taken to get all measures:" << duration.count() << "microseconds\n";
-
+		outputFile << jsonArray.dump(4);
 		// Save metrics to file
-		writeToJSON(outputFile, allMetrics);
+		//writeToJSON(outputFile, allMetrics);
 	}
 	
 	outputFile.close();

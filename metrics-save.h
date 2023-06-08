@@ -13,8 +13,9 @@
 #include <fstream>
 // Internal headers
 #include "metrics.h"
-
+#include "json.hpp"
 // Write to file function
-void writeToJSON(std::ofstream&, AllMetrics);
+json metricsToJson(AllMetrics* allMetricsArray,int cluster_size,int timestamp_counter);
+
 
 #endif
