@@ -41,10 +41,9 @@ int main(int argc, char **argv){
 	PowerMetrics powerMetrics;
 	AllMetrics allMetrics;
 
-	bool raplError = 0, nvmlError = 0;
 	const char* dateCommand = "date +'%d%m-%H%M'";
-	std::string timestamp = exec(dateCommand);
-	timestamp.pop_back();
+	allMetrics.nodeTimestamp = exec(dateCommand);
+	allMetrics.nodeTimestamp.pop_back();
 
 	std::string fileName = "results/" + allMetrics.nodeTimestamp + "_metrics.json";
 	std::ofstream outputFile(fileName, std::ios::out);
@@ -92,7 +91,7 @@ int main(int argc, char **argv){
 		getInputOutputMetrics(allMetrics.inputOutputMetrics);
 		getMemoryMetrics(allMetrics.memoryMetrics);
 		getNetworkMetrics(allMetrics.networkMetrics);
-		getPowerMetrics(allMetrics.powerMetrics, raplError, nvmlError);
+		getPowerMetrics(allMetrics.powerMetrics);
 
 		if(rank)
 			MPI_Send(&allMetrics, 1, allMetricsType, 0, 0, MPI_COMM_WORLD);

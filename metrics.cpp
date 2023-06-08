@@ -393,7 +393,7 @@ void PowerMetrics::printPowerMetrics(){
 		<< "GPU = " << this->gpuPowerHours << "Wh\n";
 };
 
-void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlError){
+void getPowerMetrics(PowerMetrics &powerMetrics){
 
 	const char* command = "perf stat -e power/energy-cores/,power/energy-ram/,power/energy-pkg/ sleep 1 2>&1 | awk '/Joules/ {print $1}' | tr ',' '.'";
 	std::string output = exec(command), temp;
