@@ -140,11 +140,10 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 
 	command = "perf stat -e 'l2_rqsts.references,l2_rqsts.miss,LLC-loads,LLC-stores,LLC-load-misses,LLC-store-misses' --all-cpus sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'";
 	output = exec(command);
+	output.erase(std::remove(output.begin(), output.end(), ' '), output.end());
 	std::stringstream streamTwo(output);
 
-	streamTwo >> std::ws;
 	std::getline(streamTwo, temp);
-	std::cout << "\n\n[CHECK] \n\n" << temp;
 	processorMetrics.cacheL2Requests = std::stoi(temp);
 	std::getline(streamTwo, temp);
 	processorMetrics.cacheL2Misses = std::stoi(temp);
