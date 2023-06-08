@@ -140,9 +140,9 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 
 	command = "perf stat -e 'l2_rqsts.references,l2_rqsts.miss,LLC-loads,LLC-stores,LLC-load-misses,LLC-store-misses' --all-cpus sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'";
 	output = exec(command);
+	std::stringstream streamTwo(output);
 	output.erase(std::remove(output.begin(), output.end(), ' '), output.end());
 	std::cout << "\n\nCHECK\n\n" << output;
-	std::stringstream streamTwo(output);
 
 	std::getline(streamTwo, temp);
 	processorMetrics.cacheL2Requests = std::stoi(temp);
@@ -385,12 +385,12 @@ PowerMetrics::PowerMetrics(){
 
 void PowerMetrics::printPowerMetrics(){
 	std::cout << "\n\t[POWER METRICS]\n"
-		<< "\nCores Power = " << this->coresPower << "W"
-		<< "\nProcessor = " << this->processorPower << "W"
-		<< "\nMemory = " << this->memoryPower << "W"
-		<< "\nSystem = " << this->systemPower << "W"
-		<< "\nGPU = " << this->gpuPower << "W"
-		<< "\nGPU = " << this->gpuPowerHours << "Wh\n";
+		<< "Cores Power = " << this->coresPower << "W\n"
+		<< "Processor = " << this->processorPower << "W\n"
+		<< "Memory = " << this->memoryPower << "W\n"
+		<< "System = " << this->systemPower << "W\n"
+		<< "GPU = " << this->gpuPower << "W\n"
+		<< "GPU = " << this->gpuPowerHours << "Wh\n";
 };
 
 void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlError){
@@ -423,13 +423,14 @@ std::string exec(const char* cmd){
 	std::array<char, 128> buffer;
 	std::string result;
 	std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+
 	if (!pipe)
 		throw std::runtime_error("popen() failed!");
 	while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
 		result += buffer.data();
 
-		if(!result.length())
-			std::cout << "\n\n\t[ERROR] String returned by exec() has length 0\n";
+	if(!result.length())
+		std::cout << "\n\n\t[ERROR] String returned by exec() has length 0\n";
 
 	return result;
 };
