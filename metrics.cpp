@@ -405,6 +405,26 @@ void getPowerMetrics(PowerMetrics &powerMetrics, bool& raplError, bool& nvmlErro
 	powerMetrics.memoryPower = std::stof(temp);
 	streamOne >> temp;
 	powerMetrics.systemPower = std::stof(temp);
+
+	const char* smi_command = "nvidia-smi --query-gpu=power.draw,temperature.gpu,fan.speed,memory.total,memory.used,memory.free,clocks.current.sm,clocks.current.memory --format=csv,nounits,noheader | tr ',' ' '";
+	output = exec(smi_command);
+	std::stringstream streamTwo(output);
+	streamTwo >> temp;
+	powerMetrics.gpuPower = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuTemperature = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuFanSpeed = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuMemoryTotal = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuMemoryUsed = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuMemoryFree = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuClocksCurrentSM = std::stof(temp);
+	streamTwo >> temp >> temp;
+	powerMetrics.gpuClocksCurrentMemory = std::stof(temp);
 	
 	//powerMetrics.printPowerMetrics();
 };
