@@ -84,36 +84,29 @@ All of the times are measured in `USER_HZ` which is typically 1/100 of a second.
 
 ![Output](./images/processor-times.png)
 
-### L2 and L3 Cache Hit and Miss Rates
+### L2 and LLC Cache Hit and Miss Rates
 
 ```bash
-perf stat -e cpu/event=0x24,umask=0x01,name=L2_RQSTS_DEMAND_DATA_RD_HIT/,cpu/event=0x24,umask=0x02,name=L2_RQSTS_ALL_DEMAND_DATA_RD/,cpu/event=0x24,umask=0x04,name=L2_RQSTS_DEMAND_DATA_RD_MISS/,cpu/event=0x2e,umask=0x01,name=LLC_REFERENCES_LLC_HIT/,cpu/event=0x2e,umask=0x02,name=LLC_REFERENCES_LLC_MISS/,cpu/event=0x2e,umask=0x08,name=LLC_REFERENCES_SNOOP_STALL/ --all-cpus sleep 1 2>&1 | awk '/L2_RQSTS_ALL_DEMAND_DATA_RD|L2_RQSTS_DEMAND_DATA_RD_HIT|L2_RQSTS_DEMAND_DATA_RD_MISS|LLC_REFERENCES_LLC_HIT|LLC_REFERENCES_LLC_MISS|LLC_REFERENCES_SNOOP_STALL/ {print $1}'
+perf stat -e "l2_rqsts.references,l2_rqsts.miss,LLC-loads,LLC-stores,LLC-load-misses,LLC-store-misses" --all-cpus sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'
 ```
 
-This one-liner should give the following L2 and L3 cache metrics: 
+`l2_rqsts.references`: This metric represents the number of L2 cache requests issued by the processor. It measures the total number of times the processor accessed the L2 cache.
 
-- `L2_RQSTS_DEMAND_DATA_RD_HIT`: counts L2 cache hits for demand data reads
-- `L2_RQSTS_ALL_DEMAND_DATA_RD`: counts all demand data reads to L2 cache
-- `L2_RQSTS_DEMAND_DATA_RD_MISS`: counts L2 cache misses for demand data reads
-- `LLC_REFERENCES_LLC_HIT`: counts LLC cache hits
-- `LLC_REFERENCES_LLC_MISS`: counts LLC cache misses
-- `LLC_REFERENCES_SNOOP_STALL`: counts snoop stalls on the bus due to LLC reference requests
+`l2_rqsts.miss`: This metric represents the number of L2 cache misses. It measures the number of times the processor requested data from the L2 cache but found that the data was not present, resulting in a cache miss.
 
-From these metrics, you can **calculate** the cache L2 hit rate, cache L2 miss rate, cache L3 hit rate, cache L3 miss rate, and cache L3 hit snoop rate **using the following formulas**:
+`LLC-loads`: This metric represents the number of cache loads from the Last Level Cache (LLC). It measures the total number of times the processor requested data from the LLC.
 
-**Cache L2 hit rate** =  L2_RQSTS_DEMAND_DATA_RD_HIT / L2_RQSTS_ALL_DEMAND_DATA_RD
+`LLC-stores`: This metric represents the number of cache stores to the LLC. It measures the total number of times the processor wrote data to the LLC.
 
-**Cache L2 miss rate** = L2_RQSTS_DEMAND_DATA_RD_MISS / L2_RQSTS_ALL_DEMAND_DATA_RD
+`LLC-load-misse`: This metric represents the number of LLC load misses. It measures the number of times the processor requested data from the LLC but found that the data was not present, resulting in a cache miss.
 
-**Cache L3 hit rate** = LLC_REFERENCES_LLC_HIT / (LLC_REFERENCES_LLC_HIT + LLC_REFERENCES_LLC_MISS)
+`LLC-store-misses` This metric represents the number of LLC store misses. It measures the number of times the processor attempted to write data to the LLC but found that the cache line for the data was not present, resulting in a cache miss.
 
-**Cache L3 miss rate** = LLC_REFERENCES_LLC_MISS / (LLC_REFERENCES_LLC_HIT + LLC_REFERENCES_LLC_MISS)
-
-**Cache L3 hit snoop rate** = LLC_REFERENCES_LLC_HIT / (LLC_REFERENCES_LLC_HIT + LLC_REFERENCES_SNOOP_STALL)
+These metrics provide insights into the cache behavior of the processor during the execution of the workload. Cache hits are desirable as they indicate that the data is readily available in the cache, improving performance. Cache misses, on the other hand, result in additional latency as the processor needs to retrieve the data from a higher-level cache or main memory.
 
 *Note that these formulas assume that the events provided in the perf stat command accurately measure the cache behavior of your system. However, depending on the specific hardware and software configuration, the event names or formulas may need to be adjusted.*
 
-![Output](./images/processor-l2-l3-rates.png)
+![Output](./images/processor-l2-llc-rates.png)
 
 ### Cycles Rates and Relative Frequencies
 

@@ -74,8 +74,8 @@ void printMetrics(SystemMetrics* systemMetrics, ProcessorMetrics* processorMetri
 	printMetricPair("Swap Cached", memoryMetrics->swapCached,"MB","Time I/O Wait",processorMetrics->timeIoWait,"USER_HZ");
 	printMetricPair("Memory Active", memoryMetrics->memoryActive,"MB","Time IRQ",processorMetrics->timeIRQ,"USER_HZ");
 	printMetricPair("Memory Inactive", memoryMetrics->memoryInactive,"MB","Time Steal",processorMetrics->timeSteal,"USER_HZ");
-	printMetricPairFloat("Pages Read", memoryMetrics->pageInRate, "pages/s", "Cache L2 Hit Rate", processorMetrics->cacheL2HitRate, "");
-	printMetricPairFloat("Pages Saved", memoryMetrics->pageOutRate, "pages/s", "Cache L2 Miss Rate", processorMetrics->cacheL2MissRate, "");
+	printMetricPairFloat("Pages Read", memoryMetrics->pageInRate, "pages/s", "Cache LLC Store Miss Rate", processorMetrics->cacheLLCStoreMissRate, "%");
+	printMetricPairFloat("Pages Saved", memoryMetrics->pageOutRate, "pages/s", "Cache LLC Load Miss Rate", processorMetrics->cacheLLCLoadMissRate, "%");
 	std::cout << '\n';
 
 	std::cout << "I/O for PID 1:";

@@ -132,42 +132,29 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	stream >> temp;
 	processorMetrics.timeGuest = std::stoi(temp);		// USER_HZ
 
-	// Created string and parsed in to const char* because it was too long
-	std::string commandString = 
-		"perf stat -e cpu/event=0x24,umask=0x01,name=L2_RQSTS_DEMAND_DATA_RD_HIT/,cpu/"
-		"event=0x24,umask=0x02,name=L2_RQSTS_ALL_DEMAND_DATA_RD/,cpu/event=0x24,umask=0x04,n"
-		"ame=L2_RQSTS_DEMAND_DATA_RD_MISS/,cpu/event=0x2e,umask=0x01,name=LLC_REFERENCES_LLC"
-		"_HIT/,cpu/event=0x2e,umask=0x02,name=LLC_REFERENCES_LLC_MISS/,cpu/event=0x2e,umask="
-		"0x08,name=LLC_REFERENCES_SNOOP_STALL/ --all-cpus sleep 1 2>&1 | awk '/L2_RQSTS_ALL_"
-		"DEMAND_DATA_RD|L2_RQSTS_DEMAND_DATA_RD_HIT|L2_RQSTS_DEMAND_DATA_RD_MISS|LLC_REFEREN"
-		"CES_LLC_HIT|LLC_REFERENCES_LLC_MISS|LLC_REFERENCES_SNOOP_STALL/ {print $1}'";
-	command = commandString.c_str();
+	command = "perf stat -e 'l2_rqsts.references,l2_rqsts.miss,LLC-loads,LLC-stores,LLC-load-misses,LLC-store-misses' --all-cpus sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'";
 	output = exec(command);
 	std::stringstream streamTwo(output);
-	float L2RqstsHit, L2RqstsMiss, L2RqstsData, LLCHit, LLCMiss, LLCSnoop;
+	float LLCMissRate;
 
 	streamTwo >> temp;
-	L2RqstsHit = std::stof(temp);
+	processorMetrics.cacheL2Requests = std::stof(temp);
 	streamTwo >> temp;
-	L2RqstsMiss = std::stof(temp);
+	processorMetrics.cacheL2Misses = std::stof(temp);
 	streamTwo >> temp;
-	L2RqstsData = std::stof(temp);
+	processorMetrics.cacheLLCLoads = std::stof(temp);
 	streamTwo >> temp;
-	LLCHit = std::stof(temp);
+	processorMetrics.cacheLLCStores = std::stof(temp);
 	streamTwo >> temp;
-	LLCMiss = std::stof(temp);
+	processorMetrics.cacheLLCLoadMisses = std::stof(temp);
 	streamTwo >> temp;
-	LLCSnoop = std::stof(temp);
+	processorMetrics.cacheLLCStoreMisses = std::stof(temp);
 	
-	if(L2RqstsData){
-		processorMetrics.cacheL2HitRate = L2RqstsHit / L2RqstsData;
-		processorMetrics.cacheL2MissRate = L2RqstsMiss / L2RqstsData;
-	}
-	if(LLCHit || LLCMiss){
-		processorMetrics.cacheL3HitRate = LLCHit / (LLCHit + LLCMiss);
-		processorMetrics.cacheL3MissRate = LLCMiss / (LLCHit + LLCMiss);
-		processorMetrics.cacheL3HitSnoopRate = LLCHit / (LLCHit + LLCSnoop);
-	}
+	// Check division by zero and calculate miss rate
+	if(processorMetrics.cacheLLCLoads)
+		processorMetrics.cacheLLCLoadMissRate = (processorMetrics.cacheLLCLoadMisses / processorMetrics.cacheLLCLoads) * 100;
+	if(processorMetrics.cacheLLCStores)
+		processorMetrics.cacheLLCStoreMissRate = (processorMetrics.cacheLLCStoreMisses / processorMetrics.cacheLLCStores) * 100;
 
 	command = "perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}'";
 	output = exec(command);

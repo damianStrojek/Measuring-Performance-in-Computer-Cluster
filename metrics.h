@@ -21,7 +21,7 @@ struct SystemMetrics {
 	int interruptRate;			// Number of all interrupts handled per second
 
 	SystemMetrics();
-    void printSystemMetrics();
+    	void printSystemMetrics();
 };
 
 struct ProcessorMetrics {
@@ -38,17 +38,17 @@ struct ProcessorMetrics {
 	int cycles;				// Number of cycles executed by the processor
 	float frequencyRelative;		// CPU clock frequency in MHz
 	float unhaltedFrequency;		// unhalted CPU clock frequency in MHz
-	float cacheL2HitRate;			// L2 cache hits for demand data reads / all demand
-						// data reads to L2 cache
-	float cacheL2MissRate;			// L2 cache misses for demand data reads / all demand 
-						// data reads to L2 cache
-	float cacheL3HitRate;			// LLC cache hits / (LLC cache hits + LLC cache misses)
-	float cacheL3HitSnoopRate;		// LLC cache misses / (LLC cache hits + LLC cache misses)
-	float cacheL3MissRate;			// LLC cache hits / (LLC cache hits + snoop stalls on 
-						// the bus due to LLC reference requests)
+	int cacheL2Requests;			// L2 cache requests issued by the processor
+	int cacheL2Misses;			// L2 cache misses
+	int cacheLLCLoads;			// Number of cache loads from the Last Level Cache
+	int cacheLLCStores;			// Number of cache stores to the LLC
+	int cacheLLCLoadMisses;			// Number of LLC load misses 
+	float cacheLLCLoadMissRate;		// LLC load misses divided by LLC loads
+	int cacheLLCStoreMisses;		// Number of LLC store misses
+	float cacheLLCStoreMissRate;		// LLC store misses divided by LLC stores
 
-    ProcessorMetrics();
-    void printProcessorMetrics();
+    	ProcessorMetrics();
+    	void printProcessorMetrics();
 };
 
 struct InputOutputMetrics {
@@ -63,7 +63,7 @@ struct InputOutputMetrics {
 	float flushOperationsRate;		// Amount of flush operations per second
 
 	InputOutputMetrics();
-    void printInputOutputMetrics();
+   	void printInputOutputMetrics();
 };
 
 struct MemoryMetrics {
@@ -86,7 +86,7 @@ struct MemoryMetrics {
 	float memoryIoRate;			// Requests to read/write data from all I/O devices
 
 	MemoryMetrics();
-    void printMemoryMetrics();
+    	void printMemoryMetrics();
 };
 
 struct NetworkMetrics {
@@ -96,7 +96,7 @@ struct NetworkMetrics {
 	float sendPacketsRate;			// packets that are being sent in KB/s
 
 	NetworkMetrics();
-    void printNetworkMetrics();
+    	void printNetworkMetrics();
 };
 
 struct PowerMetrics {
@@ -108,7 +108,7 @@ struct PowerMetrics {
 	unsigned long long gpuPowerHours;	// Power consumed by GPU in Wh
 
 	PowerMetrics();
-    void printPowerMetrics();
+	void printPowerMetrics();
 };
 
 struct AllMetrics {
