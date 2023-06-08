@@ -142,6 +142,7 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	output = exec(command);
 	std::stringstream streamTwo(output);
 
+	streamTwo >> std::ws;
 	std::getline(streamTwo, temp);
 	processorMetrics.cacheL2Requests = std::stoi(temp);
 	std::getline(streamTwo, temp);
