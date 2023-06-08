@@ -141,7 +141,6 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	command = "perf stat -e 'l2_rqsts.references,l2_rqsts.miss,LLC-loads,LLC-stores,LLC-load-misses,LLC-store-misses' --all-cpus sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}' | sed 's/[^0-9]//g'";
 	output = exec(command);
 	std::stringstream streamTwo(output);
-	std::cout << "\n\nCHECK\n\n" << output;
 
 	std::getline(streamTwo, temp);
 	processorMetrics.cacheL2Requests = std::stoi(temp);
@@ -160,7 +159,9 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 
 	check = processorMetrics.cacheLLCLoadMisses / processorMetrics.cacheLLCLoads;
 	processorMetrics.cacheLLCLoadMissRate = check;
-
+	std::cout << "CHECK" << check << "\n";
+	std::cout << "CHECK" << processorMetrics.cacheLLCLoadMissRate << "\n";
+	std::cout << "CHECK" << processorMetrics.cacheLLCLoadMisses / processorMetrics.cacheLLCLoads;
 
 	/*
 	// Check division by zero and calculate miss rate
