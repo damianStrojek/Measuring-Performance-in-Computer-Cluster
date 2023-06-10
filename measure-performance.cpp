@@ -18,8 +18,6 @@
 // External libraries
 #include <iostream>		// cin, cout, cerr
 #include <string>		// string
-#include <unistd.h>
-#include <fcntl.h>
 #include <mpi.h>		// MPI_Datatype, MPI_Init, MPI_Recv, MPI_Send
 #include "json.hpp"		// json
 // Internal headers
