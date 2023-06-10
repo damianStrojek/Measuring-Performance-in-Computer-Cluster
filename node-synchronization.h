@@ -9,6 +9,9 @@
 #ifndef NODE_SYNCHRONIZATION_H
 #define NODE_SYNCHRONIZATION_H
 
+// External libraries
+#include <mpi.h>        // MPI_Datatype, MPI_Type_commit, ...
+
 // Generating MPI types
 MPI_Datatype createMpiSystemMetricsType();
 MPI_Datatype createMpiProcessorMetricsType();
