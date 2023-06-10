@@ -135,6 +135,7 @@ void getInputOutputMetrics(InputOutputMetrics&);
 void getMemoryMetrics(MemoryMetrics&);
 void getNetworkMetrics(NetworkMetrics&);
 void getPowerMetrics(PowerMetrics&);
+
 // Getting the output from system to string
 std::string exec(const char*);
 

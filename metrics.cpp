@@ -7,16 +7,14 @@
 //
 
 // External libraries
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <array>
-#include <memory>
+#include <iostream>	// cin, cout
+#include <string>	// string, substr
+#include <sstream>	// stringstream
+#include <array>	// array
 // Internal headers
 #include "metrics.h"
 
 SystemMetrics::SystemMetrics(){
-
 	this->processesRunning = -1;
 	this->processesAll = -1;
 	this->processesBlocked = -1;
@@ -61,7 +59,6 @@ void getSystemMetrics(SystemMetrics &systemMetrics){
 };
 
 ProcessorMetrics::ProcessorMetrics(){
-
 	this->timeUser = -1;
 	this->timeNice = -1;
 	this->timeSystem = -1;
@@ -182,7 +179,6 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 };
 
 InputOutputMetrics::InputOutputMetrics(){
-
 	this->processID = GPROCESSID;
 	this->dataRead = -1;
 	this->readTime = -1;
@@ -242,7 +238,6 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 };
 
 MemoryMetrics::MemoryMetrics(){
-
 	this->memoryUsed = -1;
 	this->memoryCached = -1;
 	this->swapUsed = -1;
@@ -343,7 +338,6 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 };
 
 NetworkMetrics::NetworkMetrics(){
-
 	this->receivedData = -1;
 	this->receivePacketRate = -1;
 	this->sentData = -1;
@@ -386,7 +380,6 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 };
 
 PowerMetrics::PowerMetrics(){
-
 	this->processorPower = -1;
 	this->memoryPower = -1;
 	this->systemPower = -1;
@@ -454,7 +447,6 @@ void getPowerMetrics(PowerMetrics &powerMetrics){
 };
 
 AllMetrics::AllMetrics(){
-  
 	this->systemMetrics = SystemMetrics();
 	this->processorMetrics = ProcessorMetrics();
 	this->inputOutputMetrics = InputOutputMetrics();

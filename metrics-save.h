@@ -14,8 +14,8 @@
 // Internal headers
 #include "metrics.h"
 #include "json.hpp"
-// Write to file function
-nlohmann::json metricsToJson(AllMetrics* allMetricsArray,int cluster_size);
 
+// Write to file function
+nlohmann::json metricsToJson(AllMetrics*, int);
 
 #endif

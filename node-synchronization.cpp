@@ -6,8 +6,6 @@
 // 				    Jakub Wasniewski @wisnia01
 //
 
-// External libraries
-#include <mpi.h>
 // Internal headers
 #include "node-synchronization.h"
 #include "metrics.h"
@@ -16,9 +14,9 @@
 MPI_Datatype createMpiSystemMetricsType(){
 
     int blockLengths[] = {1, 1, 1, 1, 1};
-    MPI_Datatype types[] = {
+    MPI_Datatype metricTypes[] = {
         MPI_INT, MPI_INT, MPI_INT, MPI_INT, MPI_INT};
-    MPI_Aint offsets[] = {
+    MPI_Aint metricOffsets[] = {
         offsetof(struct SystemMetrics, processesRunning),
         offsetof(struct SystemMetrics, processesAll),
         offsetof(struct SystemMetrics, processesBlocked),
@@ -26,7 +24,7 @@ MPI_Datatype createMpiSystemMetricsType(){
         offsetof(struct SystemMetrics, interruptRate)};
 
     MPI_Datatype systemMetricsType;
-    MPI_Type_create_struct(5, blockLengths, offsets, types, &systemMetricsType);
+    MPI_Type_create_struct(5, blockLengths, metricOffsets, metricTypes, &systemMetricsType);
     MPI_Type_commit(&systemMetricsType);
 
     return systemMetricsType;
@@ -39,14 +37,14 @@ MPI_Datatype createMpiProcessorMetricsType(){
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1};
-    MPI_Datatype types[] = {
+    MPI_Datatype metricTypes[] = {
         MPI_INT, MPI_INT, MPI_INT, MPI_INT, 
         MPI_INT, MPI_INT, MPI_INT, MPI_INT, 
         MPI_INT, MPI_INT, MPI_INT, MPI_FLOAT, 
         MPI_FLOAT, MPI_INT, MPI_INT, MPI_INT, 
         MPI_INT, MPI_INT, MPI_FLOAT, MPI_INT,
         MPI_FLOAT};
-    MPI_Aint offsets[] = {
+    MPI_Aint metricOffsets[] = {
         offsetof(struct ProcessorMetrics, timeUser),
         offsetof(struct ProcessorMetrics, timeNice),
         offsetof(struct ProcessorMetrics, timeSystem),
@@ -70,7 +68,7 @@ MPI_Datatype createMpiProcessorMetricsType(){
         offsetof(struct ProcessorMetrics, cacheLLCStoreMissRate)};
 
     MPI_Datatype processorMetricsType;
-    MPI_Type_create_struct(21, blockLengths, offsets, types, &processorMetricsType);
+    MPI_Type_create_struct(21, blockLengths, metricOffsets, metricTypes, &processorMetricsType);
     MPI_Type_commit(&processorMetricsType);
 
     return processorMetricsType;
@@ -80,11 +78,11 @@ MPI_Datatype createMpiProcessorMetricsType(){
 MPI_Datatype createMpiInputOutputMetricsType(){
     
     int blockLengths[] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
-    MPI_Datatype types[] = {
+    MPI_Datatype metricTypes[] = {
         MPI_INT, MPI_FLOAT, MPI_FLOAT, 
         MPI_INT, MPI_FLOAT, MPI_FLOAT, 
         MPI_INT, MPI_FLOAT, MPI_FLOAT};
-    MPI_Aint offsets[] = {
+    MPI_Aint metricOffsets[] = {
         offsetof(struct InputOutputMetrics, processID),
         offsetof(struct InputOutputMetrics, dataRead),
         offsetof(struct InputOutputMetrics, readTime),
@@ -96,7 +94,7 @@ MPI_Datatype createMpiInputOutputMetricsType(){
         offsetof(struct InputOutputMetrics, flushOperationsRate)};
 
     MPI_Datatype inputOutputMetricsType;
-    MPI_Type_create_struct(9, blockLengths, offsets, types, &inputOutputMetricsType);
+    MPI_Type_create_struct(9, blockLengths, metricOffsets, metricTypes, &inputOutputMetricsType);
     MPI_Type_commit(&inputOutputMetricsType);
 
 	return inputOutputMetricsType;
@@ -108,12 +106,12 @@ MPI_Datatype createMpiMemoryMetricsType(){
 
     int blockLengths[] = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-    MPI_Datatype types[] = {
+    MPI_Datatype metricTypes[] = {
         MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, 
         MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, 
         MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT,
         MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT};
-    MPI_Aint offsets[] = {
+    MPI_Aint metricOffsets[] = {
         offsetof(struct MemoryMetrics, memoryUsed),
         offsetof(struct MemoryMetrics, memoryCached),
         offsetof(struct MemoryMetrics, swapUsed),
@@ -132,7 +130,7 @@ MPI_Datatype createMpiMemoryMetricsType(){
         offsetof(struct MemoryMetrics, memoryIoRate)};
 
     MPI_Datatype memoryMetricsType;
-    MPI_Type_create_struct(16, blockLengths, offsets, types, &memoryMetricsType);
+    MPI_Type_create_struct(16, blockLengths, metricOffsets, metricTypes, &memoryMetricsType);
     MPI_Type_commit(&memoryMetricsType);
 
     return memoryMetricsType;
@@ -142,16 +140,16 @@ MPI_Datatype createMpiMemoryMetricsType(){
 MPI_Datatype createMpiNetworkMetricsType(){
 
     int blockLengths[] = {1, 1, 1, 1};
-    MPI_Datatype types[] = {
+    MPI_Datatype metricTypes[] = {
         MPI_INT, MPI_FLOAT, MPI_INT, MPI_FLOAT};
-    MPI_Aint offsets[] = {
+    MPI_Aint metricOffsets[] = {
         offsetof(NetworkMetrics, receivedData),
         offsetof(NetworkMetrics, receivePacketRate),
         offsetof(NetworkMetrics, sentData),
         offsetof(NetworkMetrics, sendPacketsRate)};
 
     MPI_Datatype networkMetricsType;
-    MPI_Type_create_struct(4, blockLengths, offsets, types, &networkMetricsType);
+    MPI_Type_create_struct(4, blockLengths, metricOffsets, metricTypes, &networkMetricsType);
     MPI_Type_commit(&networkMetricsType);
 
     return networkMetricsType;
@@ -162,11 +160,11 @@ MPI_Datatype createMpiPowerMetricsType(){
 
     int blockLengths[] = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-    MPI_Datatype types[] = {
+    MPI_Datatype metricTypes[] = {
         MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT,
         MPI_FLOAT, MPI_FLOAT, MPI_FLOAT, MPI_FLOAT,
         MPI_FLOAT, MPI_FLOAT, MPI_FLOAT};
-    MPI_Aint offsets[] = {
+    MPI_Aint metricOffsets[] = {
         offsetof(PowerMetrics, processorPower),
         offsetof(PowerMetrics, memoryPower),
         offsetof(PowerMetrics, systemPower),
@@ -180,7 +178,7 @@ MPI_Datatype createMpiPowerMetricsType(){
         offsetof(PowerMetrics, gpuClocksCurrentMemory)};
     
     MPI_Datatype powerMetricsType;
-    MPI_Type_create_struct(11, blockLengths, offsets, types, &powerMetricsType);
+    MPI_Type_create_struct(11, blockLengths, metricOffsets, metricTypes, &powerMetricsType);
     MPI_Type_commit(&powerMetricsType);
 
     return powerMetricsType;

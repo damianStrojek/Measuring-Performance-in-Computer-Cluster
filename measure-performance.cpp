@@ -18,7 +18,7 @@
 // External libraries
 #include <iostream>		// cin, cout, cerr
 #include <string>		// string
-#include <mpi.h>		// MPI_Datatype, MPI_Init, MPI_Recv, MPI_Send
+#include <mpi.h>		// MPI_Datatype, MPI_Init, MPI_Recv, MPI_Send, ...
 #include "json.hpp"		// json
 // Internal headers
 #include "metrics.h"
@@ -42,10 +42,12 @@ int main(int argc, char **argv){
 
 	const char* dateCommand = "date +'%d%m-%H%M'";
 	std::string date = exec(dateCommand);
+	// Output of the exec(dateCommand) has to be escaped by pop_back() to work
 	date.pop_back();
+
 	std::string fileName = "results/" + date + "_metrics.json";
 	std::ofstream outputFile(fileName, std::ios::out);
-	if(!outputFile.is_open()) std::cerr << "\n\n\t [ERROR] Unable to open file " << fileName << " for writing.\n";
+	if(!outputFile.is_open()) std::cerr << "\n\n\t[ERROR] Unable to open file " << fileName << " for writing.\n";
 	
 	int rank, clusterSize;
 	MPI_Init(&argc, &argv);
@@ -60,11 +62,11 @@ int main(int argc, char **argv){
 	MPI_Datatype powerMetricsType = createMpiPowerMetricsType();
 	MPI_Datatype allMetricsType;
 
-	int blocklengths[] = {1, 1, 1, 1, 1, 1};
-    	MPI_Datatype types[] = {
+	int blockLengths[] = {1, 1, 1, 1, 1, 1};
+    	MPI_Datatype metricTypes[] = {
 		systemMetricsType, processorMetricsType, inputOutputMetricsType,
 		memoryMetricsType, networkMetricsType, powerMetricsType};
-    	MPI_Aint offsets[] = {
+    	MPI_Aint metricOffsets[] = {
 		offsetof(struct AllMetrics, systemMetrics),
 		offsetof(struct AllMetrics, processorMetrics),
 		offsetof(struct AllMetrics, inputOutputMetrics),
@@ -72,7 +74,7 @@ int main(int argc, char **argv){
 		offsetof(struct AllMetrics, networkMetrics),
 		offsetof(struct AllMetrics, powerMetrics)};
 
-	MPI_Type_create_struct(6, blocklengths, offsets, types, &allMetricsType);
+	MPI_Type_create_struct(6, blockLengths, metricOffsets, metricTypes, &allMetricsType);
 	MPI_Type_commit(&allMetricsType);
 	AllMetrics* allMetricsArray = new AllMetrics[clusterSize];
 	json jsonArray;
@@ -99,7 +101,6 @@ int main(int argc, char **argv){
 						&allMetricsArray[j].inputOutputMetrics, &allMetricsArray[j].memoryMetrics, \
 						&allMetricsArray[j].networkMetrics, &allMetricsArray[j].powerMetrics);
 			}
-
 			jsonArray.push_back(metricsToJson(allMetricsArray,clusterSize));
 		}
 	}
