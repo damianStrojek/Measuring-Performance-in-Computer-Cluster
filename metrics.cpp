@@ -15,6 +15,8 @@
 // Internal headers
 #include "metrics.h"
 
+#define KILOBYTE 1024
+
 SystemMetrics::SystemMetrics(){
 	this->processesRunning = -1;
 	this->processesAll = -1;
@@ -117,26 +119,26 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 
 	command = "cat /proc/stat";
 	output = exec(command);
-	std::stringstream stream(output);
+	std::stringstream streamOne(output);
 
-	stream >> temp;		// Get rid of 'cpu' at the beggining
-	stream >> temp;
+	streamOne >> temp;		// Get rid of 'cpu' at the beggining
+	streamOne >> temp;
 	processorMetrics.timeUser = std::stoi(temp);		// USER_HZ
-	stream >> temp;
+	streamOne >> temp;
 	processorMetrics.timeNice = std::stoi(temp);		// USER_HZ
-	stream >> temp;
+	streamOne >> temp;
 	processorMetrics.timeSystem = std::stoi(temp);		// USER_HZ
-	stream >> temp;
+	streamOne >> temp;
 	processorMetrics.timeIdle = std::stoi(temp);		// USER_HZ
-	stream >> temp;
+	streamOne >> temp;
 	processorMetrics.timeIoWait = std::stoi(temp);		// USER_HZ
-	stream >> temp;
+	streamOne >> temp;
 	processorMetrics.timeIRQ = std::stoi(temp);		// USER_HZ
-	stream >> temp;
+	streamOne >> temp;
 	processorMetrics.timeSoftIRQ = std::stoi(temp);		// USER_HZ
-	stream >> temp;
+	streamOne >> temp;
 	processorMetrics.timeSteal = std::stoi(temp);		// USER_HZ
-	stream >> temp;
+	streamOne >> temp;
 	processorMetrics.timeGuest = std::stoi(temp);		// USER_HZ
 	
 	// sed 's/[\xE2\x80\xAF]//g' is getting rid of special white space characters
@@ -158,9 +160,9 @@ void getProcessorMetrics(ProcessorMetrics &processorMetrics){
 	processorMetrics.cacheLLCStoreMisses = std::stoi(temp);
 	
 	// Check division by zero and calculate miss rate
-	if(processorMetrics.cacheLLCLoads > 0)
+	if(processorMetrics.cacheLLCLoads)
 		processorMetrics.cacheLLCLoadMissRate = float(processorMetrics.cacheLLCLoadMisses) / float(processorMetrics.cacheLLCLoads) * 100; 
-	if(processorMetrics.cacheLLCStores > 0)
+	if(processorMetrics.cacheLLCStores)
 		processorMetrics.cacheLLCStoreMissRate = float(processorMetrics.cacheLLCStoreMisses) / float(processorMetrics.cacheLLCStores) * 100;
 
 	command = "perf stat -e instructions,cycles,cpu-clock,cpu-clock:u sleep 1 2>&1 | awk '/^[ ]*[0-9]/{print $1}' | sed 's/[\xE2\x80\xAF]//g' | tr ',' '.'";
@@ -210,17 +212,17 @@ void getInputOutputMetrics(InputOutputMetrics &inputOutputMetrics){
 
 	const char* command = "awk '{ print $2 }' /proc/$$/io";
 	std::string output = exec(command), temp;
-	std::stringstream stream(output);
+	std::stringstream streamOne(output);
 	
-	stream >> temp;
-	inputOutputMetrics.dataRead = std::stof(temp) / 1024;		// MB
-	stream >> temp;
-	inputOutputMetrics.dataWritten = std::stof(temp) / 1024;	// MB
-	stream >> temp;
+	streamOne >> temp;
+	inputOutputMetrics.dataRead = std::stof(temp) / KILOBYTE;	// MB
+	streamOne >> temp;
+	inputOutputMetrics.dataWritten = std::stof(temp) / KILOBYTE;	// MB
+	streamOne >> temp;
 	inputOutputMetrics.readOperationsRate = std::stoi(temp);	// Number of operations
-	stream >> temp;	
+	streamOne >> temp;	
 	inputOutputMetrics.writeOperationsRate = std::stoi(temp);	// Number of operations
-	stream >> temp;
+	streamOne >> temp;
 
 	command = "iostat -d -k | awk '/^[^ ]/ {device=$1} $1 ~ /sda/ {print 1000*$10/($4*$3), 1000*$11/($4*$3), $6/$4, $7/$6}'";
 	output = exec(command);
@@ -283,27 +285,27 @@ void getMemoryMetrics(MemoryMetrics &memoryMetrics){
 
 	const char* command = "grep -v -e 'anon' -e 'file' /proc/meminfo | grep -E '^(MemTotal|Cached|SwapCached|SwapTotal|SwapFree|Active|Inactive)' | awk '{print $2}'";
 	std::string output = exec(command), temp, swapFree;
-	std::stringstream stream(output);
+	std::stringstream streamOne(output);
 
-	stream >> temp;
+	streamOne >> temp;
 	memoryMetrics.memoryUsed = std::stof(temp);
-	memoryMetrics.memoryUsed = memoryMetrics.memoryUsed / 1024;		// MB
-	stream >> temp;
+	memoryMetrics.memoryUsed = memoryMetrics.memoryUsed / KILOBYTE;		// MB
+	streamOne >> temp;
 	memoryMetrics.memoryCached = std::stof(temp);
-	memoryMetrics.memoryCached = memoryMetrics.memoryCached / 1024;		// MB
-	stream >> temp;
+	memoryMetrics.memoryCached = memoryMetrics.memoryCached / KILOBYTE;	// MB
+	streamOne >> temp;
 	memoryMetrics.swapCached = std::stof(temp);
-	memoryMetrics.swapCached = memoryMetrics.swapCached / 1024;		// MB
-	stream >> temp;
+	memoryMetrics.swapCached = memoryMetrics.swapCached / KILOBYTE;		// MB
+	streamOne >> temp;
 	memoryMetrics.memoryActive = std::stof(temp);
-	memoryMetrics.memoryActive = memoryMetrics.memoryActive / 1024;		// MB
-	stream >> temp;
+	memoryMetrics.memoryActive = memoryMetrics.memoryActive / KILOBYTE;	// MB
+	streamOne >> temp;
 	memoryMetrics.memoryInactive = std::stof(temp);
-	memoryMetrics.memoryInactive = memoryMetrics.memoryInactive / 1024;	// MB
-	stream >> temp;
-	stream >> swapFree;
+	memoryMetrics.memoryInactive = memoryMetrics.memoryInactive / KILOBYTE;	// MB
+	streamOne >> temp;
+	streamOne >> swapFree;
 	memoryMetrics.swapUsed = std::stof(temp) - std::stof(swapFree);
-	memoryMetrics.swapUsed = memoryMetrics.swapUsed / 1024;			// MB
+	memoryMetrics.swapUsed = memoryMetrics.swapUsed / KILOBYTE;		// MB
 
 	command = "sar -r -B 1 1 | awk 'NR==4{print $2,$3,$4,$5,$6,$7,$8}'";
 	output = exec(command);
@@ -359,11 +361,11 @@ void getNetworkMetrics(NetworkMetrics &networkMetrics){
 
 	const char* command = "ifstat 1 1 | tail -1 | awk '{ print $1, $2 }'";
 	std::string output = exec(command), temp;
-	std::stringstream stream(output);
+	std::stringstream streamOne(output);
 
-	stream >> temp;
+	streamOne >> temp;
 	networkMetrics.receivePacketRate = std::stof(temp);		// KB/sec
-	stream >> temp;
+	streamOne >> temp;
 	networkMetrics.sendPacketsRate = std::stof(temp);		// KB/sec
 
 	// Default interface: eth0
@@ -423,8 +425,8 @@ void getPowerMetrics(PowerMetrics &powerMetrics){
 	streamOne >> temp;
 	powerMetrics.systemPower = std::stof(temp);
 
-	const char* smi_command = "nvidia-smi --query-gpu=power.draw,temperature.gpu,fan.speed,memory.total,memory.used,memory.free,clocks.current.sm,clocks.current.memory --format=csv,nounits,noheader | tr ',' ' '";
-	output = exec(smi_command);
+	command = "nvidia-smi --query-gpu=power.draw,temperature.gpu,fan.speed,memory.total,memory.used,memory.free,clocks.current.sm,clocks.current.memory --format=csv,nounits,noheader | tr ',' ' '";
+	output = exec(command);
 	std::stringstream streamTwo(output);
 	
 	streamTwo >> temp;
