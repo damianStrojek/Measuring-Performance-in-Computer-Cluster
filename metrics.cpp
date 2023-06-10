@@ -11,6 +11,7 @@
 #include <string>	// string, substr
 #include <sstream>	// stringstream
 #include <array>	// array
+#include <memory>	// pipe, decltype
 // Internal headers
 #include "metrics.h"
 
