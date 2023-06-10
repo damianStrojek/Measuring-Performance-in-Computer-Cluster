@@ -16,15 +16,12 @@
 // 
 
 // External libraries
-#include <iostream>
-#include <string>
-#include <cstring>
-#include <stdexcept>
-#include <termios.h>
+#include <iostream>		// cin, cout, cerr
+#include <string>		// string
 #include <unistd.h>
 #include <fcntl.h>
-#include <mpi.h>
-#include "json.hpp"
+#include <mpi.h>		// MPI_Datatype, MPI_Init, MPI_Recv, MPI_Send
+#include "json.hpp"		// json
 // Internal headers
 #include "metrics.h"
 #include "metrics-save.h"
@@ -46,7 +43,7 @@ int main(int argc, char **argv){
 	AllMetrics allMetrics;
 
 	const char* dateCommand = "date +'%d%m-%H%M'";
-	std:: string date = exec(dateCommand);
+	std::string date = exec(dateCommand);
 	date.pop_back();
 	std::string fileName = "results/" + date + "_metrics.json";
 	std::ofstream outputFile(fileName, std::ios::out);
@@ -80,7 +77,7 @@ int main(int argc, char **argv){
 	MPI_Type_create_struct(6, blocklengths, offsets, types, &allMetricsType);
 	MPI_Type_commit(&allMetricsType);
 	AllMetrics* allMetricsArray = new AllMetrics[clusterSize];
-	nlohmann::json jsonArray;
+	json jsonArray;
 
 	// Download metrics in constant batches
 	for(int i = 0; i < DATA_BATCH; i++){

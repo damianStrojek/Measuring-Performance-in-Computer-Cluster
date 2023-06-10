@@ -10,7 +10,7 @@
 #define METRICS_SAVE_H
 
 // External libraries
-#include <fstream>
+#include <fstream>      // ifstream, ofstream
 // Internal headers
 #include "metrics.h"
 #include "json.hpp"
