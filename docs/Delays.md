@@ -1,3 +1,4 @@
+# Delay between each iteration
 
 This document outlines the potential to enhance the existing application by adding command line parameters for iteration control. 
 Specifically, it proposes the addition of parameters that will allow users to customize the number of iterations and the delay between each iteration. 
